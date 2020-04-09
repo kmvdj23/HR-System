@@ -1,0 +1,103 @@
+{% extends 'layouts/dashboard.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block sidebar %}
+    <!-- Nav Item - Call History -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('hr.call_history') }}">
+            <i class="fas fa-fw fa-history"></i>
+            <span>Call History</span>
+        </a>
+    </li>
+
+    <!-- Nav Item - Callout Form -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('hr.add_applicant_page') }}">
+            <i class="fas fa-fw fa-phone-alt"></i>
+            <span>Callout Form</span>
+        </a>
+    </li>
+{% endblock %}
+
+{% block page_content %}
+    
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Callout Candidates</h1>
+
+    <div class="table-responsive">
+        <table class="table table-sm small table-bordered" id="candidate-table" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Action</th>         
+                    <th>Date Acquired</th>
+                    <th>Candidate Name</th>
+                    <th>Mobile</th>
+                    <th>Email</th>
+                    <th>Preferred Position</th>
+                    <th>Preferred Location</th>
+                    <th>Source</th>
+                    <th>Call Count</th>
+                    <th>Current Disposition</th>
+                </tr>                
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="#" data-placement="top" data-toggle="tooltip" title="Call"
+                            class="btn btn-success tooltips">
+                                <i class="fas fa-fw fa-phone-alt"></i>
+                            </a>
+                            <a href="#" data-placement="top" data-toggle="tooltip" title="Edit"
+                            class="btn btn-primary tooltips">
+                                <i class="fas fa-fw fa-edit"></i>
+                            </a>
+                            <a href="#" data-placement="top" data-toggle="tooltip" title="View"
+                            class="btn btn-info tooltips">
+                                <i class="fab fa-readme"></i>
+                            </a>
+                        </div>
+                    </td>
+                    <td>7/10/2017</td>
+                    <td>Sarah May Ambac</td>
+                    <td>9776506546</td>
+                    <td>sarahmayambac10@gmail.com</td>
+                    <td>CSR</td>
+                    <td>Iloilo City</td>
+                    <td>A</td>
+                    <td>0</td>
+                    <td>No interaction</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="#" data-placement="top" data-toggle="tooltip" title="Call"
+                            class="btn btn-success tooltips">
+                                <i class="fas fa-fw fa-phone-alt"></i>
+                            </a>
+                            <a href="#" data-placement="top" data-toggle="tooltip" title="Edit"
+                            class="btn btn-primary tooltips">
+                                <i class="fas fa-fw fa-edit"></i>
+                            </a>
+                            <a href="#" data-placement="top" data-toggle="tooltip" title="View"
+                            class="btn btn-info tooltips">
+                                <i class="fab fa-readme"></i>
+                            </a>
+                        </div>
+                    </td>
+                    <td>7/10/2017</td>
+                    <td>Adrian Velesrubio</td>
+                    <td>9287241667</td>
+                    <td>adrian.velesrubio@gmail.com</td>
+                    <td>CSR</td>
+                    <td>Santa Rosa, Laguna</td>
+                    <td>A</td>
+                    <td>0</td>
+                    <td>No interaction</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

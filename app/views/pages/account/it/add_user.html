@@ -1,0 +1,165 @@
+{% extends 'layouts/dashboard.html' %}
+
+{% block title %}Register User{% endblock %}
+
+{% block sidebar %}
+    <!-- Nav Item - Account Records -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('it.accounts_page')}}">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Account Records</span>
+        </a>
+    </li>
+
+    <!-- Nav Item - Add User -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('it.register_page')}}">
+            <i class="fas fa-fw fa-id-card"></i>
+            <span>Add User</span>
+        </a>
+    </li>
+{% endblock %}
+
+{% block page_content %}
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">Add User</h1>
+
+    <div class="row">
+        <div class="col-md-6 center">
+            <div class="card card-body">
+                <form method="POST" action="{{url_for('it.register')}}">
+                    {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+
+                        <!-- First Name -->
+                        <div class="form-group mb-2">
+                            {{ form.first_name.label(class="form-control-label") }}
+
+                            {% if form.first_name.errors %}
+                                {{ form.first_name(class="form-control form-control-sm is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.first_name.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.first_name(class="form-control form-control-sm")}}
+                            {% endif %}
+                        </div>
+
+                        <!-- Last Name -->
+                        <div class="form-group mb-2">
+                            {{ form.last_name.label(class="form-control-label") }}
+
+                            {% if form.last_name.errors %}
+                                {{ form.last_name(class="form-control form-control-sm is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.last_name.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.last_name(class="form-control form-control-sm")}}
+                            {% endif %}
+                        </div>
+
+                        <!-- Username -->
+                        <div class="form-group mb-2">
+                            {{ form.username.label(class="form-control-label") }}
+
+                            {% if form.username.errors %}
+                                {{ form.username(class="form-control form-control-sm is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.username.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.username(class="form-control form-control-sm")}}
+                            {% endif %}
+                        </div>
+
+                        <!-- Mobile Number -->
+                        <div class="form-group mb-2">
+                            {{ form.mobile.label(class="form-control-label") }}
+
+                            {% if form.mobile.errors %}
+                                {{ form.mobile(class="form-control form-control-sm is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.mobile.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.mobile(class="form-control form-control-sm")}}
+                            {% endif %}
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-group mb-2">
+                            {{ form.password.label(class="form-control-label") }}
+
+                            {% if form.password.errors %}
+                                {{ form.password(class="form-control form-control-sm is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.password.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.password(class="form-control form-control-sm")}}
+                            {% endif %}
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-group mb-2">
+                            {{ form.confirm_pass.label(class="form-control-label") }}
+
+                            {% if form.confirm_pass.errors %}
+                                {{ form.confirm_pass(class="form-control form-control-sm is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.confirm_pass.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.confirm_pass(class="form-control form-control-sm")}}
+                            {% endif %}
+                        </div>
+
+                        <!-- Account Type -->
+                        <div class="form-group mb-2">
+                            {{ form.account_type.label(class="form-control-label") }}
+
+                            {% if form.account_type.errors %}
+                                {{ form.account_type(class="form-control form-control-sm is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.account_type.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.account_type(class="form-control form-control-sm")}}
+                            {% endif %}
+                        </div>
+
+                        <hr>
+
+                        <!-- Actions -->
+                        <div class="form-group mb-2">
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                Submit
+                            </button>
+                            <a href="{{url_for('main.home_page')}}" class="btn btn-sm btn-secondary">
+                                Cancel
+                            </a>
+                        </div>
+
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

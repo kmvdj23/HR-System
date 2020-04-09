@@ -1,0 +1,66 @@
+{% extends 'layouts/dashboard.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block sidebar %}
+    {% if current_user.account_type == 2 %}
+        <!-- Nav Item - Call History -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('hr.call_history') }}">
+                <i class="fas fa-fw fa-history"></i>
+                <span>Call History</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - Callout Form -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('hr.add_applicant_page') }}">
+                <i class="fas fa-fw fa-phone-alt"></i>
+                <span>Callout Form</span>
+            </a>
+        </li>
+    {% endif %}
+{% endblock %}
+
+{% block page_content %}
+    
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Callout Candidates</h1>
+
+    <div class="table-responsive">
+        <table class="table table-sm small table-bordered" id="call-history-table" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Candidate Name</th>
+                    <th>Mobile</th>
+                    <th>Source</th>
+                    <th>Disposition Detail</th>
+                    <th>Comments</th>
+                    <th>Duration (mm:ss)</th>
+                    <th>Interview Date & Time</th>
+                </tr>                
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Kristine jane Rivera</td>
+                    <td>9156273981</td>
+                    <td>BCH</td>
+                    <td>Passed 7-min Interview</td>
+                    <td>magaling</td>
+                    <td>00:29</td>
+                    <td>7pm</td>
+                </tr>
+                <tr>
+                    <td>michael gutierrez</td>
+                    <td>9754255119</td>
+                    <td></td>
+                    <td>Declined - EMPLOYED</td>
+                    <td></td>
+                    <td>00:02</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

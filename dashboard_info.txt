@@ -1,0 +1,4 @@
+applicants (monthly)
+Processed applications
+Pending applications
+HR-applicant ratio

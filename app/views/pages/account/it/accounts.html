@@ -1,0 +1,84 @@
+{% extends 'layouts/dashboard.html' %}
+
+{% block title %}Account Records{% endblock %}
+
+{% block sidebar %}
+    <!-- Nav Item - Account Records -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('it.accounts_page')}}">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Account Records</span>
+        </a>
+    </li>
+
+    <!-- Nav Item - Add User -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('it.register_page')}}">
+            <i class="fas fa-fw fa-id-card"></i>
+            <span>Add User</span>
+        </a>
+    </li>
+{% endblock %}
+
+{% block page_content %}
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Account Records</h1>
+
+    <div class="table-responsive">
+        <table class="table table-sm small table-bordered" id="account-records-table" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>User Type</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>                
+            </thead>
+            <tbody>
+                {% for account in accounts %}
+                    <tr>
+                        <td>{{ account.first_name }} {{ account.last_name }}</td>
+
+                        <!-- TODO: ELIMINATE IF ELSE -->
+                        {% if account.account_type == 0 %}
+                            <td>IT</td>
+                        {% elif account.account_type == 1 %}
+                            <td>HR Admin</td>
+                        {% elif account.account_type == 2 %}
+                            <td>HR</td>
+                        {% endif %}
+
+                        {% if account.active %}
+                            <td>Active</td>
+                        {% else %}
+                            <td>Inactive</td>
+                        {% endif %}
+
+                        <td>
+                            <form method="POST" action="{{ url_for('it.toggle_status', username=account.username) }}">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a href="{{ url_for('it.edit_page', username=account.username) }}" data-placement="top" data-toggle="tooltip" title="Edit"
+                                    class="btn btn-primary tooltips">
+                                        <i class="fas fa-fw fa-edit"></i>
+                                    </a>
+                                    {% if account.active %}
+                                        <button type="submit" data-placement="top" data-toggle="tooltip" title="Toggle Inactive" class="btn btn-danger tooltips">
+                                            <i class="fas fa-unlock"></i>
+                                        </button>
+                                    {% else %}
+                                        <button type="submit" data-placement="top" data-toggle="tooltip" title="Toggle Active" class="btn btn-danger tooltips">
+                                            <i class="fas fa-lock"></i>
+                                        </button>
+                                    {% endif %}
+                                </div>                                
+                            </form>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

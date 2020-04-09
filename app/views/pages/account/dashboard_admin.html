@@ -1,0 +1,256 @@
+{% extends 'layouts/dashboard.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block sidebar %}
+    <!-- Nav Item - Account Records -->
+    <li class="nav-item">
+        <a class="nav-link" href="tables.html">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Account Records</span>
+        </a>
+    </li>
+
+    <!-- Nav Item - Callout Form -->
+    <li class="nav-item">
+        <a class="nav-link" href="tables.html">
+            <i class="fas fa-fw fa-phone-alt"></i>
+            <span>Callout Form</span>
+        </a>
+    </li>
+
+    <!-- Nav Item - Candidate List -->
+    <li class="nav-item">
+        <a class="nav-link" href="tables.html">
+            <i class="fas fa-fw fa-th-list"></i>
+            <span>Candidate List</span>
+        </a>
+    </li>
+{% endblock %}
+
+{% block page_content %}
+    
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Dashboard</h1>
+    
+    <!-- Content Row -->
+    <div class="row">
+
+        <!-- Applicants (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Applicants (Monthly)</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">20</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Processed Applications Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Processed Applications</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">115</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Applications Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pending Applications</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">30</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HR-Applicant Ratio Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">HR-Applicant Ratio</div>
+                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">3 : 5</div>
+                        </div>
+                        <div class="col-auto">
+                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- End of Content Row -->
+
+    <!-- Content Row -->
+    <div class="row">
+
+        <!-- Pie Chart -->
+        <div class="col-xl-6 col-lg-6">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Candidate Status</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="chart-pie pt-4 pb-2">
+                        <canvas id="chart-candidate-status"></canvas>
+                    </div>
+                    <div class="mt-4 text-center small">
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-success"></i> Hired
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-danger"></i> Failed
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-warning"></i> Declined
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-primary"></i> For Final
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-info"></i> For Background Check
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pie Chart -->
+        <div class="col-xl-6 col-lg-6">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Callout Status</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="chart-pie pt-4 pb-2">
+                        <canvas id="chart-callout-status"></canvas>
+                    </div>
+                    <div class="mt-4 text-center small">
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-primary"></i> Untapped
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-success"></i> First Attempt
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-info"></i> Second Attempt
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-warning"></i> Third Attempt
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- End of Content Row -->
+
+    <!-- Content Row -->
+    <div class="row">
+
+        <!-- Pie Chart -->
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Details</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="chart-pie pt-4 pb-2">
+                        <canvas id="chart-details"></canvas>
+                    </div>
+                    <div class="mt-4 text-center small">
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-A"></i> Cannot Be Reached
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-B"></i> Passed
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-C"></i> Failed
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-D"></i> Executive Search
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-E"></i> Declined
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-F"></i> Phone Invite
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-G"></i> Specialized Recruitment
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-H"></i> Processed
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-I"></i> Active File
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-J"></i> Text Blast
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-K"></i> Wrong Number
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- End of Content Row -->
+
+    <!-- Content Row -->
+    <div class="row">
+        <div class="col-xl-12 col-lg-12">
+
+            <!-- Bar Chart -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Applications Processed by HR</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-bar">
+                        <canvas id="chart-hr-process"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- End of Content Row -->
+
+{% endblock %}
