@@ -119,7 +119,7 @@ def add_applicant():
 
 		birthdate = request.form.get('personal-birthdate')
 		if birthdate != '':
-			applicant.birthdate = birthdate
+			applicant.birthdate = datetime.strptime('{0}'.format(birthdate), '%Y-%m-%d')
 
 		educational_attainment = request.form.get('education-attainment')
 		if educational_attainment != '':
