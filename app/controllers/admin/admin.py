@@ -18,7 +18,7 @@ def home_page():
 def add_applicant_page():
 	# Flask Form Here
 	pass
-	return render_template('.html', form=form, callers=Account.get_callers())
+	return render_template('pages/account/add_applicant.html', form=form, callers=Account.get_callers())
 
 # ========================= METHODS =======================================
 
@@ -50,7 +50,62 @@ def add_applicant():
 			hr_id=request.form.get('call-hr')
 		)
 
-		return redirect(url_for('admin.home_page'))
+		birthdate = request.form.get('personal-birthdate')
+		if birthdate != '':
+			applicant.birthdate = birthdate
 
-	return render_template('.html', form=form, callers=Account.get_callers())
+		educational_attainment = request.form.get('education-attainment')
+		if educational_attainment != '':
+			applicant.educational_attainment = educational_attainment
+
+		# TODO: Add applicant interview date and time
+		interview_date = request.form.get('additional-interview_date')
+		interview_time = request.form.get('additional-interview_time')
+
+		if interview_date != '' and interview_time != '':
+			timepiece = interview_time.split(" ")
+
+			try:
+				hour = timepiece[0].split(":")[0]
+				minute = timepiece[0].split(":")[1]
+			except IndexError as e:
+				minute = '00'
+
+			locale_time = timepiece[1]
+
+			interview_datetime = datetime.strptime('{0} {1}:{2} {3}'.format(interview_date, hour, minute, locale_time), '%Y-%m-%d %I:%M %p')
+
+			applicant.interview_datetime = interview_datetime
+
+		db.session.add(applicant)
+		db.session.commit()
+
+		flash('Applicant {0} {1} added successfully'.format(applicant.first_name, applicant.last_name), 'success')
+		return redirect(url_for('hr.home_page'))
+
+	else:
+		flash('Applicant not created', 'danger')
+		print('==================== ERRORS: add_applicant() ================')
+		for err in form.errors:
+			print(err)
+		print('=============================================================')
+		for err in form.personal.errors:
+			print(err)
+		print('=============================================================')
+		for err in form.education.errors:
+			print(err)
+		print('=============================================================')
+		for err in form.preference.errors:
+			print(err)
+		print('=============================================================')
+		for err in form.call.errors:
+			print(err)
+		print('=============================================================')
+		for err in form.additional.errors:
+			print(err)
+
+		return render_template('pages/account/add_applicant.html', form=form)
+
+	return redirect(url_for('admin.add_applicant_page'))
+
 
