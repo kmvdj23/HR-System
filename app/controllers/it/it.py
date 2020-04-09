@@ -1,6 +1,6 @@
 from flask import redirect, request, render_template, url_for, flash, Blueprint
 from flask_login import login_required, current_user
-from lib import generate_random_password
+from lib import generate_random_password, password_encrypt
 from app.models import Account
 from app.config import db
 from app.forms import AddUserForm, EditUserForm
@@ -73,7 +73,7 @@ def register():
             last_name=request.form.get('last_name'),
             username=request.form.get('username'),
             mobile_number=request.form.get('mobile'),
-            password=request.form.get('password'),  #Do Encryption Here
+            password=password_encrypt(request.form.get('password')), 
             account_type=int(request.form.get('account_type'))
         )
 
@@ -127,7 +127,7 @@ def edit(username):
 @it.route('/account/<username>/passwordreset', methods=['POST'])
 def reset_password(username):
     account = Account.find_account(username)
-    account.password = request.form.get('generated_password') #Do Encryption
+    account.password = password_encrypt(request.form.get('generated_password'))
     db.session.commit()
     flash('Password for {0} has been reset: {1}'.format(account.username, account.password), 'success')
     return redirect(url_for('it.edit_page', username=username))

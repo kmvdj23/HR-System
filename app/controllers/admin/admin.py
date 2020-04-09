@@ -13,10 +13,11 @@ def home_page():
 	#Do Query Here
 	return render_template('pages/account/dashboard_admin.html')
 
-@admin.rotue('/add/applicant')
+@admin.route('/add/applicant')
 @login_required
 def add_applicant_page():
 	# Flask Form Here
+	pass
 	return render_template('.html', form=form, callers=Account.get_callers())
 
 # ========================= METHODS =======================================
@@ -25,7 +26,7 @@ def add_applicant_page():
 @login_required
 def add_applicant():
 	# Flask Form Here
-
+	pass
 	if form.validate_on_submit():
 		applicant = Applicant(
 			last_name=request.form.get('personal-last_name'),

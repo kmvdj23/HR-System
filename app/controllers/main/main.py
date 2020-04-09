@@ -1,3 +1,4 @@
+from lib import password_decrypt
 from app.models import Account, Applicant
 from app.config import db
 from flask import redirect, request, render_template, url_for, flash, Blueprint
@@ -36,7 +37,7 @@ def settings_page():
 def login():
 	if request.method == 'POST':
 		account = Account.find_account(request.form.get('username'))
-		if account and account.password == request.form.get('password'):
+		if account and password_decrypt(request.form.get('password'), account.password):
 			if login_user(account) and account.account_type == 0:
 				return redirect(url_for('it.home_page'))
 			elif login_user(account) and account.account_type == 1:

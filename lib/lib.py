@@ -1,5 +1,5 @@
 import random, string
-
+from werkzeug import security
 
 def choices_from_dict(source, prepend_blank=True):
     choices = list()
@@ -32,7 +32,7 @@ def generate_random_password(len=6):
 
 
 def password_encrypt(raw_password):
-    pass
+    return security.generate_password_hash(raw_password, method='pbkdf2:sha256', salt_length=8)
 
-def password_decrypt(encrypted_password):
-    pass
+def password_decrypt(input_password, encrypted_password):
+    return security.check_password_hash(encrypted_password, input_password)
