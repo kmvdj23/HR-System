@@ -43,6 +43,9 @@ class Account(db.Model, UserMixin):
     def is_active(self):
         return self.active
 
+    @classmethod
+    def get_callers(cls):
+        return Account.query.filter(cls.account_type == 2 and cls.is_active() == True).all()
 
 class Applicant(db.Model):
     __tablename__ = 'applicant'

@@ -95,8 +95,6 @@ def add_applicant():
 		return 'Hey'
 
 	if form.validate_on_submit():
-		print('==================')
-		print(request.form)
 		applicant = Applicant(
 			last_name=request.form.get('personal-last_name'),
 			first_name=request.form.get('personal-first_name'),
