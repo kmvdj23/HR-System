@@ -116,7 +116,7 @@ def import_from_csv():
 	if 'file' not in request.files:
 		flash('No File Uploaded')
 		return redirect(url_for('admin.home_page'))
-	
+
 	csv_file = request.files.get('file')
 
 	if csv_file:
@@ -140,4 +140,3 @@ def import_from_csv():
 			file.close()
 
 	return redirect(url_for('admin.home_page'))
-
