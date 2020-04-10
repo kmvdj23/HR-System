@@ -25,6 +25,9 @@ def form_time(value):
 
 
 def table_date(value):
+	default_datetime = datetime.datetime.strptime('0001-01-01 12:00 AM', '%Y-%m-%d %I:%M %p')
+	if value == default_datetime:
+		return ''
 	return datetime.datetime.strftime(value, '%B %d, %Y %I:%M %p')
 
 
