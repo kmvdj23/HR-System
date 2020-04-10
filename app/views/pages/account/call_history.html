@@ -33,34 +33,49 @@
                 <tr>
                     <th>Candidate Name</th>
                     <th>Mobile</th>
-                    <th>Source</th>
-                    <th>Disposition Detail</th>
-                    <th>Comments</th>
-                    <th>Duration (mm:ss)</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Remarks</th>
+                    <th>Call Date</th>
                     <th>Interview Date & Time</th>
                 </tr>                
             </thead>
             <tbody>
-                <tr>
-                    <td>Kristine jane Rivera</td>
-                    <td>9156273981</td>
-                    <td>BCH</td>
-                    <td>Passed 7-min Interview</td>
-                    <td>magaling</td>
-                    <td>00:29</td>
-                    <td>7pm</td>
-                </tr>
-                <tr>
-                    <td>michael gutierrez</td>
-                    <td>9754255119</td>
-                    <td></td>
-                    <td>Declined - EMPLOYED</td>
-                    <td></td>
-                    <td>00:02</td>
-                    <td></td>
-                </tr>
+                {% for call in calls %}
+                    <tr>
+                        <td>{{ call.applicant.first_name }} {{ call.applicant.last_name }}</td>
+                        <td>{{ call.applicant.mobile1 }}</td>
+                        <td>{{ call.applicant.email }}</td>
+                        <td>{{ call.applicant.status|title }}</td>
+                        <td>{{ call.applicant.remarks }}</td>
+                        <td>
+                            <time class="from-now" data-datetime="{{ call.datetime }}">
+                                {{ call.datetime }}
+                            </time>
+                        </td>
+                        <td>
+                            {{ call.applicant.interview_datetime|table_date }}
+                        </td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
 
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Date Formatting with momentjs
+            $('.from-now').each(function(i, e) {
+                ( function updateTime() {
+                    var time = moment($(e).data('datetime'));
+                    $(e).text(time.fromNow());
+                    $(e).attr('title', time.format('MMMM Do YYYY, h:mm:ss a Z'));
+                    setTimeout(updateTime, 1000);
+                })();
+            });
+        });
+    </script>
 {% endblock %}

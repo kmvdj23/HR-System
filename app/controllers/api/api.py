@@ -7,4 +7,3 @@ api_v1 = Blueprint('api', __name__, url_prefix='/api/v1' )
 @api_v1.route('/getAllApplicants')
 def getAllApplicants():
 	pass
-

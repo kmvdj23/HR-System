@@ -6,16 +6,16 @@ from flask import redirect, request, render_template, url_for, flash, Blueprint
 from flask_login import login_required, current_user
 from app.forms import CalloutForm, PersonalInformation, ScholasticInformation, JobPreference, CallInformation, AdditionalInformation
 
-
 hr = Blueprint('hr', __name__, url_prefix='/hr')
+
 
 # =================================== PAGES ===========================================
 @hr.route('/dashboard')
 @login_required
 def home_page():
-	# applicants = current_user.applicants
-	# return render_template('pages/account/dashboard_hr.html', applicants=applicants)
-	return render_template('pages/account/dashboard_hr.html')
+	applicants = current_user.applicants
+	return render_template('pages/account/dashboard_hr.html', applicants=applicants)
+
 
 @hr.route('/callhistory')
 @login_required
@@ -23,16 +23,36 @@ def call_history():
 	calls = current_user.calls
 	return render_template('pages/account/call_history.html', calls=calls)
 
-@hr.route('/process/<applicant_id>')
+
+@hr.route('/<applicant_id>/modify')
 @login_required
-def process_page(applicant_id):
-	# Flask Form Here
-	form = None
+def edit_applicant_page(applicant_id):
+	form = CalloutForm(request.form)
 	applicant = Applicant.find_applicant(applicant_id)
+	form.personal.address.data = applicant.address
+	form.call.remarks.data = applicant.remarks
+
 	if not applicant:
-		flash('Applicant does not exist')
+		flash('Applicant does not exist', 'danger')
 		return redirect(url_for('hr.home_page'))
-	return render_template('.html', form=form, applicant=applicant)
+
+	return render_template('pages/account/edit_applicant.html', form=form, applicant=applicant)
+
+
+@hr.route('/<applicant_id>/call')
+@login_required
+def call_applicant_page(applicant_id):
+	form = CalloutForm(request.form)
+	applicant = Applicant.find_applicant(applicant_id)
+	form.personal.address.data = applicant.address
+	form.call.remarks.data = applicant.remarks
+
+	if not applicant:
+		flash('Applicant does not exist', 'danger')
+		return redirect(url_for('hr.home_page'))
+
+	return render_template('pages/account/hr/call_applicant.html', form=form, applicant=applicant)
+
 
 @hr.route('/add/applicant')
 def add_applicant_page():
@@ -44,55 +64,208 @@ def add_applicant_page():
 
 	return render_template('pages/account/add_applicant.html', form=form)
 
-# ================================ METHODS ==============================================
-@hr.route('/doProcess/<applicant_id>', methods=['POST'])
+
+@hr.route('/<applicant_id>/view')
 @login_required
-def process(applicant_id):
-	# Flask Form Here
+def view_applicant_page(applicant_id):
 	applicant = Applicant.find_applicant(applicant_id)
+	if not applicant:
+		flash('Applicant does not exist', 'danger')
+		return redirect(url_for('hr.home_page'))
+
+	return render_template('pages/account/view_applicant.html', applicant=applicant)
+
+
+# # ================================ METHODS ==============================================
+
+@hr.route('/<applicant_id>/modify', methods=['POST'])
+@login_required
+def edit_applicant(applicant_id):
+	form = CalloutForm(request.form)
+	applicant = Applicant.find_applicant(applicant_id)
+	form.personal.address.data = applicant.address
+	form.call.remarks.data = applicant.remarks
+	# form.call.hr.choices = list()
+
+	# callers = Account.get_callers()
+	# for caller in callers:
+	# 	form.call.hr.choices.append((caller.id, caller.username))		
+
 	if form.validate_on_submit():
-		applicant.last_name=request.form.get('last_name')
-		applicant.first_name=request.form.get('first_name')
-		applicant.middle_name=request.form.get('middle_name')
-		applicant.birthdate=request.form.get('birthdate')
-		applicant.email=request.form.get('email')
-		applicant.address=request.form.get('address')
-		applicant.mobile1=request.form.get('mobile1')
-		applicant.mobile2=request.form.get('mobile2')
-		applicant.landline=request.form.get('landline')
-		applicant.marital_status=request.form.get('marital_status')
-		applicant.educational_attainment=request.form.get('educational_attainment')
-		applicant.course=request.form.get('course')
-		applicant.graduation_year=request.form.get('graduation_year')
-		applicant.applied_position=request.form.get('applied_position')
-		applicant.expected_salary=request.form.get('expected_salary')
-		applicant.preferred_shift=request.form.get('preferred_shift')
-		applicant.preferred_location=request.form.get('preferred_location')
-		applicant.status=request.form.get('status')
-		applicant.remarks=request.form.get('remarks')
-		applicant.source=request.form.get('source')
-		applicant.interview_datetime=request.form.get('interview_datetime')
-		
+		applicant.last_name=request.form.get('personal-last_name')
+		applicant.first_name=request.form.get('personal-first_name')
+		applicant.middle_name=request.form.get('personal-middle_name')		
+		applicant.email=request.form.get('personal-email')
+		applicant.mobile1=request.form.get('personal-mobile1')
+		applicant.mobile2=request.form.get('personal-mobile2')
+		applicant.landline=request.form.get('personal-landline')
+		applicant.address=request.form.get('personal-address')
+		applicant.marital_status=request.form.get('personal-marital_status')
+		applicant.course=request.form.get('education-course')
+		applicant.graduation_year=request.form.get('education-graduation_year')
+		applicant.applied_position=request.form.get('preference-applied_position')
+		applicant.expected_salary=request.form.get('preference-expected_salary')
+		applicant.preferred_shift=request.form.get('preference-shift')
+		applicant.preferred_location=request.form.get('preference-location')
+		applicant.status=request.form.get('call-disposition')
+		applicant.remarks=request.form.get('call-remarks')
+		applicant.source=request.form.get('additional-source')
+		applicant.hr_id=current_user.id
+
+		birthdate = request.form.get('personal-birthdate')
+		if birthdate != '':
+			applicant.birthdate = datetime.strptime('{0}'.format(birthdate), '%Y-%m-%d')
+
+		educational_attainment = request.form.get('education-attainment')
+		if educational_attainment != '':
+			applicant.educational_attainment = educational_attainment
+
+		interview_date = request.form.get('additional-interview_date')
+		interview_time = request.form.get('additional-interview_time')
+
+		if interview_date != '' and interview_time != '':
+			timepiece = interview_time.split(" ")
+
+			try:
+				hour = timepiece[0].split(":")[0]
+				minute = timepiece[0].split(":")[1]
+			except IndexError as e:
+				minute = '00'
+
+			locale_time = timepiece[1]
+
+			interview_datetime = datetime.strptime('{0} {1}:{2} {3}'.format(interview_date, hour, minute, locale_time), '%Y-%m-%d %I:%M %p')
+
+			applicant.interview_datetime = interview_datetime
+
+		db.session.commit()
+
+		flash('Applicant {0} {1} has been modified'.format(applicant.first_name, applicant.last_name), 'success')
+		return redirect(url_for('hr.home_page'))
+
+	else:		
+		flash('Applicant not modified', 'danger')
+		print('==================== ERRORS: add_applicant() ================')
+		for err in form.errors:
+			print(err)
+		print('=============================================================')
+		for err in form.personal.errors:
+			print(err)
+		print('=============================================================')
+		for err in form.education.errors:
+			print(err)
+		print('=============================================================')
+		for err in form.preference.errors:
+			print(err)
+		print('=============================================================')
+		for err in form.call.errors:
+			print(err)
+		print('=============================================================')
+		for err in form.additional.errors:
+			print(err)
+
+		return render_template('pages/account/edit_applicant.html', form=form, applicant=applicant)
+
+	return redirect(url_for('hr.edit_applicant_page', applicant_id=applicant_id))
+
+
+@hr.route('/<applicant_id>/call', methods=['POST'])
+@login_required
+def call_applicant(applicant_id):
+	form = CalloutForm(request.form)
+	applicant = Applicant.find_applicant(applicant_id)
+	form.personal.address.data = applicant.address
+	form.call.remarks.data = applicant.remarks
+	
+	if form.validate_on_submit():
+		applicant.last_name=request.form.get('personal-last_name')
+		applicant.first_name=request.form.get('personal-first_name')
+		applicant.middle_name=request.form.get('personal-middle_name')		
+		applicant.email=request.form.get('personal-email')
+		applicant.mobile1=request.form.get('personal-mobile1')
+		applicant.mobile2=request.form.get('personal-mobile2')
+		applicant.landline=request.form.get('personal-landline')
+		applicant.address=request.form.get('personal-address')
+		applicant.marital_status=request.form.get('personal-marital_status')
+		applicant.course=request.form.get('education-course')
+		applicant.graduation_year=request.form.get('education-graduation_year')
+		applicant.applied_position=request.form.get('preference-applied_position')
+		applicant.expected_salary=request.form.get('preference-expected_salary')
+		applicant.preferred_shift=request.form.get('preference-shift')
+		applicant.preferred_location=request.form.get('preference-location')
+		applicant.status=request.form.get('call-disposition')
+		applicant.remarks=request.form.get('call-remarks')
+		applicant.source=request.form.get('additional-source')
+		applicant.hr_id=current_user.id
+
+		birthdate = request.form.get('personal-birthdate')
+		if birthdate != '':
+			applicant.birthdate = datetime.strptime('{0}'.format(birthdate), '%Y-%m-%d')
+
+		educational_attainment = request.form.get('education-attainment')
+		if educational_attainment != '':
+			applicant.educational_attainment = educational_attainment
+
+		interview_date = request.form.get('additional-interview_date')
+		interview_time = request.form.get('additional-interview_time')
+
+		if interview_date != '' and interview_time != '':
+			timepiece = interview_time.split(" ")
+
+			try:
+				hour = timepiece[0].split(":")[0]
+				minute = timepiece[0].split(":")[1]
+			except IndexError as e:
+				minute = '00'
+
+			locale_time = timepiece[1]
+
+			interview_datetime = datetime.strptime('{0} {1}:{2} {3}'.format(interview_date, hour, minute, locale_time), '%Y-%m-%d %I:%M %p')
+
+			applicant.interview_datetime = interview_datetime
 
 		call = CallHistory(
-				hr_id=current_user.id,
-				applicant_id=applicant.id
-			)
+			hr_id=current_user.id,
+			applicant_id=applicant.id
+		)
 
 		db.session.add(call)
 		db.session.commit()
-		return redirect(url_for('hr.process_page'))
-	
-	return render_template('.html', form=form, applicant=applicant)
+
+		call_date_str = datetime.strftime(call.datetime, '%B %d, %Y %I:%M %p')
+		flash('You called applicant {0} {1} on {2}'.format(applicant.first_name, applicant.last_name, call_date_str), 'success')
+		return redirect(url_for('hr.home_page'))
+
+	else:		
+		flash('Applicant not modified', 'danger')
+		print('==================== ERRORS: add_applicant() ================')
+		for err in form.errors:
+			print(err)
+		print('=============================================================')
+		for err in form.personal.errors:
+			print(err)
+		print('=============================================================')
+		for err in form.education.errors:
+			print(err)
+		print('=============================================================')
+		for err in form.preference.errors:
+			print(err)
+		print('=============================================================')
+		for err in form.call.errors:
+			print(err)
+		print('=============================================================')
+		for err in form.additional.errors:
+			print(err)
+
+		return render_template('pages/account/hr/call_applicant.html', form=form, applicant=applicant)
+
+	return redirect(url_for('hr.call_applicant_page', applicant_id=applicant_id))
 
 
 @hr.route('/add/applicant', methods=['POST'])
 @login_required
 def add_applicant():
 	form = CalloutForm(request.form)
-
-	if form is None:
-		return 'Hey'
 
 	if form.validate_on_submit():
 		applicant = Applicant(
@@ -125,7 +298,6 @@ def add_applicant():
 		if educational_attainment != '':
 			applicant.educational_attainment = educational_attainment
 
-		# TODO: Add applicant interview date and time
 		interview_date = request.form.get('additional-interview_date')
 		interview_time = request.form.get('additional-interview_time')
 

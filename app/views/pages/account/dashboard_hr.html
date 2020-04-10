@@ -37,67 +37,61 @@
                     <th>Preferred Position</th>
                     <th>Preferred Location</th>
                     <th>Source</th>
-                    <th>Call Count</th>
                     <th>Current Disposition</th>
                 </tr>                
             </thead>
             <tbody>
-                <tr>
-                    <td>
-                        <div class="btn-group btn-group-sm" role="group">
-                            <a href="#" data-placement="top" data-toggle="tooltip" title="Call"
-                            class="btn btn-success tooltips">
-                                <i class="fas fa-fw fa-phone-alt"></i>
-                            </a>
-                            <a href="#" data-placement="top" data-toggle="tooltip" title="Edit"
-                            class="btn btn-primary tooltips">
-                                <i class="fas fa-fw fa-edit"></i>
-                            </a>
-                            <a href="#" data-placement="top" data-toggle="tooltip" title="View"
-                            class="btn btn-info tooltips">
-                                <i class="fab fa-readme"></i>
-                            </a>
-                        </div>
-                    </td>
-                    <td>7/10/2017</td>
-                    <td>Sarah May Ambac</td>
-                    <td>9776506546</td>
-                    <td>sarahmayambac10@gmail.com</td>
-                    <td>CSR</td>
-                    <td>Iloilo City</td>
-                    <td>A</td>
-                    <td>0</td>
-                    <td>No interaction</td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="btn-group btn-group-sm" role="group">
-                            <a href="#" data-placement="top" data-toggle="tooltip" title="Call"
-                            class="btn btn-success tooltips">
-                                <i class="fas fa-fw fa-phone-alt"></i>
-                            </a>
-                            <a href="#" data-placement="top" data-toggle="tooltip" title="Edit"
-                            class="btn btn-primary tooltips">
-                                <i class="fas fa-fw fa-edit"></i>
-                            </a>
-                            <a href="#" data-placement="top" data-toggle="tooltip" title="View"
-                            class="btn btn-info tooltips">
-                                <i class="fab fa-readme"></i>
-                            </a>
-                        </div>
-                    </td>
-                    <td>7/10/2017</td>
-                    <td>Adrian Velesrubio</td>
-                    <td>9287241667</td>
-                    <td>adrian.velesrubio@gmail.com</td>
-                    <td>CSR</td>
-                    <td>Santa Rosa, Laguna</td>
-                    <td>A</td>
-                    <td>0</td>
-                    <td>No interaction</td>
-                </tr>
+                {% for applicant in applicants %}
+                    <tr>
+                        <td>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a href="{{ url_for('hr.call_applicant_page', applicant_id=applicant.id) }}" data-placement="top" data-toggle="tooltip" title="Call"
+                                class="btn btn-success tooltips">
+                                    <i class="fas fa-fw fa-phone-alt"></i>
+                                </a>
+                                <a href="{{ url_for('hr.edit_applicant_page', applicant_id=applicant.id) }}" data-placement="top" data-toggle="tooltip" title="Edit"
+                                class="btn btn-primary tooltips">
+                                    <i class="fas fa-fw fa-edit"></i>
+                                </a>
+                                <a href="{{ url_for('hr.view_applicant_page', applicant_id=applicant.id) }}" data-placement="top" data-toggle="tooltip" title="View"
+                                class="btn btn-info tooltips">
+                                    <i class="fab fa-readme"></i>
+                                </a>
+                            </div>
+                        </td>
+                        <td>
+                            <time class="from-now"
+                                data-datetime="{{ applicant.acquire_date }}">
+                                {{ applicant.acquire_date }}
+                            </time>
+                        </td>
+                        <td>{{ applicant.first_name }} {{ applicant.last_name }}</td>
+                        <td>{{ applicant.mobile1 }}</td>
+                        <td>{{ applicant.email }}</td>
+                        <td>{{ applicant.applied_position }}</td>
+                        <td>{{ applicant.preferred_location }}</td>
+                        <td>{{ applicant.source }}</td>
+                        <td>{{ applicant.status|title }}</td>
+                    </tr>                    
+                {% endfor %}
             </tbody>
         </table>
     </div>
 
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Date Formatting with momentjs
+            $('.from-now').each(function(i, e) {
+                ( function updateTime() {
+                    var time = moment($(e).data('datetime'));
+                    $(e).text(time.fromNow());
+                    $(e).attr('title', time.format('MMMM Do YYYY, h:mm:ss a Z'));
+                    setTimeout(updateTime, 1000);
+                })();
+            });
+        });
+    </script>
 {% endblock %}

@@ -25,11 +25,11 @@
 {% block page_content %}
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-4 text-gray-800">Callout Form</h1>
+    <h1 class="h3 mb-4 text-gray-800">Candidate Contact Information</h1>
 
     <div class="row">
         <div class="col-md-12">
-            <form method="POST" action="{{ url_for('hr.add_applicant') }}">
+            <form method="POST" action="{{ url_for('hr.edit_applicant', applicant_id=applicant.id) }}">
                 {{ form.hidden_tag() }}
                 {{ form.personal.hidden_tag() }}
                 {{ form.education.hidden_tag() }}
@@ -62,7 +62,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.personal.last_name(class="form-control form-control-sm")}}
+                                        {{ form.personal.last_name(class="form-control form-control-sm", value=applicant.last_name) }}
                                     {% endif %}
                                 </div>
 
@@ -82,7 +82,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.personal.first_name(class="form-control form-control-sm")}}
+                                        {{ form.personal.first_name(class="form-control form-control-sm", value=applicant.first_name) }}
                                     {% endif %}
                                 </div>
 
@@ -102,7 +102,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.personal.middle_name(class="form-control form-control-sm")}}
+                                        {{ form.personal.middle_name(class="form-control form-control-sm", value=applicant.middle_name) }}
                                     {% endif %}
                                 </div>
 
@@ -122,7 +122,8 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.personal.birthdate(class="form-control form-control-sm")}}
+
+                                        {{ form.personal.birthdate(class="form-control form-control-sm", value=applicant.birthdate|form_date) }}
                                     {% endif %}
                                 </div>
 
@@ -142,7 +143,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.personal.email(class="form-control form-control-sm")}}
+                                        {{ form.personal.email(class="form-control form-control-sm", value=applicant.email) }}
                                     {% endif %}
                                 </div>
 
@@ -162,7 +163,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.personal.mobile1(class="form-control form-control-sm")}}
+                                        {{ form.personal.mobile1(class="form-control form-control-sm", value=applicant.mobile1) }}
                                     {% endif %}
                                 </div>
 
@@ -182,7 +183,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.personal.mobile2(class="form-control form-control-sm")}}
+                                        {{ form.personal.mobile2(class="form-control form-control-sm", value=applicant.mobile2) }}
                                     {% endif %}
                                 </div>
 
@@ -202,7 +203,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.personal.landline(class="form-control form-control-sm")}}
+                                        {{ form.personal.landline(class="form-control form-control-sm", value=applicant.landline) }}
                                     {% endif %}
                                 </div>
 
@@ -222,7 +223,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.personal.address(class="form-control form-control-sm")}}
+                                        {{ form.personal.address(class="form-control form-control-sm") }}
                                     {% endif %}
                                 </div>
 
@@ -242,7 +243,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.personal.marital_status(class="form-control form-control-sm")}}
+                                        {{ form.personal.marital_status(class="form-control form-control-sm", value=applicant.marital_status) }}
                                     {% endif %}
                                 </div>
                             </fieldset>                            
@@ -272,7 +273,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.education.attainment(class="form-control form-control-sm")}}
+                                        {{ form.education.attainment(class="form-control form-control-sm", value=applicant.educational_attainment) }}
                                     {% endif %}
                                 </div>
 
@@ -292,7 +293,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.education.course(class="form-control form-control-sm")}}
+                                        {{ form.education.course(class="form-control form-control-sm", value=applicant.course) }}
                                     {% endif %}
                                 </div>
 
@@ -312,7 +313,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.education.graduation_year(class="form-control form-control-sm")}}
+                                        {{ form.education.graduation_year(class="form-control form-control-sm", value=applicant.graduation_year) }}
                                     {% endif %}
                                 </div>
                             </fieldset>
@@ -346,7 +347,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.preference.applied_position(class="form-control form-control-sm")}}
+                                        {{ form.preference.applied_position(class="form-control form-control-sm", value=applicant.applied_position) }}
                                     {% endif %}
                                 </div>
 
@@ -366,7 +367,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.preference.expected_salary(class="form-control form-control-sm")}}
+                                        {{ form.preference.expected_salary(class="form-control form-control-sm", value=applicant.expected_salary) }}
                                     {% endif %}
                                 </div>
 
@@ -386,7 +387,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.preference.shift(class="form-control form-control-sm")}}
+                                        {{ form.preference.shift(class="form-control form-control-sm", value=applicant.preferred_shift) }}
                                     {% endif %}
                                 </div>
 
@@ -406,7 +407,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.preference.location(class="form-control form-control-sm")}}
+                                        {{ form.preference.location(class="form-control form-control-sm", value=applicant.preferred_location) }}
                                     {% endif %}
                                 </div>
                             </fieldset>
@@ -436,7 +437,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.call.disposition(class="form-control form-control-sm")}}
+                                        {{ form.call.disposition(class="form-control form-control-sm", value=applicant.status) }}
                                     {% endif %}
                                 </div>
 
@@ -456,7 +457,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.call.remarks(class="form-control form-control-sm")}}
+                                        {{ form.call.remarks(class="form-control form-control-sm", value=applicant.remarks) }}
                                     {% endif %}
                                 </div>
                             </fieldset>
@@ -486,7 +487,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.additional.source(class="form-control form-control-sm")}}
+                                        {{ form.additional.source(class="form-control form-control-sm", value=applicant.source) }}
                                     {% endif %}
                                 </div>
 
@@ -506,7 +507,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.additional.interview_date(class="form-control form-control-sm")}}
+                                        {{ form.additional.interview_date(class="form-control form-control-sm", value=applicant.interview_datetime|form_date) }}
                                     {% endif %}
                                 </div>
 
@@ -526,7 +527,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.additional.interview_time(class="form-control form-control-sm")}}
+                                        {{ form.additional.interview_time(class="form-control form-control-sm", value=applicant.interview_datetime|form_time) }}
                                     {% endif %}
                                 </div>
                             </fieldset>

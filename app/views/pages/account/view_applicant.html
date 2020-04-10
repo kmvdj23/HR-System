@@ -1,0 +1,239 @@
+{% extends 'layouts/dashboard.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block sidebar %}
+    {% if current_user.account_type == 2 %}
+        <!-- Nav Item - Call History -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('hr.call_history') }}">
+                <i class="fas fa-fw fa-history"></i>
+                <span>Call History</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - Callout Form -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('hr.add_applicant_page') }}">
+                <i class="fas fa-fw fa-phone-alt"></i>
+                <span>Callout Form</span>
+            </a>
+        </li>
+    {% endif %}
+{% endblock %}
+
+{% block page_content %}
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">Candidate Summary</h1>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    <h3>{{ applicant.first_name }} {{ applicant.last_name }}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+                                <a class="nav-link active" id="personal-tab" data-toggle="pill" href="#personal-pane" role="tab" aria-controls="personal-pane" aria-selected="true">Personal Information</a>
+                                <a class="nav-link" id="education-tab" data-toggle="pill" href="#education-pane" role="tab" aria-controls="education-pane" aria-selected="false">Scholastic Information</a>
+                                <a class="nav-link" id="preference-tab" data-toggle="pill" href="#preference-pane" role="tab" aria-controls="preference-pane" aria-selected="false">Job Preference</a>
+                                <a class="nav-link" id="call-tab" data-toggle="pill" href="#call-pane" role="tab" aria-controls="call-pane" aria-selected="false">Call Information</a>
+                                <a class="nav-link" id="additional-tab" data-toggle="pill" href="#additional-pane" role="tab" aria-controls="additional-pane" aria-selected="false">Additional Information</a>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="tab-content" id="v-pills-tabContent">
+                                <div class="tab-pane fade show active" id="personal-pane" role="tabpanel" aria-labelledby="personal-tab">
+                                    <div class="form-group">
+                                        <h4>Full Name</h4>
+                                        {{ applicant.id|full_name }}
+                                        <hr>
+                                    </div>
+                                    {% if applicant.birthdate|form_date != '' %}
+                                        <div class="form-group">
+                                            <h4>Birthdate</h4>
+                                            {{ applicant.birthdate|form_date }}
+                                            <hr>
+                                        </div>
+                                    {% endif %}
+                                    <div class="form-group">
+                                        <h4>Email</h4>
+                                        {{ applicant.email }}
+                                        <hr>
+                                    </div>
+                                    <div class="form-group">
+                                        <h4>Mobile 1</h4>
+                                        {{ applicant.mobile1 }}
+                                        <hr>
+                                    </div>
+                                    {% if applicant.mobile2 != '' %}
+                                        <div class="form-group">
+                                            <h4>Mobile 2</h4>
+                                            {{ applicant.mobile2 }}
+                                            <hr>
+                                        </div>
+                                    {% endif %}
+                                    {% if applicant.landline != '' %}
+                                        <div class="form-group">
+                                            <h4>Landline</h4>
+                                            {{ applicant.landline }}
+                                            <hr>
+                                        </div>
+                                    {% endif %}
+                                    {% if applicant.address != '' %}
+                                        <div class="form-group">
+                                            <h4>Address</h4>
+                                            {{ applicant.address }}
+                                            <hr>
+                                        </div>
+                                    {% endif %}
+                                    <div class="form-group">
+                                        <h4>Marital Status</h4>
+                                        {{ applicant.marital_status|title }}
+                                        <hr>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="education-pane" role="tabpanel" aria-labelledby="education-tab">
+                                    {% if applicant.id|no_scholastic_info %}
+                                    <div class="jumbotron d-flex align-items-center no-data">
+                                        <div class="container">
+                                            <h1>No Data</h1>
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                        <div class="form-group">
+                                            <h4>Educational Attainment</h4>
+                                            {{ applicant.educational_attainment|title }}
+                                            <hr>
+                                        </div>
+                                        {% if applicant.course != '' %}
+                                            <div class="form-group">
+                                                <h4>Course</h4>
+                                                {{ applicant.course }}
+                                                <hr>
+                                            </div>
+                                        {% endif %}
+                                        {% if applicant.graduation_year != '' %}
+                                            <div class="form-group">
+                                                <h4>Graduation Year</h4>
+                                                {{ applicant.graduation_year }}
+                                                <hr>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div class="tab-pane fade" id="preference-pane" role="tabpanel" aria-labelledby="preference-tab">
+                                    {% if applicant.id|no_preference %}
+                                    <div class="jumbotron d-flex align-items-center no-data">
+                                        <div class="container">
+                                            <h1>No Data</h1>
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                        {% if applicant.applied_position != '' %}
+                                            <div class="form-group">
+                                                <h4>Preferred Position</h4>
+                                                {{ applicant.applied_position }}
+                                                <hr>
+                                            </div>
+                                        {% endif %}
+                                        {% if applicant.expected_salary != '' %}
+                                            <div class="form-group">
+                                                <h4>Expected Salary</h4>
+                                                {{ applicant.expected_salary }}
+                                                <hr>
+                                            </div>
+                                        {% endif %}
+                                        {% if applicant.preferred_shift != '' %}
+                                            <div class="form-group">
+                                                <h4>Preferred Shift</h4>
+                                                {{ applicant.preferred_shift|title }}
+                                                <hr>
+                                            </div>
+                                        {% endif %}
+                                        {% if applicant.preferred_location != '' %}
+                                            <div class="form-group">
+                                                <h4>Preferred Locaation</h4>
+                                                {{ applicant.preferred_location }}
+                                                <hr>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div class="tab-pane fade" id="call-pane" role="tabpanel" aria-labelledby="call-tab">
+                                    {% if applicant.id|no_call_info %}
+                                    <div class="jumbotron d-flex align-items-center no-data">
+                                        <div class="container">
+                                            <h1>No Data</h1>
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                        <div class="form-group">
+                                            <h4>Interviewer</h4>
+                                            {{ applicant.hr.first_name }} {{ applicant.hr.last_name }}
+                                            <hr>
+                                        </div>
+                                        {% if applicant.calls|length > 0 %}
+                                            <div class="form-group">
+                                                <h4>Number of Calls</h4>
+                                                {{ applicant.calls|length }}
+                                                <hr>
+                                            </div>
+                                        {% endif %}
+                                        <div class="form-group">
+                                            <h4>Applicant Status</h4>
+                                            {{ applicant.status|title }}
+                                            <hr>
+                                        </div>
+                                        {% if applicant.remarks != '' %}
+                                            <div class="form-group">
+                                                <h4>Interviewer Remarks</h4>
+                                                {{ applicant.remarks }}
+                                                <hr>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div class="tab-pane fade" id="additional-pane" role="tabpanel" aria-labelledby="additional-tab">
+                                    {% if applicant.id|no_additional_info %}
+                                    <div class="jumbotron d-flex align-items-center no-data">
+                                        <div class="container">
+                                            <h1>No Data</h1>
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                        {% if applicant.interview_datetime|form_date != '' %}
+                                            <div class="form-group">
+                                                <h4>Interview Date</h4>
+                                                {{ applicant.interview_datetime|form_date }}
+                                                <hr>
+                                            </div>
+                                        {% endif %}
+                                        {% if applicant.interview_datetime|form_time != '' %}
+                                            <div class="form-group">
+                                                <h4>Interview Time</h4>
+                                                {{ applicant.interview_datetime|form_time }}
+                                                <hr>
+                                            </div>
+                                        {% endif %}
+                                        {% if applicant.source != '' %}
+                                            <div class="form-group">
+                                                <h4>Application Source</h4>
+                                                {{ applicant.source }}
+                                                <hr>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

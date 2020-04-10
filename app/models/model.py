@@ -47,6 +47,7 @@ class Account(db.Model, UserMixin):
     def get_callers(cls):
         return Account.query.filter(cls.account_type == 2 and cls.is_active() == True).all()
 
+
 class Applicant(db.Model):
     __tablename__ = 'applicant'
 
@@ -121,7 +122,6 @@ class Applicant(db.Model):
                                         index=True, nullable=False, server_default='pending')
     remarks = db.Column(db.String(300), nullable=True)
 
-
     # Additional Information
     acquire_date = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
     source = db.Column(db.String(30), nullable=True)
@@ -137,7 +137,7 @@ class Applicant(db.Model):
 
     @classmethod
     def find_applicant(cls, id):
-        return Applicant.query.filter(cls.id == id)
+        return Applicant.query.filter(cls.id == id).first()
 
     @classmethod
     def search(cls, query):
@@ -156,9 +156,10 @@ class Applicant(db.Model):
             or (cls.status.name == query)
         )
 
+
 class CallHistory(db.Model):
 
-    __tablename__ = 'callhistory'
+    __tablename__ = 'call_history'
 
     id = db.Column(db.Integer, primary_key=True)
     datetime = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
@@ -169,6 +170,7 @@ class CallHistory(db.Model):
 
     applicant_id = db.Column(db.Integer, db.ForeignKey('applicant.id'))
     applicant = db.relationship('Applicant', backref=db.backref('calls', lazy=True))
+    # TODO: create_table, fix html call count
 
     @classmethod
     def find_call(cls, id):
