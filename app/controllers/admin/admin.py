@@ -109,3 +109,35 @@ def add_applicant():
 	return redirect(url_for('admin.add_applicant_page'))
 
 
+@admin.route('/import', methods=['POST'])
+@login_required
+def import_from_csv():
+
+	if 'file' not in request.files:
+		flash('No File Uploaded')
+		return redirect(url_for('admin.home_page'))
+	
+	csv_file = request.files.get('file')
+
+	if csv_file:
+		with open(csv_file, 'r') as file:
+			file.readline() #Ignore Column Headers
+			line =  file.readline()
+			while line:
+				details = line.strip().split(',')
+				applicant = Applicant(
+					last_name=details[0],
+					first_name=details[1],
+					email=details[2],
+					mobile1=details[3],
+					applied_position=details[4]
+					)
+
+				db.session.add(applicant)
+
+				line = file.readline()
+			db.session.commit()
+			file.close()
+
+	return redirect(url_for('admin.home_page'))
+
