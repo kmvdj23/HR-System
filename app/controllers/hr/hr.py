@@ -85,16 +85,11 @@ def edit_applicant(applicant_id):
 	applicant = Applicant.find_applicant(applicant_id)
 	form.personal.address.data = applicant.address
 	form.call.remarks.data = applicant.remarks
-	# form.call.hr.choices = list()
-
-	# callers = Account.get_callers()
-	# for caller in callers:
-	# 	form.call.hr.choices.append((caller.id, caller.username))		
 
 	if form.validate_on_submit():
 		applicant.last_name=request.form.get('personal-last_name')
 		applicant.first_name=request.form.get('personal-first_name')
-		applicant.middle_name=request.form.get('personal-middle_name')		
+		applicant.middle_name=request.form.get('personal-middle_name')
 		applicant.email=request.form.get('personal-email')
 		applicant.mobile1=request.form.get('personal-mobile1')
 		applicant.mobile2=request.form.get('personal-mobile2')
@@ -143,7 +138,7 @@ def edit_applicant(applicant_id):
 		flash('Applicant {0} {1} has been modified'.format(applicant.first_name, applicant.last_name), 'success')
 		return redirect(url_for('hr.home_page'))
 
-	else:		
+	else:
 		flash('Applicant not modified', 'danger')
 		print('==================== ERRORS: add_applicant() ================')
 		for err in form.errors:
@@ -176,11 +171,11 @@ def call_applicant(applicant_id):
 	applicant = Applicant.find_applicant(applicant_id)
 	form.personal.address.data = applicant.address
 	form.call.remarks.data = applicant.remarks
-	
+
 	if form.validate_on_submit():
 		applicant.last_name=request.form.get('personal-last_name')
 		applicant.first_name=request.form.get('personal-first_name')
-		applicant.middle_name=request.form.get('personal-middle_name')		
+		applicant.middle_name=request.form.get('personal-middle_name')
 		applicant.email=request.form.get('personal-email')
 		applicant.mobile1=request.form.get('personal-mobile1')
 		applicant.mobile2=request.form.get('personal-mobile2')
@@ -236,7 +231,7 @@ def call_applicant(applicant_id):
 		flash('You called applicant {0} {1} on {2}'.format(applicant.first_name, applicant.last_name, call_date_str), 'success')
 		return redirect(url_for('hr.home_page'))
 
-	else:		
+	else:
 		flash('Applicant not modified', 'danger')
 		print('==================== ERRORS: add_applicant() ================')
 		for err in form.errors:

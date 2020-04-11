@@ -3,7 +3,31 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block sidebar %}
-    {% if current_user.account_type == 2 %}
+    {% if current_user.account_type == 1 %}
+        <!-- Nav Item - Account Records -->
+        <li class="nav-item">
+            <a class="nav-link" href="tables.html">
+                <i class="fas fa-fw fa-table"></i>
+                <span>HR Records</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - Callout Form -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('admin.add_applicant_page') }}">
+                <i class="fas fa-fw fa-phone-alt"></i>
+                <span>Callout Form</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - Candidate List -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('admin.candidates_page') }}">
+                <i class="fas fa-fw fa-th-list"></i>
+                <span>Candidate List</span>
+            </a>
+        </li>
+    {% elif current_user.account_type == 2 %}
         <!-- Nav Item - Call History -->
         <li class="nav-item">
             <a class="nav-link" href="{{ url_for('hr.call_history') }}">
@@ -29,7 +53,12 @@
 
     <div class="row">
         <div class="col-md-12">
-            <form method="POST" action="{{ url_for('hr.edit_applicant', applicant_id=applicant.id) }}">
+            {% if current_user.account_type == 1 %}
+                {% set endpoint = 'admin.edit_applicant' %}
+            {% elif current_user.account_type == 2 %}
+                {% set endpoint = 'hr.edit_applicant' %}
+            {% endif %}
+            <form method="POST" action="{{ url_for(endpoint, applicant_id=applicant.id) }}">
                 {{ form.hidden_tag() }}
                 {{ form.personal.hidden_tag() }}
                 {{ form.education.hidden_tag() }}
@@ -246,7 +275,7 @@
                                         {{ form.personal.marital_status(class="form-control form-control-sm", value=applicant.marital_status) }}
                                     {% endif %}
                                 </div>
-                            </fieldset>                            
+                            </fieldset>
                         </div>
                         <!-- End of Personal Information -->
 
@@ -460,6 +489,29 @@
                                         {{ form.call.remarks(class="form-control form-control-sm", value=applicant.remarks) }}
                                     {% endif %}
                                 </div>
+
+                                {% if current_user.account_type == 1 %}
+                                    <!-- HR -->
+                                    <div class="form-group mb-2">
+                                        {% if form.call.hr.flags.required %}
+                                            {{ form.call.hr.label(class="form-control-label", text=form.call.hr.label.text + '*') }}
+                                        {% else %}
+                                            {{ form.call.hr.label(class="form-control-label") }}
+                                        {% endif %}
+
+                                        {% if form.call.hr.errors %}
+                                            {{ form.call.hr(class="form-control form-control-sm is-invalid")}}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.call.hr.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {{ form.call.hr(class="form-control form-control-sm", value=applicant.hr_id|string)}}
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+
                             </fieldset>
                         </div>
                         <!-- End of Call Information -->

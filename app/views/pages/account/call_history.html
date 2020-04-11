@@ -23,7 +23,7 @@
 {% endblock %}
 
 {% block page_content %}
-    
+
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Callout Candidates</h1>
 
@@ -38,7 +38,7 @@
                     <th>Remarks</th>
                     <th>Call Date</th>
                     <th>Interview Date & Time</th>
-                </tr>                
+                </tr>
             </thead>
             <tbody>
                 {% for call in calls %}
@@ -46,7 +46,7 @@
                         <td>{{ call.applicant.first_name }} {{ call.applicant.last_name }}</td>
                         <td>{{ call.applicant.mobile1 }}</td>
                         <td>{{ call.applicant.email }}</td>
-                        <td>{{ call.applicant.status|title }}</td>
+                        <td>{{ call.applicant.status|select }}</td>
                         <td>{{ call.applicant.remarks }}</td>
                         <td>
                             <time class="from-now" data-datetime="{{ call.datetime }}">

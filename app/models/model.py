@@ -5,7 +5,7 @@ from flask_login import  UserMixin
 
 
 class Account(db.Model, UserMixin):
-    
+
     # TODO: rename fields (e.g. account_type -> role)
 
     __tablename__ = 'account'
@@ -23,7 +23,7 @@ class Account(db.Model, UserMixin):
     mobile_number = db.Column(db.String(11))
     active = db.Column('is_active', db.Boolean(), nullable=False, server_default='1')
 
-    
+
     @classmethod
     def find_account(cls, username):
         return Account.query.filter(cls.username == username).first()
@@ -33,9 +33,9 @@ class Account(db.Model, UserMixin):
         query = '%{0}%'.format(query)
         return Account.query.filter((cls.username == query)
             or (cls.account_type == query)
-            or (cls.is_active == query) 
+            or (cls.is_active == query)
             ).all()
-    
+
     @classmethod
     def get_all_accounts(cls):
         return Account.query.all()
@@ -183,51 +183,3 @@ class CallHistory(db.Model):
             or (cls.applicant_id == query)
             or (cls.datetime == query)
             )
-
-# class Applicant(db.Model):
-
-#     __tablename__ = 'applicant'
-
-#     id = db.Column(db.Integer, primary_key=True)
-
-#     #Applicant Details
-#     first_name = db.Column(db.String(24), nullable=False)
-#     middle_name = db.Column(db.String(24), nullable=False)
-#     last_name = db.Column(db.String(24), nullable=False)
-#     address = db.Column(db.String(100), nullable=False)
-#     mobile_number = db.Column(db.String(11), nullable=False)
-#     marital_status = db.Column(db.String(24))
-#     educational_attainment = db.Column(db.String(24))
-#     source = db.Column(db.String(24), nullable=False)
-#     expected_salary = db.Column(db.Integer, nullable=False)
-#     comments = db.Column(db.String(80))
-
-#     # ===================== Relationships ==================================
-
-#     hr_id = db.Column(db.Integer, db.ForeignKey('account.id'))
-#     hr = db.relationship('Account', backref=db.backref('applicants', lazy=True))
-
-#     applicant_status = db.Column(db.Integer, db.ForeignKey('status.id'), nullable=False, server_default='1')
-#     status = db.relationship('Status', backref=db.backref('applicants', lazy=True))
-
-#     @classmethod
-#     def find_applicant(cls, applicant_id):
-#         return Applicant.query.filter(cls.id == applicant_id)
-
-#     @classmethod
-#     def search(cls, query):
-#         query = '%{0}%'.format(query)
-
-#         return Applicant.query.filter((cls.source == query)
-#             or (cls.hr_id == query)
-#             or (cls.expected_salary == query)
-#             or (applicant_status == query)
-#             )
-
-# class Status(db.Model):
-
-#     __tablename__ = 'status'
-
-#     id = db.Column(db.Integer, primary_key=True)
-
-#     name = db.Column(db.String(50), nullable=False)
