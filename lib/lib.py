@@ -1,4 +1,5 @@
 import random, string
+import os
 from werkzeug import security
 
 def choices_from_dict(source, prepend_blank=True):
@@ -36,3 +37,6 @@ def password_encrypt(raw_password):
 
 def password_decrypt(input_password, encrypted_password):
     return security.check_password_hash(encrypted_password, input_password)
+
+def validate_file(csv_file):
+    return os.path.splitext(csv_file)[1] in ['.csv']

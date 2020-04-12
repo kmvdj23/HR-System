@@ -116,7 +116,7 @@ class Applicant(db.Model):
 
     # Job Preference
     applied_position = db.Column(db.String(50), nullable=True)
-    expected_salary = db.Column(db.Integer, nullable=False)
+    expected_salary = db.Column(db.Integer, nullable=False, default=0)
     preferred_shift = db.Column(db.Enum(*SHIFT, name='preferred_shift', native_enum=False),
                                         index=True, nullable=False, server_default='any')
     preferred_location = db.Column(db.String(50), nullable=True)

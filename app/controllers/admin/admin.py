@@ -6,6 +6,9 @@ from flask_login import login_required, current_user
 from wtforms.validators import DataRequired
 from app.forms import CalloutForm, PersonalInformation, ScholasticInformation, JobPreference, CallInformation, AdditionalInformation
 from lib.app import Dashboard, HRStats
+import os
+from werkzeug.utils import secure_filename
+
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -281,27 +284,30 @@ def edit_applicant(applicant_id):
 @admin.route('/import', methods=['POST'])
 @login_required
 def import_from_csv():
+    callers = Account.get_callers()
+    iterator = 0
 
-    if 'file' not in request.files:
+    if 'csv-input' not in request.files:
         flash('No File Uploaded')
         return redirect(url_for('admin.candidates_page'))
 
-    csv_file = request.files.get('file')
+    csv_file = request.files.get('csv-input')
 
     if csv_file:
-        with open(csv_file, 'r') as file:
-            file.readline() #Ignore Column Headers
+        filename = secure_filename(csv_file.filename)
+        csv_file.save(os.path.join(os.getcwd(), 'app', 'uploads', filename))
+
+        with open(os.path.join(os.getcwd(), 'app', 'uploads', filename), 'r', encoding='utf-8-sig') as file:
+            headers = file.readline().strip().split(',')
             line =  file.readline()
             while line:
-                details = line.strip().split(',')
-                applicant = Applicant(
-                    last_name=details[0],
-                    first_name=details[1],
-                    email=details[2],
-                    mobile1=details[3],
-                    applied_position=details[4]
-                    )
-
+                data = line.strip().split(',')
+                applicant = Applicant(**dict(zip(headers,data)))
+                applicant.hr_id = callers[iterator].id
+                if iterator == len(callers)-1:
+                    iterator = 0
+                else:
+                    ++iterator
                 db.session.add(applicant)
 
                 line = file.readline()
