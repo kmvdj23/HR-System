@@ -11008,48 +11008,16 @@ body.sidebar-toggled footer.sticky-footer {
   width: 100%;
 }
 
-.text-A {
-  color: #25CBB5 !important;
+.text-phone-invite {
+  color: #8566aa !important;
 }
 
-.text-B {
-  color: #92C5BC !important;
+.text-no-reach {
+  color: #ff5733 !important;
 }
 
-.text-C {
-  color: #A2E6DD !important;
-}
-
-.text-D {
-  color: #A6DADA !important;
-}
-
-.text-E {
-  color: #BAF0D0 !important;
-}
-
-.text-F {
-  color: #b581b1 !important;
-}
-
-.text-G {
-  color: #E4DCB7 !important;
-}
-
-.text-H {
-  color: #EAD296 !important;
-}
-
-.text-I {
-  color: #ECCEB2 !important;
-}
-
-.text-J {
-  color: #F4B0A7 !important;
-}
-
-.text-K {
-  color: #F55D6A !important;
+.text-interview {
+  color: #d8ebb5 !important;
 }
 
 .flex {

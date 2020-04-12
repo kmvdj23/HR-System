@@ -5,6 +5,7 @@ from flask import redirect, request, render_template, url_for, flash, Blueprint
 from flask_login import login_required, current_user
 from wtforms.validators import DataRequired
 from app.forms import CalloutForm, PersonalInformation, ScholasticInformation, JobPreference, CallInformation, AdditionalInformation
+from lib.app import Dashboard
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -14,8 +15,14 @@ admin = Blueprint('admin', __name__, url_prefix='/admin')
 @login_required
 def home_page():
 	#Do Query Here
-	return render_template('pages/account/dashboard_admin.html')
+	stats = Dashboard()
+	return render_template('pages/account/dashboard_admin.html', stats=stats)
 
+@admin.route('/records')
+@login_required
+def records_page():
+	interviewers = Account.get_callers()
+	return render_template('pages/account/admin/records.html', interviewers=interviewers)
 
 @admin.route('/candidates')
 @login_required

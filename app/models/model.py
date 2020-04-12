@@ -47,6 +47,10 @@ class Account(db.Model, UserMixin):
     def get_callers(cls):
         return Account.query.filter(cls.account_type == 2 and cls.is_active() == True).all()
 
+    @classmethod
+    def count(cls):
+        return Account.query.count()
+
 
 class Applicant(db.Model):
     __tablename__ = 'applicant'
@@ -155,6 +159,10 @@ class Applicant(db.Model):
             or (cls.hr.username == query)
             or (cls.status.name == query)
         )
+
+    @classmethod
+    def count(cls):
+        return Applicant.query.count()
 
 
 class CallHistory(db.Model):
