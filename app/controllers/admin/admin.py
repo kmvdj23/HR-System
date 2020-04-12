@@ -5,7 +5,7 @@ from flask import redirect, request, render_template, url_for, flash, Blueprint
 from flask_login import login_required, current_user
 from wtforms.validators import DataRequired
 from app.forms import CalloutForm, PersonalInformation, ScholasticInformation, JobPreference, CallInformation, AdditionalInformation
-from lib.app import Dashboard
+from lib.app import Dashboard, HRStats
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -30,6 +30,18 @@ def candidates_page():
 	applicants = Applicant.query.all()
 	return render_template('pages/account/admin/candidates.html', applicants=applicants)
 
+@admin.route('/view/hr/<username>')
+@login_required
+def hr_page(username):
+	hr = Account.find_account(username)
+	stats = HRStats(hr.username)
+
+	if not hr:
+		flash('HR does not exist', 'danger')
+		return redirect(url_for('admin.records_page'))
+
+	return render_template('pages/account/admin/profile.html', hr=hr, stats=stats)
+
 
 @admin.route('/add/applicant')
 @login_required
@@ -43,6 +55,7 @@ def add_applicant_page():
 		form.call.hr.choices.append((caller.id, f'{caller.first_name} {caller.last_name} ({caller.username})'))
 
 	return render_template('pages/account/add_applicant.html', form=form)
+
 
 @admin.route('/<applicant_id>/modify')
 @login_required

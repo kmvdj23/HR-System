@@ -4,6 +4,64 @@ from sqlalchemy import func, extract
 from app.models import Account, Applicant
 
 
+class HRStats(object):
+    def __init__(self, username):
+        self.hr = Account.find_account(username)
+
+    def pending(self):
+        return Account.query.join(Applicant)\
+            .filter(Account.id == Applicant.hr_id)\
+            .filter(Applicant.status == 'pending')\
+            .filter(Account.id == self.hr.id).count()
+
+    def phone_invite(self):
+        return Account.query.join(Applicant)\
+            .filter(Account.id == Applicant.hr_id)\
+            .filter(Applicant.status == 'phone_invite')\
+            .filter(Account.id == self.hr.id).count()
+
+    def no_reach(self):
+        return Account.query.join(Applicant)\
+            .filter(Account.id == Applicant.hr_id)\
+            .filter(Applicant.status == 'no_reach')\
+            .filter(Account.id == self.hr.id).count()
+
+    def declined(self):
+        return Account.query.join(Applicant)\
+            .filter(Account.id == Applicant.hr_id)\
+            .filter(Applicant.status == 'declined')\
+            .filter(Account.id == self.hr.id).count()
+
+    def interview(self):
+        return Account.query.join(Applicant)\
+            .filter(Account.id == Applicant.hr_id)\
+            .filter(Applicant.status == 'interview')\
+            .filter(Account.id == self.hr.id).count()
+
+    def passed(self):
+        return Account.query.join(Applicant)\
+            .filter(Account.id == Applicant.hr_id)\
+            .filter(Applicant.status == 'passed')\
+            .filter(Account.id == self.hr.id).count()
+
+    def failed(self):
+        return Account.query.join(Applicant)\
+            .filter(Account.id == Applicant.hr_id)\
+            .filter(Applicant.status == 'failed')\
+            .filter(Account.id == self.hr.id).count()
+
+    def hired(self):
+        return Account.query.join(Applicant)\
+            .filter(Account.id == Applicant.hr_id)\
+            .filter(Applicant.status == 'hired')\
+            .filter(Account.id == self.hr.id).count()
+
+    def total(self):
+        return Account.query.join(Applicant)\
+            .filter(Account.id == Applicant.hr_id)\
+            .filter(Account.id == self.hr.id).count()
+
+
 class Dashboard(object):
     def __init__(self):
         self.candidate_status = CandidateStatus()

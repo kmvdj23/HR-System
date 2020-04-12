@@ -1,1 +1,1 @@
-from lib.app.dashboard_stats import Dashboard
+from lib.app.dashboard_stats import Dashboard, HRStats

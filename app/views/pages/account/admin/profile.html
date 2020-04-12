@@ -1,0 +1,125 @@
+{% extends 'layouts/dashboard.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block sidebar %}
+    <!-- Nav Item - Account Records -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('admin.records_page') }}">
+            <i class="fas fa-fw fa-table"></i>
+            <span>HR Records</span>
+        </a>
+    </li>
+
+    <!-- Nav Item - Callout Form -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('admin.add_applicant_page') }}">
+            <i class="fas fa-fw fa-phone-alt"></i>
+            <span>Callout Form</span>
+        </a>
+    </li>
+
+    <!-- Nav Item - Candidate List -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('admin.candidates_page') }}">
+            <i class="fas fa-fw fa-th-list"></i>
+            <span>Candidate List</span>
+        </a>
+    </li>
+{% endblock %}
+
+{% block page_content %}
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">HR Staff Summary</h1>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    <h3>{{ hr.first_name }} {{ hr.last_name }}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mr-2 mb-4">
+                            <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+                                <a class="nav-link active" id="personal-tab" data-toggle="pill" href="#personal-pane" role="tab" aria-controls="personal-pane" aria-selected="true">Personal Information</a>
+                                <a class="nav-link" id="performance-tab" data-toggle="pill" href="#performance-pane" role="tab" aria-controls="performance-pane" aria-selected="false">Performance</a>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="tab-content" id="v-pills-tabContent">
+                                <div class="tab-pane fade show active" id="personal-pane" role="tabpanel" aria-labelledby="personal-tab">
+                                    <div class="form-group">
+                                        <h4>Full Name</h4>
+                                        {{ hr.first_name }} {{ hr.last_name }}
+                                        <hr>
+                                    </div>
+                                    <div class="form-group">
+                                        <h4>Username</h4>
+                                        {{ hr.username }}
+                                        <hr>
+                                    </div>
+                                    <div class="form-group">
+                                        <h4>Mobile number</h4>
+                                        {{ hr.mobile_number }}
+                                        <hr>
+                                    </div>
+                                    <div class="form-group">
+                                        <h4>Status</h4>
+                                        {% if hr.active %}
+                                            Active
+                                        {% else %}
+                                            Inactive
+                                        {% endif %}
+                                        <hr>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="performance-pane" role="tabpanel" aria-labelledby="performance-tab">
+                                    <div class="form-group">
+                                        <strong>Pending Applicants: </strong>
+                                        {{ stats.pending() }}
+                                    </div>
+                                    <div class="form-group">
+                                        <strong>Phone invites: </strong>
+                                        {{ stats.phone_invite() }}
+                                    </div>
+                                    <div class="form-group">
+                                        <strong>Cannot reach: </strong>
+                                        {{ stats.no_reach() }}
+                                    </div>
+                                    <div class="form-group">
+                                        <strong>Applicants declined: </strong>
+                                        {{ stats.declined() }}
+                                    </div>
+                                    <div class="form-group">
+                                        <strong>Applicants for interview: </strong>
+                                        {{ stats.interview() }}
+                                    </div>
+                                    <div class="form-group">
+                                        <strong>Applicants passed: </strong>
+                                        {{ stats.passed() }}
+                                    </div>
+                                    <div class="form-group">
+                                        <strong>Applicants failed: </strong>
+                                        {{ stats.failed() }}
+                                    </div>
+                                    <div class="form-group">
+                                        <strong>Applicants hired: </strong>
+                                        {{ stats.hired() }}
+                                    </div>
+                                    <hr>
+                                    <div class="form-group">
+                                        <strong>Total applicants assigned: </strong>
+                                        {{ stats.total() }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

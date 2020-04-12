@@ -11043,3 +11043,8 @@ body.sidebar-toggled footer.sticky-footer {
   background-color: white;
   text-align: center;
 }
+
+#performance-pane h4, h3 {
+  display: inline;
+}
+
