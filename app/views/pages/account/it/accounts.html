@@ -33,7 +33,7 @@
                     <th>User Type</th>
                     <th>Status</th>
                     <th>Action</th>
-                </tr>                
+                </tr>
             </thead>
             <tbody>
                 {% for account in accounts %}
@@ -41,11 +41,11 @@
                         <td>{{ account.first_name }} {{ account.last_name }}</td>
 
                         <!-- TODO: ELIMINATE IF ELSE -->
-                        {% if account.account_type == 0 %}
+                        {% if account.role == 'it' %}
                             <td>IT</td>
-                        {% elif account.account_type == 1 %}
+                        {% elif account.role == 'admin' %}
                             <td>HR Admin</td>
-                        {% elif account.account_type == 2 %}
+                        {% elif account.role == 'hr' %}
                             <td>HR</td>
                         {% endif %}
 
@@ -71,7 +71,7 @@
                                             <i class="fas fa-lock"></i>
                                         </button>
                                     {% endif %}
-                                </div>                                
+                                </div>
                             </form>
                         </td>
 

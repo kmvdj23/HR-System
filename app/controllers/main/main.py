@@ -21,11 +21,11 @@ def login_page():
 @main.route('/dashboard')
 @login_required
 def home_page():
-	if current_user.account_type == 0:
+	if current_user.role == 'it':
 		return redirect(url_for('it.home_page'))
-	elif current_user.account_type == 1:
+	elif current_user.role == 'admin':
 		return redirect(url_for('admin.home_page'))
-	elif current_user.account_type == 2:
+	elif current_user.role == 'hr':
 		return redirect(url_for('hr.home_page'))
 
 
@@ -42,11 +42,11 @@ def login():
 	if request.method == 'POST':
 		account = Account.find_account(request.form.get('username'))
 		if account and password_decrypt(request.form.get('password'), account.password):
-			if login_user(account) and account.account_type == 0:
+			if login_user(account) and account.role == 'it':
 				return redirect(url_for('it.home_page'))
-			elif login_user(account) and account.account_type == 1:
+			elif login_user(account) and account.role == 'admin':
 				return redirect(url_for('admin.home_page'))
-			elif login_user(account) and account.account_type == 2:
+			elif login_user(account) and account.role == 'hr':
 				return redirect(url_for('hr.home_page'))
 		else:
 			flash('Invalid Account!')
@@ -101,6 +101,6 @@ def upload_profile_pic():
 		directory = upload_file(image, user=current_user)
 		print(directory)
 
-		# current_user.profile_pic = directory
-		# db.session.commit()
+		current_user.profile_pic = directory
+		db.session.commit()
 		return redirect(url_for('main.settings'))

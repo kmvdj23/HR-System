@@ -27,7 +27,7 @@ def home_page():
 @admin.route('/records')
 @login_required
 def records_page():
-	interviewers = Account.get_callers()
+	interviewers = Account.get_all_active_hr()
 	return render_template('pages/account/admin/records.html', interviewers=interviewers)
 
 
@@ -58,7 +58,7 @@ def add_applicant_page():
 	form.call.hr.validators.append(DataRequired())
 	form.call.hr.choices = list()
 
-	callers = Account.get_callers()
+	callers = Account.get_all_active_hr()
 	for caller in callers:
 		form.call.hr.choices.append((caller.id, f'{caller.first_name} {caller.last_name} ({caller.username})'))
 
@@ -76,7 +76,7 @@ def edit_applicant_page(applicant_id):
 	form.call.remarks.data = applicant.remarks
 	form.call.hr.choices = list()
 
-	callers = Account.get_callers()
+	callers = Account.get_all_active_hr()
 	for caller in callers:
 		form.call.hr.choices.append((caller.id, caller.username))
 
@@ -108,7 +108,7 @@ def add_applicant():
 	form.call.hr.validators.append(DataRequired())
 	form.call.hr.choices = list()
 
-	callers = Account.get_callers()
+	callers = Account.get_all_active_hr()
 	for caller in callers:
 		form.call.hr.choices.append((caller.id, f'{caller.first_name} {caller.last_name} ({caller.username})'))
 
@@ -165,7 +165,6 @@ def add_applicant():
 		db.session.commit()
 
 		flash('Applicant {0} {1} added successfully'.format(applicant.first_name, applicant.last_name), 'success')
-		# TODO: Make candidate list page
 		return redirect(url_for('admin.candidates_page'))
 
 	else:
@@ -205,7 +204,7 @@ def edit_applicant(applicant_id):
 	form.call.remarks.data = applicant.remarks
 	form.call.hr.choices = list()
 
-	callers = Account.get_callers()
+	callers = Account.get_all_active_hr()
 	for caller in callers:
 		form.call.hr.choices.append((caller.id, caller.username))
 
@@ -290,7 +289,7 @@ def edit_applicant(applicant_id):
 @admin.route('/import', methods=['POST'])
 @login_required
 def import_from_csv():
-    callers = Account.get_callers()
+    callers = Account.get_all_active_hr()
     iterator = 0
 
     if 'csv-input' not in request.files:

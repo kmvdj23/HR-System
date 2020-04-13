@@ -30,7 +30,7 @@ def account_page(username):
     if not account:
         flash('Account does not Exist')
         return redirect(url_for('it.accounts_page'))
-    return render_template('pages/account/it/account.html' , account=account)   
+    return render_template('pages/account/it/account.html' , account=account)
 
 
 @login_required
@@ -46,7 +46,7 @@ def edit_page(username):
         return redirect(url_for('it.accounts_page'))
 
     # TODO: Set other values here instead
-    form.account_type.default = account.account_type
+    form.role.default = account.role
     form.process()
 
     return render_template('pages/account/it/edit_user.html', form=form, account=account, generated_password=generated_password)
@@ -72,9 +72,10 @@ def register():
             first_name=request.form.get('first_name'),
             last_name=request.form.get('last_name'),
             username=request.form.get('username'),
-            mobile_number=request.form.get('mobile'),
-            password=password_encrypt(request.form.get('password')), 
-            account_type=int(request.form.get('account_type'))
+            mobile=request.form.get('mobile'),
+            email=request.form.get('email'),
+            password=password_encrypt(request.form.get('password')),
+            role=request.form.get('role')
         )
 
         db.session.add(account)
@@ -83,11 +84,11 @@ def register():
         flash('Account for {0} created successfully'.format(account.username), 'success')
     else:
         flash('Account not created', 'danger')
-        
+
         print('==================== ERRORS: register() ================')
         for err in form.errors:
             print(err)
-        
+
         return render_template('pages/account/it/add_user.html', form=form)
 
     return redirect(url_for('it.register_page'))
@@ -105,19 +106,20 @@ def edit(username):
         account.first_name = request.form.get('first_name')
         account.last_name = request.form.get('last_name')
         account.username = request.form.get('username')
-        account.mobile_number = request.form.get('mobile')
-        account.account_type = int(request.form.get('account_type'))
+        account.email = request.form.get('email')
+        account.mobile = request.form.get('mobile')
+        account.role = request.form.get('role')
 
         db.session.commit()
 
         flash('Account updated for {0}'.format(account.username))
     else:
         flash('Account not modified', 'danger')
-        
+
         print('==================== ERRORS: edit() ================')
         for err in form.errors:
             print(err)
-        
+
         return render_template('pages/account/it/edit_user.html', form=form, account=account, generated_password=generated_password)
 
     return redirect(url_for('it.edit_page', username=username))

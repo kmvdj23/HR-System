@@ -80,6 +80,22 @@
                             {% endif %}
                         </div>
 
+                        <!-- Email -->
+                        <div class="form-group mb-2">
+                            {{ form.email.label(class="form-control-label") }}
+
+                            {% if form.email.errors %}
+                                {{ form.email(class="form-control form-control-sm is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.email.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.email(class="form-control form-control-sm")}}
+                            {% endif %}
+                        </div>
+
                         <!-- Mobile Number -->
                         <div class="form-group mb-2">
                             {{ form.mobile.label(class="form-control-label") }}
@@ -130,17 +146,17 @@
 
                         <!-- Account Type -->
                         <div class="form-group mb-2">
-                            {{ form.account_type.label(class="form-control-label") }}
+                            {{ form.role.label(class="form-control-label") }}
 
-                            {% if form.account_type.errors %}
-                                {{ form.account_type(class="form-control form-control-sm is-invalid")}}
+                            {% if form.role.errors %}
+                                {{ form.role(class="form-control form-control-sm is-invalid")}}
                                 <div class="invalid-feedback">
-                                    {% for error in form.account_type.errors %}
+                                    {% for error in form.role.errors %}
                                         <span>{{ error }}</span>
                                     {% endfor %}
                                 </div>
                             {% else %}
-                                {{ form.account_type(class="form-control form-control-sm")}}
+                                {{ form.role(class="form-control form-control-sm")}}
                             {% endif %}
                         </div>
 

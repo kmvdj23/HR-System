@@ -1,58 +1,71 @@
-import datetime
+from datetime import datetime
 from collections import OrderedDict
 from app.config import db
 from flask_login import  UserMixin
+from app.models.util import ResourceMixin
 
-
-class Account(db.Model, UserMixin):
-
-    # TODO: rename fields (e.g. account_type -> role)
-
+class Account(db.Model, ResourceMixin, UserMixin):
     __tablename__ = 'account'
 
+    ROLE = OrderedDict([
+        ('it', 'IT'),
+        ('admin', 'HR Admin'),
+        ('hr', 'HR')
+    ])
+
     id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    username = db.Column(db.String(30), nullable=False, unique=True)
+    email = db.Column(db.String(50), nullable=False, unique=True)
+    mobile = db.Column(db.String(11), nullable=False)
 
-    #Main Fields
-    username = db.Column(db.String(24), unique=True, nullable=False)
-    password = db.Column(db.String(24), nullable=False)
-    account_type = db.Column(db.Integer, nullable=False)
-
-    #Account Details
-    first_name = db.Column(db.String(24), nullable=False)
-    last_name = db.Column(db.String(24), nullable=False)
-    mobile_number = db.Column(db.String(11))
+    password = db.Column(db.String(50), nullable=False)
+    role = db.Column(db.Enum(*ROLE, name='role', native_enum=False),
+                    index=True, nullable=False, server_default='it')
     active = db.Column('is_active', db.Boolean(), nullable=False, server_default='1')
+    profile_pic = db.Column(db.String(300), nullable=False, default='static/images/default.jpg')
 
+    # Activity tracking for IT
+    sign_in_count = db.Column(db.Integer, nullable=False, default=0)
+    current_sign_in_date = db.Column(db.DateTime)
+    current_sign_in_ip = db.Column(db.String(200))
+    last_sign_in_date = db.Column(db.DateTime)
+    last_sign_in_ip = db.Column(db.String(200))
 
     @classmethod
-    def find_account(cls, username):
-        return Account.query.filter(cls.username == username).first()
-
-    @classmethod
-    def search(cls, query):
-        query = '%{0}%'.format(query)
-        return Account.query.filter((cls.username == query)
-            or (cls.account_type == query)
-            or (cls.is_active == query)
-            ).all()
+    def find_account(cls, identity):
+        return Account.query.filter((cls.username == identity)
+            | (cls.email == identity)).first()
 
     @classmethod
     def get_all_accounts(cls):
         return Account.query.all()
 
-    def is_active(self):
-        return self.active
-
     @classmethod
-    def get_callers(cls):
-        return Account.query.filter(cls.account_type == 2 and cls.is_active() == True).all()
+    def get_all_active_hr(cls):
+        return Account.query.filter(cls.role == 'hr' \
+            and cls.active == True).all()
 
     @classmethod
     def count(cls):
         return Account.query.count()
 
+    @classmethod
+    def hr_count(cls):
+        return Account.query.filter(cls.role == 'hr' \
+            and cls.active == True).count()
 
-class Applicant(db.Model):
+    def update_activity_tracking(self, ip_address):
+        self.sign_in_count = self.sign_in_count + 1
+        self.last_sign_in_date = self.current_sign_in_date
+        self.last_sign_in_ip = self.current_sign_in_ip
+        self.current_sign_in_date = datetime.now()
+        self.current_sign_in_ip = ip_address
+        self.save()
+
+
+class Applicant(db.Model, ResourceMixin):
     __tablename__ = 'applicant'
 
     ATTAINMENT = OrderedDict([
@@ -99,10 +112,10 @@ class Applicant(db.Model):
     last_name = db.Column(db.String(50), nullable=False)
     first_name = db.Column(db.String(50), nullable=False)
     middle_name = db.Column(db.String(50), nullable=True)
-    birthdate = db.Column(db.DateTime, nullable=True, default=datetime.datetime.strptime('0001-01-01 12:00 AM', '%Y-%m-%d %I:%M %p'))
-    email = db.Column(db.String(50), nullable=False)
+    birthdate = db.Column(db.DateTime, nullable=True, default=datetime.strptime('0001-01-01 12:00 AM', '%Y-%m-%d %I:%M %p'))
+    email = db.Column(db.String(50), nullable=False, unique=True)
     address = db.Column(db.String(300), nullable=True)
-    mobile1 = db.Column(db.String(11), nullable=False)
+    mobile1 = db.Column(db.String(11), nullable=False, unique=True)
     mobile2 = db.Column(db.String(11), nullable=True)
     landline = db.Column(db.String(11), nullable=True)
     marital_status = db.Column(db.Enum(*MARITAL_STATUS, name='marital_status', native_enum=False),
@@ -127,50 +140,30 @@ class Applicant(db.Model):
     remarks = db.Column(db.String(300), nullable=True)
 
     # Additional Information
-    acquire_date = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
+    acquire_date = db.Column(db.DateTime, nullable=False, default=datetime.now())
     source = db.Column(db.String(30), nullable=True)
-    interview_datetime = db.Column(db.DateTime, nullable=True, default=datetime.datetime.strptime('0001-01-01 12:00 AM', '%Y-%m-%d %I:%M %p'))
+    interview_datetime = db.Column(db.DateTime, nullable=True, default=datetime.strptime('0001-01-01 12:00 AM', '%Y-%m-%d %I:%M %p'))
 
     # ===================== Relationships ==================================
 
     hr_id = db.Column(db.Integer, db.ForeignKey('account.id'))
     hr = db.relationship('Account', backref=db.backref('applicants', lazy=True))
 
-    # status_id = db.Column(db.Integer, db.ForeignKey('status.id'), nullable=False, server_default='1')
-    # status = db.relationship('Status', backref=db.backref('applicants', lazy=True))
-
     @classmethod
     def find_applicant(cls, id):
         return Applicant.query.filter(cls.id == id).first()
-
-    @classmethod
-    def search(cls, query):
-        query = '%{0}%'.format(query)
-
-        return Applicant.query.filter(
-            (cls.first_name == query)
-            or (cls.last_name == query)
-            or (cls.email == query)
-            or (cls.applied_position == query)
-            or (cls.expected_salary == query)
-            or (cls.source == query)
-            or (cls.hr.first_name == query)
-            or (cls.hr.last_name == query)
-            or (cls.hr.username == query)
-            or (cls.status.name == query)
-        )
 
     @classmethod
     def count(cls):
         return Applicant.query.count()
 
 
-class CallHistory(db.Model):
+class CallHistory(db.Model, ResourceMixin):
 
     __tablename__ = 'call_history'
 
     id = db.Column(db.Integer, primary_key=True)
-    datetime = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
+    datetime = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
     # ======================== RELATIONSHIPS =================================
     hr_id = db.Column(db.Integer, db.ForeignKey('account.id'))
@@ -178,16 +171,12 @@ class CallHistory(db.Model):
 
     applicant_id = db.Column(db.Integer, db.ForeignKey('applicant.id'))
     applicant = db.relationship('Applicant', backref=db.backref('calls', lazy=True))
-    # TODO: create_table, fix html call count
 
     @classmethod
     def find_call(cls, id):
         return CallHistory.query.filter(cls.id == id)
 
-    @classmethod
-    def search(cls, query):
-        return Applicant.query.filter(
-            (cls.hr_id == query)
-            or (cls.applicant_id == query)
-            or (cls.datetime == query)
-            )
+    def save(self):
+        self.datetime = datetime.now()
+        db.session.add(self)
+        db.session.commit()

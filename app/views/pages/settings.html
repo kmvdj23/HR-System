@@ -3,7 +3,7 @@
 {% block title %}Register User{% endblock %}
 
 {% block sidebar %}
-    {% if current_user.account_type == 0 %}
+    {% if current_user.role == 'it' %}
         <!-- Nav Item - Account Records -->
         <li class="nav-item">
             <a class="nav-link" href="{{url_for('it.accounts_page')}}">
@@ -19,7 +19,7 @@
                 <span>Add User</span>
             </a>
         </li>
-    {% elif current_user.account_type == 1 %}
+    {% elif current_user.role == 'admin' %}
         <!-- Nav Item - Account Records -->
         <li class="nav-item">
             <a class="nav-link" href="{{ url_for('admin.records_page') }}">
@@ -43,7 +43,7 @@
                 <span>Candidate List</span>
             </a>
         </li>
-    {% elif current_user.account_type == 2 %}
+    {% elif current_user.role == 'hr' %}
         <!-- Nav Item - Call History -->
         <li class="nav-item">
             <a class="nav-link" href="{{ url_for('hr.call_history') }}">
@@ -72,7 +72,7 @@
             <div class="card card-body mb-2">
                 <form method="POST" action="{{ url_for('main.upload_profile_pic') }}" enctype="multipart/form-data">
                     <div class="form-group">
-                        <img class="img-profile rounded-circle center" src="https://source.unsplash.com/QAB-WJcbgJk/60x60"
+                        <img class="img-profile rounded-circle center" src="../{{ current_user.profile_pic }}"
                         id="profile-pic"
                         style="height: 10rem; width: 10rem;">
                     </div>
@@ -163,7 +163,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.mobile(class="form-control form-control-sm", value=current_user.mobile_number)}}
+                                        {{ form.mobile(class="form-control form-control-sm", value=current_user.mobile)}}
                                     {% endif %}
                                 </div>
                             </fieldset>

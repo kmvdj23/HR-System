@@ -80,35 +80,51 @@
                             {% endif %}
                         </div>
 
-                        <!-- Mobile Number -->
+                        <!-- Email -->
+                        <div class="form-group mb-2">
+                            {{ form.email.label(class="form-control-label") }}
+
+                            {% if form.email.errors %}
+                                {{ form.email(class="form-control form-control-sm is-invalid", value=account.email)}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.email.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.email(class="form-control form-control-sm", value=account.email)}}
+                            {% endif %}
+                        </div>
+
+                        <!-- Mobile -->
                         <div class="form-group mb-2">
                             {{ form.mobile.label(class="form-control-label") }}
 
                             {% if form.mobile.errors %}
-                                {{ form.mobile(class="form-control form-control-sm is-invalid", value=account.mobile_number)}}
+                                {{ form.mobile(class="form-control form-control-sm is-invalid", value=account.mobile)}}
                                 <div class="invalid-feedback">
                                     {% for error in form.mobile.errors %}
                                         <span>{{ error }}</span>
                                     {% endfor %}
                                 </div>
                             {% else %}
-                                {{ form.mobile(class="form-control form-control-sm", value=account.mobile_number)}}
+                                {{ form.mobile(class="form-control form-control-sm", value=account.mobile)}}
                             {% endif %}
                         </div>
 
                         <!-- Account Type -->
                         <div class="form-group mb-2">
-                            {{ form.account_type.label(class="form-control-label") }}
+                            {{ form.role.label(class="form-control-label") }}
 
-                            {% if form.account_type.errors %}
-                                {{ form.account_type(class="form-control form-control-sm is-invalid", value=account.account_type)}}
+                            {% if form.role.errors %}
+                                {{ form.role(class="form-control form-control-sm is-invalid", value=account.role)}}
                                 <div class="invalid-feedback">
-                                    {% for error in form.account_type.errors %}
+                                    {% for error in form.role.errors %}
                                         <span>{{ error }}</span>
                                     {% endfor %}
                                 </div>
                             {% else %}
-                                {{ form.account_type(class="form-control form-control-sm", value=2)}}
+                                {{ form.role(class="form-control form-control-sm", value=2)}}
                             {% endif %}
                         </div>
 
@@ -158,7 +174,7 @@
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <form method="POST" action="{{ url_for('it.reset_password', username=account.username) }}">
                 <input type="hidden" name="generated_password" value="{{ generated_password }}">
-                <button type="submit" class="btn btn-danger">Reset</button>    
+                <button type="submit" class="btn btn-danger">Reset</button>
             </form>
           </div>
         </div>
