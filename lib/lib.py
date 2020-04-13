@@ -55,8 +55,8 @@ def upload_file(file, **kwargs):
 
         elif filename.endswith(('.jpeg', '.jpg','.png')):
             user = kwargs.get('user')
-            if not os.path.exists(os.path.join(os.getcwd(), 'app', 'uploads', 'pictures', user.username)):
-                os.mkdir(os.path.join(os.getcwd(), 'app', 'uploads', 'pictures', user.username))
-            directory = os.path.join(os.getcwd(), 'app', 'uploads', 'pictures', user.username, filename)
+            if not os.path.exists(os.path.join(os.getcwd(), 'app', 'static', 'images', user.username)):
+                os.mkdir(os.path.join(os.getcwd(), 'app', 'static', 'images', user.username))
+            directory = os.path.join(os.getcwd(), 'app', 'static', 'images', user.username, filename)
             file.save(directory)
-            return directory
+            return os.path.join('static', 'images', user.username, filename)
