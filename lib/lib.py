@@ -1,6 +1,7 @@
 import random, string
 import os
 from werkzeug import security
+from werkzeug.utils import secure_filename
 
 def choices_from_dict(source, prepend_blank=True):
     choices = list()
@@ -41,3 +42,21 @@ def password_decrypt(input_password, encrypted_password):
 
 def validate_file(csv_file):
     return os.path.splitext(csv_file)[1] in ['.csv']
+
+def upload_file(file, **kwargs):
+
+    if file != '':
+        filename = secure_filename(file.filename)
+
+        if filename.endswith('.csv'):
+            directory = os.path.join(os.getcwd(), 'app', 'uploads', 'csv', filename)
+            file.save(directory)
+            return directory
+
+        elif filename.endswith(('.jpeg', '.jpg','.png')):
+            user = kwargs.get('user')
+            if not os.path.exists(os.path.join(os.getcwd(), 'app', 'uploads', 'pictures', user.username)):
+                os.mkdir(os.path.join(os.getcwd(), 'app', 'uploads', 'pictures', user.username))
+            directory = os.path.join(os.getcwd(), 'app', 'uploads', 'pictures', user.username, filename)
+            file.save(directory)
+            return directory
