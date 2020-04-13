@@ -1,0 +1,283 @@
+{% extends 'layouts/dashboard.html' %}
+
+{% block title %}Register User{% endblock %}
+
+{% block sidebar %}
+    {% if current_user.account_type == 0 %}
+        <!-- Nav Item - Account Records -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{url_for('it.accounts_page')}}">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Account Records</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - Add User -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{url_for('it.register_page')}}">
+                <i class="fas fa-fw fa-id-card"></i>
+                <span>Add User</span>
+            </a>
+        </li>
+    {% elif current_user.account_type == 1 %}
+        <!-- Nav Item - Account Records -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('admin.records_page') }}">
+                <i class="fas fa-fw fa-table"></i>
+                <span>HR Records</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - Callout Form -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('admin.add_applicant_page') }}">
+                <i class="fas fa-fw fa-phone-alt"></i>
+                <span>Callout Form</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - Candidate List -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('admin.candidates_page') }}">
+                <i class="fas fa-fw fa-th-list"></i>
+                <span>Candidate List</span>
+            </a>
+        </li>
+    {% elif current_user.account_type == 2 %}
+        <!-- Nav Item - Call History -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('hr.call_history') }}">
+                <i class="fas fa-fw fa-history"></i>
+                <span>Call History</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - Callout Form -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('hr.add_applicant_page') }}">
+                <i class="fas fa-fw fa-phone-alt"></i>
+                <span>Callout Form</span>
+            </a>
+        </li>
+    {% endif %}
+{% endblock %}
+
+{% block page_content %}
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">Account Settings</h1>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-body mb-2">
+                <form method="POST" action="{{ url_for('main.upload_profile_pic') }}">
+                    <div class="form-group">
+                        <img class="img-profile rounded-circle center" src="https://source.unsplash.com/QAB-WJcbgJk/60x60"
+                        id="profile-pic"
+                        style="height: 10rem; width: 10rem;">
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-md btn-info center"
+                        name="upload-profile-btn" id="upload-profile-btn">
+                            Upload profile picture
+                        </button>
+                        <input type="file" name="profile-input"
+                        id="profile-input" accept="image/*"
+                        style="display: none;">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <form method="POST" action="{{ url_for('main.settings') }}">
+                {{ form.hidden_tag() }}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card card-body">
+                            <fieldset class="form-group">
+
+                                <legend>
+                                    Personal Information
+                                </legend>
+
+                                <!-- First Name -->
+                                <div class="form-group mb-2">
+                                    {{ form.first_name.label(class="form-control-label") }}
+
+                                    {% if form.first_name.errors %}
+                                        {{ form.first_name(class="form-control form-control-sm is-invalid")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.first_name.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.first_name(class="form-control form-control-sm", value=current_user.first_name)}}
+                                    {% endif %}
+                                </div>
+
+                                <!-- Last Name -->
+                                <div class="form-group mb-2">
+                                    {{ form.last_name.label(class="form-control-label") }}
+
+                                    {% if form.last_name.errors %}
+                                        {{ form.last_name(class="form-control form-control-sm is-invalid")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.last_name.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.last_name(class="form-control form-control-sm", value=current_user.last_name)}}
+                                    {% endif %}
+                                </div>
+
+                                <!-- Username -->
+                                <div class="form-group mb-2">
+                                    {{ form.username.label(class="form-control-label") }}
+
+                                    {% if form.username.errors %}
+                                        {{ form.username(class="form-control form-control-sm is-invalid")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.username.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.username(class="form-control form-control-sm", value=current_user.username)}}
+                                    {% endif %}
+                                </div>
+
+                                <!-- Mobile Number -->
+                                <div class="form-group mb-2">
+                                    {{ form.mobile.label(class="form-control-label") }}
+
+                                    {% if form.mobile.errors %}
+                                        {{ form.mobile(class="form-control form-control-sm is-invalid")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.mobile.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.mobile(class="form-control form-control-sm", value=current_user.mobile_number)}}
+                                    {% endif %}
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card card-body">
+                            <fieldset class="form-group">
+
+                                <legend>
+                                    Change Password
+                                </legend>
+
+                                <!-- Current Password -->
+                                <div class="form-group mb-2">
+                                    {{ form.old_pass.label(class="form-control-label") }}
+
+                                    {% if form.old_pass.errors %}
+                                        {{ form.old_pass(class="form-control form-control-sm is-invalid")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.old_pass.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.old_pass(class="form-control form-control-sm")}}
+                                    {% endif %}
+                                </div>
+
+                                <!-- Confirm Current Password -->
+                                <div class="form-group mb-2">
+                                    {{ form.confirm_old_pass.label(class="form-control-label") }}
+
+                                    {% if form.confirm_old_pass.errors %}
+                                        {{ form.confirm_old_pass(class="form-control form-control-sm is-invalid")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.confirm_old_pass.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.confirm_old_pass(class="form-control form-control-sm")}}
+                                    {% endif %}
+                                </div>
+
+                                <!-- New Password -->
+                                <div class="form-group mb-2">
+                                    {{ form.new_pass.label(class="form-control-label") }}
+
+                                    {% if form.new_pass.errors %}
+                                        {{ form.new_pass(class="form-control form-control-sm is-invalid")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.new_pass.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.new_pass(class="form-control form-control-sm")}}
+                                    {% endif %}
+                                </div>
+
+                                <!-- Confirm New Password -->
+                                <div class="form-group mb-2">
+                                    {{ form.confirm_new_pass.label(class="form-control-label") }}
+
+                                    {% if form.confirm_new_pass.errors %}
+                                        {{ form.confirm_new_pass(class="form-control form-control-sm is-invalid")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.confirm_new_pass.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.confirm_new_pass(class="form-control form-control-sm")}}
+                                    {% endif %}
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="d-flex flex-row-reverse mb-4">
+                            <fieldset class="form-group">
+                                <!-- Actions -->
+                                <div class="form-group mb-2">
+                                    <button type="submit" class="btn btn-primary">
+                                        Submit
+                                    </button>
+                                    <a href="{{url_for('main.home_page')}}" class="btn btn-secondary">
+                                        Cancel
+                                    </a>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#upload-profile-btn').on('click', function() {
+                $('#profile-input').trigger('click');
+            });
+
+            $('#profile-input').change(function() {
+                $(this).closest('form').submit();
+            });
+        });
+    </script>
+{% endblock %}

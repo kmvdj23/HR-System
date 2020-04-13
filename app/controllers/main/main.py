@@ -1,10 +1,12 @@
-from lib import password_decrypt
+from lib import password_decrypt, password_encrypt
 from app.models import Account, Applicant
 from app.config import db
+from app.forms import AccountSettingsForm
 from flask import redirect, request, render_template, url_for, flash, Blueprint
 from flask_login import login_user, logout_user, current_user, login_required
 
 main = Blueprint('main', __name__, url_prefix='/main')
+
 
 #  ========================== PAGES ========================================
 
@@ -14,6 +16,7 @@ def login_page():
 		return redirect(url_for('main.home_page'))
 	else:
 		return render_template('index.html')
+
 
 @main.route('/dashboard')
 @login_required
@@ -25,12 +28,13 @@ def home_page():
 	elif current_user.account_type == 2:
 		return redirect(url_for('hr.home_page'))
 
-@login_required
+
 @main.route('/settings')
+@login_required
 def settings_page():
-	# Flask Form Here
-	account = current_user
-	return render_template('pages/settings.html', form=form, account=account)
+	form = AccountSettingsForm(request.form)
+	return render_template('pages/settings.html', form=form)
+
 
 # ============================ METHODS ==============================
 @main.route('/login', methods=['POST'])
@@ -51,20 +55,34 @@ def login():
 		flash('Invalid Account!')
 		return redirect(url_for('main.login_page'))
 
+
 @login_required
-@main.route('/doSettings', methods=['POST'])
+@main.route('/settings', methods=['POST'])
+@login_required
 def settings():
-	account = current_user
-	# Flask Form
+	form = AccountSettingsForm(request.form)
+
 	if form.validate_on_submit():
-		account.first_name = request.form.get('first_name')
-		account.last_name = request.form.get('last_name')
-		account.username = request.form.get('username')
-		account.password = request.form.get('password')
-		account.account_type = request.form.get('account_type')
+		current_user.first_name = request.form.get('first_name')
+		current_user.last_name = request.form.get('last_name')
+		current_user.username = request.form.get('username')
+		current_user.mobile = request.form.get('mobile')
+
+		old_pass = request.form.get('old_pass')
+		new_pass = request.form.get('new_pass')
+
+		if old_pass != '' and new_pass != '' and password_decrypt(old_pass, current_user.password):
+			current_user.password = password_encrypt(new_pass)
 
 		db.session.commit()
-	return redirect(url_for('main.settings_page'))
+
+		flash('Account settings modified', 'success')
+		return redirect(url_for('main.settings_page'))
+
+	else:
+		flash('Account settings not modified', 'danger')
+		return render_template('pages/settings.html', form=form)
+
 
 @main.route('/logout', methods=['POST'])
 @login_required
@@ -73,3 +91,8 @@ def logout():
 		logout_user()
 		return redirect(url_for('main.login_page'))
 
+
+@main.route('/upload/profile_picture', methods=['POST'])
+@login_required
+def upload_profile_pic():
+	print('============= TODO ==============')

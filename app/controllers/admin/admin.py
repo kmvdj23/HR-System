@@ -12,6 +12,7 @@ from werkzeug.utils import secure_filename
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
+
 # ========================= PAGES =======================================
 
 @admin.route('/dashboard')
@@ -21,17 +22,20 @@ def home_page():
 	stats = Dashboard()
 	return render_template('pages/account/dashboard_admin.html', stats=stats)
 
+
 @admin.route('/records')
 @login_required
 def records_page():
 	interviewers = Account.get_callers()
 	return render_template('pages/account/admin/records.html', interviewers=interviewers)
 
+
 @admin.route('/candidates')
 @login_required
 def candidates_page():
 	applicants = Applicant.query.all()
 	return render_template('pages/account/admin/candidates.html', applicants=applicants)
+
 
 @admin.route('/view/hr/<username>')
 @login_required
@@ -94,6 +98,7 @@ def view_applicant_page(applicant_id):
 
 
 # ========================= METHODS =======================================
+
 
 @admin.route('/add/applicant', methods=['POST'])
 @login_required

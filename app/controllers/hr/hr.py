@@ -10,6 +10,7 @@ hr = Blueprint('hr', __name__, url_prefix='/hr')
 
 
 # =================================== PAGES ===========================================
+
 @hr.route('/dashboard')
 @login_required
 def home_page():
@@ -77,6 +78,7 @@ def view_applicant_page(applicant_id):
 
 
 # # ================================ METHODS ==============================================
+
 
 @hr.route('/<applicant_id>/modify', methods=['POST'])
 @login_required

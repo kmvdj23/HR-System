@@ -11044,7 +11044,6 @@ body.sidebar-toggled footer.sticky-footer {
   text-align: center;
 }
 
-#performance-pane h4, h3 {
-  display: inline;
+#profile-pic:hover {
+    opacity: 0.9;
 }
-
