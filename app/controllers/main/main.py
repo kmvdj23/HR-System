@@ -1,4 +1,4 @@
-from lib import password_decrypt, password_encrypt
+from lib import password_decrypt, password_encrypt, upload_file
 from app.models import Account, Applicant
 from app.config import db
 from app.forms import AccountSettingsForm
@@ -95,4 +95,12 @@ def logout():
 @main.route('/upload/profile_picture', methods=['POST'])
 @login_required
 def upload_profile_pic():
-	print('============= TODO ==============')
+	if 'profile-input' in request.files:
+		image = request.files.get('profile-input')
+
+		directory = upload_file(image, user=current_user)
+		print(directory)
+
+		# current_user.profile_pic = directory
+		# db.session.commit()
+		return redirect(url_for('main.settings'))

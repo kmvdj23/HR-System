@@ -6,8 +6,9 @@ from flask_login import login_required, current_user
 from wtforms.validators import DataRequired
 from app.forms import CalloutForm, PersonalInformation, ScholasticInformation, JobPreference, CallInformation, AdditionalInformation
 from lib.app import Dashboard, HRStats
+from lib import upload_file
 import os
-from werkzeug.utils import secure_filename
+
 
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
@@ -299,10 +300,8 @@ def import_from_csv():
     csv_file = request.files.get('csv-input')
 
     if csv_file:
-        filename = secure_filename(csv_file.filename)
-        csv_file.save(os.path.join(os.getcwd(), 'app', 'uploads', filename))
-
-        with open(os.path.join(os.getcwd(), 'app', 'uploads', filename), 'r', encoding='utf-8-sig') as file:
+        directory = upload_file(csv_file)
+        with open(directory, 'r', encoding='utf-8-sig') as file:
             headers = file.readline().strip().split(',')
             line =  file.readline()
             while line:
