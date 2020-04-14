@@ -1,66 +1,6 @@
 {% extends 'layouts/dashboard.html' %}
 
-{% block title %}Register User{% endblock %}
-
-{% block sidebar %}
-    {% if current_user.role == 'it' %}
-        <!-- Nav Item - Account Records -->
-        <li class="nav-item">
-            <a class="nav-link" href="{{url_for('it.accounts_page')}}">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Account Records</span>
-            </a>
-        </li>
-
-        <!-- Nav Item - Add User -->
-        <li class="nav-item">
-            <a class="nav-link" href="{{url_for('it.register_page')}}">
-                <i class="fas fa-fw fa-id-card"></i>
-                <span>Add User</span>
-            </a>
-        </li>
-    {% elif current_user.role == 'admin' %}
-        <!-- Nav Item - Account Records -->
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('admin.records_page') }}">
-                <i class="fas fa-fw fa-table"></i>
-                <span>HR Records</span>
-            </a>
-        </li>
-
-        <!-- Nav Item - Callout Form -->
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('admin.add_applicant_page') }}">
-                <i class="fas fa-fw fa-phone-alt"></i>
-                <span>Callout Form</span>
-            </a>
-        </li>
-
-        <!-- Nav Item - Candidate List -->
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('admin.candidates_page') }}">
-                <i class="fas fa-fw fa-th-list"></i>
-                <span>Candidate List</span>
-            </a>
-        </li>
-    {% elif current_user.role == 'hr' %}
-        <!-- Nav Item - Call History -->
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('hr.call_history') }}">
-                <i class="fas fa-fw fa-history"></i>
-                <span>Call History</span>
-            </a>
-        </li>
-
-        <!-- Nav Item - Callout Form -->
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('hr.add_applicant_page') }}">
-                <i class="fas fa-fw fa-phone-alt"></i>
-                <span>Callout Form</span>
-            </a>
-        </li>
-    {% endif %}
-{% endblock %}
+{% block title %}Settings{% endblock %}
 
 {% block page_content %}
 
@@ -179,17 +119,17 @@
 
                                 <!-- Current Password -->
                                 <div class="form-group mb-2">
-                                    {{ form.old_pass.label(class="form-control-label") }}
+                                    {{ form.old_password.label(class="form-control-label") }}
 
-                                    {% if form.old_pass.errors %}
-                                        {{ form.old_pass(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.old_password.errors %}
+                                        {{ form.old_password(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.old_pass.errors %}
+                                            {% for error in form.old_password.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.old_pass(class="form-control form-control-sm")}}
+                                        {{ form.old_password(class="form-control form-control-sm")}}
                                     {% endif %}
                                 </div>
 
@@ -211,33 +151,33 @@
 
                                 <!-- New Password -->
                                 <div class="form-group mb-2">
-                                    {{ form.new_pass.label(class="form-control-label") }}
+                                    {{ form.password.label(class="form-control-label") }}
 
-                                    {% if form.new_pass.errors %}
-                                        {{ form.new_pass(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.password.errors %}
+                                        {{ form.password(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.new_pass.errors %}
+                                            {% for error in form.password.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.new_pass(class="form-control form-control-sm")}}
+                                        {{ form.password(class="form-control form-control-sm")}}
                                     {% endif %}
                                 </div>
 
                                 <!-- Confirm New Password -->
                                 <div class="form-group mb-2">
-                                    {{ form.confirm_new_pass.label(class="form-control-label") }}
+                                    {{ form.confirm_pass.label(class="form-control-label") }}
 
-                                    {% if form.confirm_new_pass.errors %}
-                                        {{ form.confirm_new_pass(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.confirm_pass.errors %}
+                                        {{ form.confirm_pass(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.confirm_new_pass.errors %}
+                                            {% for error in form.confirm_pass.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.confirm_new_pass(class="form-control form-control-sm")}}
+                                        {{ form.confirm_pass(class="form-control form-control-sm")}}
                                     {% endif %}
                                 </div>
                             </fieldset>

@@ -1,7 +1,7 @@
 from lib import password_decrypt, password_encrypt, upload_file
 from app.models import Account, Applicant
 from app.config import db
-from app.forms import AccountSettingsForm
+from app.forms import AccountSettingsForm, AccountForm
 from flask import redirect, request, render_template, url_for, flash, Blueprint
 from flask_login import login_user, logout_user, current_user, login_required
 
@@ -32,11 +32,12 @@ def home_page():
 @main.route('/settings')
 @login_required
 def settings_page():
-	form = AccountSettingsForm(request.form)
+	form = AccountForm()
 	return render_template('pages/settings.html', form=form)
 
 
 # ============================ METHODS ==============================
+
 @main.route('/login', methods=['POST'])
 def login():
 	account = Account.find_account(request.form.get('username'))
@@ -56,11 +57,16 @@ def login():
 
 	return redirect(url_for('main.login_page'))
 
+
 @login_required
 @main.route('/settings', methods=['POST'])
 @login_required
 def settings():
-	form = AccountSettingsForm(request.form)
+	form = AccountForm(obj=current_user)
+
+	# Set new labels
+	form.password.label.text = 'New password'
+	form.confirm_pass.label.text = 'Confirm New Password'
 
 	if form.validate_on_submit():
 		current_user.first_name = request.form.get('first_name')
@@ -68,8 +74,8 @@ def settings():
 		current_user.username = request.form.get('username')
 		current_user.mobile = request.form.get('mobile')
 
-		old_pass = request.form.get('old_pass')
-		new_pass = request.form.get('new_pass')
+		old_pass= request.form.get('old_password')
+		new_pass = request.form.get('password')
 
 		if old_pass != '' and new_pass != '' and password_decrypt(old_pass, current_user.password):
 			current_user.password = password_encrypt(new_pass)
