@@ -12,7 +12,7 @@ main = Blueprint('main', __name__, url_prefix='/main')
 
 @main.route('/')
 def login_page():
-	if(current_user.is_authenticated):
+	if(current_user.is_authenticated and current_user.is_active()):
 		return redirect(url_for('main.home_page'))
 	else:
 		return render_template('index.html')
@@ -39,22 +39,22 @@ def settings_page():
 # ============================ METHODS ==============================
 @main.route('/login', methods=['POST'])
 def login():
-	if request.method == 'POST':
-		account = Account.find_account(request.form.get('username'))
-		if account and password_decrypt(request.form.get('password'), account.password):
-			if login_user(account) and account.role == 'it':
+	account = Account.find_account(request.form.get('username'))
+	if account and password_decrypt(request.form.get('password'), account.password):
+		if login_user(account) and account.is_active():
+			account.update_activity_tracking(request.remote_addr)
+			if account.role == 'it':
 				return redirect(url_for('it.home_page'))
-			elif login_user(account) and account.role == 'admin':
+			elif account.role == 'admin':
 				return redirect(url_for('admin.home_page'))
-			elif login_user(account) and account.role == 'hr':
+			elif account.role == 'hr':
 				return redirect(url_for('hr.home_page'))
 		else:
-			flash('Invalid Account!')
-			return redirect(url_for('main.login_page'))
+			flash('That account is disabled', 'danger')
 	else:
-		flash('Invalid Account!')
-		return redirect(url_for('main.login_page'))
+		flash('Identity or password is incorrect', 'danger')
 
+	return redirect(url_for('main.login_page'))
 
 @login_required
 @main.route('/settings', methods=['POST'])

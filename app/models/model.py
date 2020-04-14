@@ -56,6 +56,9 @@ class Account(db.Model, ResourceMixin, UserMixin):
         return Account.query.filter(cls.role == 'hr' \
             and cls.active == True).count()
 
+    def is_active(self):
+        return self.active
+
     def update_activity_tracking(self, ip_address):
         self.sign_in_count = self.sign_in_count + 1
         self.last_sign_in_date = self.current_sign_in_date
