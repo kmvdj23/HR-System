@@ -1,25 +1,5 @@
 {% extends 'layouts/dashboard.html' %}
 
-{% block title %}Dashboard{% endblock %}
-
-{% block sidebar %}
-    <!-- Nav Item - Account Records -->
-    <li class="nav-item">
-        <a class="nav-link" href="{{url_for('it.accounts_page')}}">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Account Records</span>
-        </a>
-    </li>
-
-    <!-- Nav Item - Add User -->
-    <li class="nav-item">
-        <a class="nav-link" href="{{url_for('it.register_page')}}">
-            <i class="fas fa-fw fa-id-card"></i>
-            <span>Add User</span>
-        </a>
-    </li>
-{% endblock %}
-
 {% block page_content %}
 
     <!-- Page Heading -->

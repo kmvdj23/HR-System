@@ -1,19 +1,21 @@
 from flask import redirect, request, render_template, url_for, flash, Blueprint
 from flask_login import login_required, current_user
-from lib import generate_random_password, password_encrypt
+from lib import generate_random_password, password_encrypt, password_decrypt
 from app.models import Account
 from app.config import db
-from app.forms import AddUserForm, EditUserForm
+from app.forms import AccountForm, AddUserForm, EditUserForm
+from wtforms.validators import DataRequired
 
 it = Blueprint('it', __name__, url_prefix='/it')
 
 
 # =========================== GET METHODS ===========================================
+
 @it.route('/dashboard')
 @login_required
 def home_page():
     accounts = Account.get_all_accounts()
-    return render_template('pages/account/dashboard_it.html', accounts=accounts)
+    return render_template('pages/account/it/dashboard.html', accounts=accounts)
 
 
 @login_required
@@ -33,11 +35,9 @@ def account_page(username):
     return render_template('pages/account/it/account.html' , account=account)
 
 
-@login_required
 @it.route('/account/<username>/edit')
+@login_required
 def edit_page(username):
-    # Generate Password
-    form = EditUserForm(request.form)
     account = Account.find_account(username)
     generated_password = generate_random_password()
 
@@ -45,84 +45,81 @@ def edit_page(username):
         flash('User does not exist', 'danger')
         return redirect(url_for('it.accounts_page'))
 
-    # TODO: Set other values here instead
+    form = AccountForm(obj=account)
+
     form.role.default = account.role
     form.process()
 
-    return render_template('pages/account/it/edit_user.html', form=form, account=account, generated_password=generated_password)
+    return render_template('pages/write_account.html', form=form, account=account, generated_password=generated_password)
 
 
+@it.route('/account/register')
 @login_required
-@it.route('/register')
 def register_page():
-    form = AddUserForm(request.form)
-    return render_template('pages/account/it/add_user.html', form=form)
+    form = AccountForm()
+
+    # Set required fields
+    form.password.validators.append(DataRequired())
+    form.confirm_pass.validators.append(DataRequired())
+
+    return render_template('pages/write_account.html', form=form)
 
 
-# ============================= POST METHODS =========================================
+# =========================== POST METHODS ===========================================
 
-
+@it.route('/account/register', methods=['POST'])
 @login_required
-@it.route('/register', methods=['POST'])
 def register():
-    form = AddUserForm(request.form)
+    form = AccountForm()
+
+    # Set required fields
+    form.password.validators.append(DataRequired())
+    form.confirm_pass.validators.append(DataRequired())
 
     if form.validate_on_submit():
-        account = Account(
-            first_name=request.form.get('first_name'),
-            last_name=request.form.get('last_name'),
-            username=request.form.get('username'),
-            mobile=request.form.get('mobile'),
-            email=request.form.get('email'),
-            password=password_encrypt(request.form.get('password')),
-            role=request.form.get('role')
-        )
+        account = Account()
+        form.populate_obj(account)
 
         db.session.add(account)
         db.session.commit()
 
-        flash('Account for {0} created successfully'.format(account.username), 'success')
+        flash(f'Account for { account.username } created successfully',
+            'success')
     else:
         flash('Account not created', 'danger')
-
         print('==================== ERRORS: register() ================')
         for err in form.errors:
             print(err)
+            return render_template('pages/write_account.html', form=form)
 
-        return render_template('pages/account/it/add_user.html', form=form)
-
-    return redirect(url_for('it.register_page'))
+    return redirect(url_for('it.accounts_page'))
 
 
-@login_required
 @it.route('/account/<username>/edit', methods=['POST'])
+@login_required
 def edit(username):
-    # Flask Form Change Password
-    form = EditUserForm(request.form)
     account = Account.find_account(username)
     generated_password = generate_random_password()
+    form = AccountForm(obj=account)
+
+    form.role.default = account.role
+    form.process()
 
     if form.validate_on_submit():
-        account.first_name = request.form.get('first_name')
-        account.last_name = request.form.get('last_name')
-        account.username = request.form.get('username')
-        account.email = request.form.get('email')
-        account.mobile = request.form.get('mobile')
-        account.role = request.form.get('role')
+        form.populate_obj(account)
 
         db.session.commit()
 
-        flash('Account updated for {0}'.format(account.username))
+        flash(f'Account updated for { account.username }',
+            'success')
     else:
         flash('Account not modified', 'danger')
-
         print('==================== ERRORS: edit() ================')
         for err in form.errors:
             print(err)
+        return render_template('pages/write_account.html', form=form, account=account, generated_password=generated_password)
 
-        return render_template('pages/account/it/edit_user.html', form=form, account=account, generated_password=generated_password)
-
-    return redirect(url_for('it.edit_page', username=username))
+    return redirect(url_for('it.accounts_page'))
 
 
 @login_required
@@ -131,7 +128,8 @@ def reset_password(username):
     account = Account.find_account(username)
     account.password = password_encrypt(request.form.get('generated_password'))
     db.session.commit()
-    flash('Password for {0} has been reset: {1}'.format(account.username, account.password), 'success')
+    flash('Password for {0} has been reset: {1}'.format(account.username,
+        request.form.get('generated_password')), 'success')
     return redirect(url_for('it.edit_page', username=username))
 
 

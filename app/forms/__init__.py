@@ -6,4 +6,4 @@ from app.forms.applicant_info import (
     CallInformation,
     AdditionalInformation
 )
-from app.forms.form import CalloutForm, AccountSettingsForm
+from app.forms.form import AccountForm, CalloutForm, AccountSettingsForm

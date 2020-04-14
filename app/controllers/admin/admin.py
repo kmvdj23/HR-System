@@ -19,9 +19,8 @@ admin = Blueprint('admin', __name__, url_prefix='/admin')
 @admin.route('/dashboard')
 @login_required
 def home_page():
-	#Do Query Here
 	stats = Dashboard()
-	return render_template('pages/account/dashboard_admin.html', stats=stats)
+	return render_template('pages/account/admin/dashboard.html', stats=stats)
 
 
 @admin.route('/records')

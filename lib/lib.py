@@ -2,6 +2,7 @@ import random, string
 import os
 from werkzeug import security
 from werkzeug.utils import secure_filename
+from flask_wtf import Form
 
 def choices_from_dict(source, prepend_blank=True):
     choices = list()
@@ -40,8 +41,10 @@ def password_encrypt(raw_password):
 def password_decrypt(input_password, encrypted_password):
     return security.check_password_hash(encrypted_password, input_password)
 
+
 def validate_file(csv_file):
     return os.path.splitext(csv_file)[1] in ['.csv']
+
 
 def upload_file(file, **kwargs):
 
@@ -60,3 +63,11 @@ def upload_file(file, **kwargs):
             directory = os.path.join(os.getcwd(), 'app', 'static', 'images', user.username, filename)
             file.save(directory)
             return os.path.join('static', 'images', user.username, filename)
+
+
+class ModelForm(Form):
+    def __init__(self, obj=None, prefix='', **kwargs):
+        Form.__init__(
+            self, obj=obj, prefix=prefix, **kwargs
+        )
+        self._obj = obj

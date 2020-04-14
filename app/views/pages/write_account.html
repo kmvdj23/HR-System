@@ -1,0 +1,223 @@
+{% extends 'layouts/dashboard.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block page_content %}
+
+    {% if 'register' in request.endpoint %}
+        {% set page_heading = 'Register User' %}
+        {% set endpoint = 'it.register' %}
+        {% set kwargs = {} %}
+        {% set username = '' %}
+        {% set button = 'Submit' %}
+    {% elif 'edit' in request.endpoint %}
+        {% set page_heading = 'Edit User' %}
+        {% set endpoint = 'it.edit' %}
+        {% set kwargs = { 'username': account.username } %}
+        {% set username = account.username %}
+        {% set button = 'Update' %}
+        {% set first_name = account.first_name %}
+        {% set last_name = account.last_name %}
+        {% set username = account.username %}
+        {% set email = account.email %}
+        {% set mobile = account.mobile %}
+    {% endif %}
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">{{ page_heading }}</h1>
+
+    <div class="row">
+        <div class="col-md-6 center">
+            <div class="card card-body">
+                <form method="POST" action="{{ url_for(endpoint, **kwargs) }}">
+                    {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+
+                        <!-- First Name -->
+                        <div class="form-group mb-2">
+                            {{ form.first_name.label(class="form-control-label") }}
+
+                            {% if form.first_name.errors %}
+                                {{ form.first_name(class="form-control form-control-sm is-invalid", value=first_name)}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.first_name.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.first_name(class="form-control form-control-sm", value=first_name)}}
+                            {% endif %}
+                        </div>
+
+                        <!-- Last Name -->
+                        <div class="form-group mb-2">
+                            {{ form.last_name.label(class="form-control-label") }}
+
+                            {% if form.last_name.errors %}
+                                {{ form.last_name(class="form-control form-control-sm is-invalid", value=last_name)}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.last_name.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.last_name(class="form-control form-control-sm", value=last_name)}}
+                            {% endif %}
+                        </div>
+
+                        <!-- Username -->
+                        <div class="form-group mb-2">
+                            {{ form.username.label(class="form-control-label") }}
+
+                            {% if form.username.errors %}
+                                {{ form.username(class="form-control form-control-sm is-invalid", value=username)}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.username.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.username(class="form-control form-control-sm", value=username)}}
+                            {% endif %}
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-group mb-2">
+                            {{ form.email.label(class="form-control-label") }}
+
+                            {% if form.email.errors %}
+                                {{ form.email(class="form-control form-control-sm is-invalid", value=email)}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.email.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.email(class="form-control form-control-sm", value=email)}}
+                            {% endif %}
+                        </div>
+
+                        <!-- Mobile Number -->
+                        <div class="form-group mb-2">
+                            {{ form.mobile.label(class="form-control-label") }}
+
+                            {% if form.mobile.errors %}
+                                {{ form.mobile(class="form-control form-control-sm is-invalid", value=mobile)}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.mobile.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.mobile(class="form-control form-control-sm", value=mobile)}}
+                            {% endif %}
+                        </div>
+
+                        {% if endpoint == 'it.register' %}
+                            <!-- Password -->
+                            <div class="form-group mb-2">
+                                {{ form.password.label(class="form-control-label") }}
+
+                                {% if form.password.errors %}
+                                    {{ form.password(class="form-control form-control-sm is-invalid")}}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.password.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.password(class="form-control form-control-sm")}}
+                                {% endif %}
+                            </div>
+
+                            <!-- Password -->
+                            <div class="form-group mb-2">
+                                {{ form.confirm_pass.label(class="form-control-label") }}
+
+                                {% if form.confirm_pass.errors %}
+                                    {{ form.confirm_pass(class="form-control form-control-sm is-invalid")}}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.confirm_pass.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.confirm_pass(class="form-control form-control-sm")}}
+                                {% endif %}
+                            </div>
+                        {% endif %}
+
+                        <!-- Account Type -->
+                        <div class="form-group mb-2">
+                            {{ form.role.label(class="form-control-label") }}
+
+                            {% if form.role.errors %}
+                                {{ form.role(class="form-control form-control-sm is-invalid")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.role.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.role(class="form-control form-control-sm")}}
+                            {% endif %}
+                        </div>
+
+                        <hr>
+
+                        <!-- Actions -->
+                        <div class="form-group mb-2">
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                {{ button }}
+                            </button>
+                            <a href="{{ url_for('it.accounts_page') }}" class="btn btn-sm btn-secondary">
+                                Cancel
+                            </a>
+                        </div>
+
+                        {% if endpoint == 'it.edit' %}
+                            <!-- Reset Password -->
+                            <div class="form-group mb-2">
+                                <button id="reset-pass-btn" type="button" class="btn btn-sm btn-danger"
+                                    data-toggle="modal" data-target="#resetPassModal">
+                                    Reset Password
+                                </button>
+                            </div>
+                        {% endif %}
+
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% if endpoint == 'it.edit' %}
+        <!-- Reset Password Modal -->
+        <div class="modal fade" id="resetPassModal" tabindex="-1" role="dialog" aria-labelledby="resetPassModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to reset password?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <h5>Generated Password</h5>
+                <div class="card card-body">
+                    <b>{{ generated_password }}</b>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <form method="POST" action="{{ url_for('it.reset_password', username=account.username) }}">
+                    <input type="hidden" name="generated_password" value="{{ generated_password }}">
+                    <button type="submit" class="btn btn-danger">Reset</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

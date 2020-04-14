@@ -15,7 +15,7 @@ hr = Blueprint('hr', __name__, url_prefix='/hr')
 @login_required
 def home_page():
 	applicants = current_user.applicants
-	return render_template('pages/account/dashboard_hr.html', applicants=applicants)
+	return render_template('pages/account/hr/dashboard.html', applicants=applicants)
 
 
 @hr.route('/callhistory')
