@@ -1,7 +1,7 @@
 from lib import password_decrypt, password_encrypt, upload_file
 from app.models import Account, Applicant
 from app.config import db
-from app.forms import AccountSettingsForm, AccountForm
+from app.forms import AccountForm
 from flask import redirect, request, render_template, url_for, flash, Blueprint
 from flask_login import login_user, logout_user, current_user, login_required
 

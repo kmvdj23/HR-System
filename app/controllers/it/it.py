@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from lib import generate_random_password, password_encrypt, password_decrypt
 from app.models import Account
 from app.config import db
-from app.forms import AccountForm, AddUserForm, EditUserForm
+from app.forms import AccountForm
 from wtforms.validators import DataRequired
 
 it = Blueprint('it', __name__, url_prefix='/it')
