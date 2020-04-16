@@ -47,9 +47,6 @@ def edit_page(username):
 
     form = AccountForm(obj=account)
 
-    form.role.default = account.role
-    form.process()
-
     return render_template('pages/write_account.html', form=form, account=account, generated_password=generated_password)
 
 
@@ -101,9 +98,6 @@ def edit(username):
     account = Account.find_account(username)
     generated_password = generate_random_password()
     form = AccountForm(obj=account)
-
-    form.role.default = account.role
-    form.process()
 
     if form.validate_on_submit():
         form.populate_obj(account)
