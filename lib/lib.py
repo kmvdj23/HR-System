@@ -2,10 +2,8 @@ import random, string
 import os
 from werkzeug import security
 from werkzeug.utils import secure_filename
-<<<<<<< HEAD
-=======
 from flask_wtf import Form
->>>>>>> dd5d99f60e765caddf8e2f2e98eb7f869110e57a
+
 
 def choices_from_dict(source, prepend_blank=True):
     choices = list()
@@ -48,10 +46,7 @@ def password_decrypt(input_password, encrypted_password):
 def validate_file(csv_file):
     return os.path.splitext(csv_file)[1] in ['.csv']
 
-<<<<<<< HEAD
-=======
 
->>>>>>> dd5d99f60e765caddf8e2f2e98eb7f869110e57a
 def upload_file(file, **kwargs):
 
     if file != '':
@@ -64,13 +59,7 @@ def upload_file(file, **kwargs):
 
         elif filename.endswith(('.jpeg', '.jpg','.png')):
             user = kwargs.get('user')
-<<<<<<< HEAD
-            if not os.path.exists(os.path.join(os.getcwd(), 'app', 'uploads', 'pictures', user.username)):
-                os.mkdir(os.path.join(os.getcwd(), 'app', 'uploads', 'pictures', user.username))
-            directory = os.path.join(os.getcwd(), 'app', 'uploads', 'pictures', user.username, filename)
-            file.save(directory)
-            return directory
-=======
+
             if not os.path.exists(os.path.join(os.getcwd(), 'app', 'static', 'images', user.username)):
                 os.mkdir(os.path.join(os.getcwd(), 'app', 'static', 'images', user.username))
             directory = os.path.join(os.getcwd(), 'app', 'static', 'images', user.username, filename)
@@ -84,4 +73,4 @@ class ModelForm(Form):
             self, obj=obj, prefix=prefix, **kwargs
         )
         self._obj = obj
->>>>>>> dd5d99f60e765caddf8e2f2e98eb7f869110e57a
+
