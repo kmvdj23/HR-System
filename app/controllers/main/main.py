@@ -35,6 +35,9 @@ def settings_page():
 	form = AccountForm()
 	return render_template('pages/settings.html', form=form)
 
+@main.route('/error')
+def error_page():
+	return render_template('404.html')
 
 # ============================ METHODS ==============================
 
@@ -58,7 +61,6 @@ def login():
 	return redirect(url_for('main.login_page'))
 
 
-@login_required
 @main.route('/settings', methods=['POST'])
 @login_required
 def settings():

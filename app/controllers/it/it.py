@@ -5,6 +5,7 @@ from app.models import Account
 from app.config import db
 from app.forms import AccountForm
 from wtforms.validators import DataRequired
+from lib.app import it_user
 
 it = Blueprint('it', __name__, url_prefix='/it')
 
@@ -13,20 +14,23 @@ it = Blueprint('it', __name__, url_prefix='/it')
 
 @it.route('/dashboard')
 @login_required
+@it_user
 def home_page():
     accounts = Account.get_all_accounts()
     return render_template('pages/account/it/dashboard.html', accounts=accounts)
 
 
-@login_required
 @it.route('/accounts')
+@login_required
+@it_user
 def accounts_page():
     accounts = Account.get_all_accounts()
     return render_template('pages/account/it/accounts.html' , accounts=accounts)
 
 
-@login_required
 @it.route('/account/<username>')
+@login_required
+@it_user
 def account_page(username):
     account = Account.find_account(username)
     if not account:
@@ -37,6 +41,7 @@ def account_page(username):
 
 @it.route('/account/<username>/edit')
 @login_required
+@it_user
 def edit_page(username):
     account = Account.find_account(username)
     generated_password = generate_random_password()
@@ -55,6 +60,7 @@ def edit_page(username):
 
 @it.route('/account/register')
 @login_required
+@it_user
 def register_page():
     form = AccountForm()
 
@@ -69,6 +75,7 @@ def register_page():
 
 @it.route('/account/register', methods=['POST'])
 @login_required
+@it_user
 def register():
     form = AccountForm()
 
@@ -97,6 +104,7 @@ def register():
 
 @it.route('/account/<username>/edit', methods=['POST'])
 @login_required
+@it_user
 def edit(username):
     account = Account.find_account(username)
     generated_password = generate_random_password()
@@ -122,8 +130,9 @@ def edit(username):
     return redirect(url_for('it.accounts_page'))
 
 
-@login_required
 @it.route('/account/<username>/passwordreset', methods=['POST'])
+@login_required
+@it_user
 def reset_password(username):
     account = Account.find_account(username)
     account.password = password_encrypt(request.form.get('generated_password'))
@@ -133,8 +142,9 @@ def reset_password(username):
     return redirect(url_for('it.edit_page', username=username))
 
 
-@login_required
 @it.route('/account/<username>/toggle', methods=['POST'])
+@login_required
+@it_user
 def toggle_status(username):
     account = Account.find_account(username)
     account.active = not account.active

@@ -5,6 +5,7 @@ from app.config import db
 from flask import redirect, request, render_template, url_for, flash, Blueprint
 from flask_login import login_required, current_user
 from app.forms import CalloutForm, PersonalInformation, ScholasticInformation, JobPreference, CallInformation, AdditionalInformation
+from lib.app import hr_user
 
 hr = Blueprint('hr', __name__, url_prefix='/hr')
 
@@ -13,6 +14,7 @@ hr = Blueprint('hr', __name__, url_prefix='/hr')
 
 @hr.route('/dashboard')
 @login_required
+@hr_user
 def home_page():
 	applicants = current_user.applicants
 	return render_template('pages/account/hr/dashboard.html', applicants=applicants)
@@ -20,6 +22,7 @@ def home_page():
 
 @hr.route('/callhistory')
 @login_required
+@hr_user
 def call_history():
 	calls = current_user.calls
 	return render_template('pages/account/call_history.html', calls=calls)
@@ -27,6 +30,7 @@ def call_history():
 
 @hr.route('/<applicant_id>/modify')
 @login_required
+@hr_user
 def edit_applicant_page(applicant_id):
 	form = CalloutForm(request.form)
 	applicant = Applicant.find_applicant(applicant_id)
@@ -42,6 +46,7 @@ def edit_applicant_page(applicant_id):
 
 @hr.route('/<applicant_id>/call')
 @login_required
+@hr_user
 def call_applicant_page(applicant_id):
 	form = CalloutForm(request.form)
 	applicant = Applicant.find_applicant(applicant_id)
@@ -56,6 +61,8 @@ def call_applicant_page(applicant_id):
 
 
 @hr.route('/add/applicant')
+@login_required
+@hr_user
 def add_applicant_page():
 	form = CalloutForm(request.form)
 	form.personal.marital_status.choices = choices_from_dict(Applicant.MARITAL_STATUS, prepend_blank=False)
@@ -68,6 +75,7 @@ def add_applicant_page():
 
 @hr.route('/<applicant_id>/view')
 @login_required
+@hr_user
 def view_applicant_page(applicant_id):
 	applicant = Applicant.find_applicant(applicant_id)
 	if not applicant:
@@ -82,6 +90,7 @@ def view_applicant_page(applicant_id):
 
 @hr.route('/<applicant_id>/modify', methods=['POST'])
 @login_required
+@hr_user
 def edit_applicant(applicant_id):
 	form = CalloutForm(request.form)
 	applicant = Applicant.find_applicant(applicant_id)
@@ -168,6 +177,7 @@ def edit_applicant(applicant_id):
 
 @hr.route('/<applicant_id>/call', methods=['POST'])
 @login_required
+@hr_user
 def call_applicant(applicant_id):
 	form = CalloutForm(request.form)
 	applicant = Applicant.find_applicant(applicant_id)
@@ -261,6 +271,7 @@ def call_applicant(applicant_id):
 
 @hr.route('/add/applicant', methods=['POST'])
 @login_required
+@hr_user
 def add_applicant():
 	form = CalloutForm(request.form)
 
