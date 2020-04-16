@@ -115,10 +115,10 @@ class Applicant(db.Model, ResourceMixin):
     last_name = db.Column(db.String(50), nullable=False)
     first_name = db.Column(db.String(50), nullable=False)
     middle_name = db.Column(db.String(50), nullable=True)
-    birthdate = db.Column(db.DateTime, nullable=True, default=datetime.strptime('0001-01-01 12:00 AM', '%Y-%m-%d %I:%M %p'))
+    birthdate = db.Column(db.DateTime, nullable=True, default=datetime.strptime('01/01/0001 12:00 AM', '%d/%m/%Y %I:%M %p'))
     email = db.Column(db.String(50), nullable=False, unique=True)
     address = db.Column(db.String(300), nullable=True)
-    mobile1 = db.Column(db.String(11), nullable=False, unique=True)
+    mobile1 = db.Column(db.String(11), nullable=False)
     mobile2 = db.Column(db.String(11), nullable=True)
     landline = db.Column(db.String(11), nullable=True)
     marital_status = db.Column(db.Enum(*MARITAL_STATUS, name='marital_status', native_enum=False),
@@ -126,7 +126,7 @@ class Applicant(db.Model, ResourceMixin):
 
     # Scholastic Information
     educational_attainment = db.Column(db.Enum(*ATTAINMENT, name='educational_attainment', native_enum=False),
-                                        index=True, nullable=False, server_default='bachelor\'s')
+                                        index=True, nullable=True)
     course = db.Column(db.String(30), nullable=True)
     graduation_year = db.Column(db.String(4), nullable=True)
 
@@ -145,7 +145,7 @@ class Applicant(db.Model, ResourceMixin):
     # Additional Information
     acquire_date = db.Column(db.DateTime, nullable=False, default=datetime.now())
     source = db.Column(db.String(30), nullable=True)
-    interview_datetime = db.Column(db.DateTime, nullable=True, default=datetime.strptime('0001-01-01 12:00 AM', '%Y-%m-%d %I:%M %p'))
+    interview_datetime = db.Column(db.DateTime, nullable=True, default=datetime.strptime('01/01/0001 12:00 AM', '%d/%m/%Y %I:%M %p'))
 
     # ===================== Relationships ==================================
 

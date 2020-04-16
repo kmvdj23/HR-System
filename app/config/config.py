@@ -6,18 +6,18 @@ from flask_login import LoginManager
 from sqlalchemy import desc
 
 def form_date(value):
-	default_datetime = datetime.strptime('0001-01-01 12:00 AM', '%Y-%m-%d %I:%M %p')
+	default_datetime = datetime.strptime('01/01/0001 12:00 AM', '%d/%m/%Y %I:%M %p')
 	print('====================================================')
 	print(value)
 	print(type(value))
 	if value == default_datetime:
 		return ''
 	else:
-		return datetime.strftime(value, '%Y-%m-%d')
+		return datetime.strftime(value, '%d/%m/%Y')
 
 
 def form_time(value):
-	default_datetime = datetime.strptime('0001-01-01 12:00 AM', '%Y-%m-%d %I:%M %p')
+	default_datetime = datetime.strptime('01/01/0001 12:00 AM', '%d/%m/%Y %I:%M %p')
 	if value == default_datetime:
 		return ''
 	else:
@@ -25,7 +25,7 @@ def form_time(value):
 
 
 def table_date(value):
-	default_datetime = datetime.strptime('0001-01-01 12:00 AM', '%Y-%m-%d %I:%M %p')
+	default_datetime = datetime.strptime('01/01/0001 12:00 AM', '%d/%m/%Y %I:%M %p')
 	if value == default_datetime:
 		return ''
 	return datetime.strftime(value, '%B %d, %Y %I:%M %p')
@@ -58,7 +58,7 @@ def no_call_info(value):
 
 
 def no_additional_info(value):
-	default_datetime = datetime.strptime('0001-01-01 12:00 AM', '%Y-%m-%d %I:%M %p')
+	default_datetime = datetime.strptime('01/01/0001 12:00 AM', '%d/%m/%Y %I:%M %p')
 	from app.models import Applicant
 	applicant = Applicant.find_applicant(value)
 	return(not applicant.source and applicant.interview_datetime == default_datetime)

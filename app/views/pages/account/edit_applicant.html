@@ -1,50 +1,6 @@
 {% extends 'layouts/dashboard.html' %}
 
-{% block title %}Dashboard{% endblock %}
-
-{% block sidebar %}
-    {% if current_user.role == 'admin' %}
-        <!-- Nav Item - Account Records -->
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('admin.records_page') }}">
-                <i class="fas fa-fw fa-table"></i>
-                <span>HR Records</span>
-            </a>
-        </li>
-
-        <!-- Nav Item - Callout Form -->
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('admin.add_applicant_page') }}">
-                <i class="fas fa-fw fa-phone-alt"></i>
-                <span>Callout Form</span>
-            </a>
-        </li>
-
-        <!-- Nav Item - Candidate List -->
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('admin.candidates_page') }}">
-                <i class="fas fa-fw fa-th-list"></i>
-                <span>Candidate List</span>
-            </a>
-        </li>
-    {% elif current_user.role == 'hr' %}
-        <!-- Nav Item - Call History -->
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('hr.call_history') }}">
-                <i class="fas fa-fw fa-history"></i>
-                <span>Call History</span>
-            </a>
-        </li>
-
-        <!-- Nav Item - Callout Form -->
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('hr.add_applicant_page') }}">
-                <i class="fas fa-fw fa-phone-alt"></i>
-                <span>Callout Form</span>
-            </a>
-        </li>
-    {% endif %}
-{% endblock %}
+{% block title %}Edit Applicant{% endblock %}
 
 {% block page_content %}
 
@@ -59,12 +15,9 @@
                 {% set endpoint = 'hr.edit_applicant' %}
             {% endif %}
             <form method="POST" action="{{ url_for(endpoint, applicant_id=applicant.id) }}">
+
                 {{ form.hidden_tag() }}
-                {{ form.personal.hidden_tag() }}
-                {{ form.education.hidden_tag() }}
-                {{ form.preference.hidden_tag() }}
-                {{ form.call.hidden_tag() }}
-                {{ form.additional.hidden_tag() }}
+
                 <div class="row">
                     <div class="col-md-6">
 
@@ -77,202 +30,202 @@
 
                                 <!-- Last Name -->
                                 <div class="form-group mb-2">
-                                    {% if form.personal.last_name.flags.required %}
-                                        {{ form.personal.last_name.label(class="form-control-label", text=form.personal.last_name.label.text + '*') }}
+                                    {% if form.last_name.flags.required %}
+                                        {{ form.last_name.label(class="form-control-label", text=form.last_name.label.text + '*') }}
                                     {% else %}
-                                        {{ form.personal.last_name.label(class="form-control-label") }}
+                                        {{ form.last_name.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.personal.last_name.errors %}
-                                        {{ form.personal.last_name(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.last_name.errors %}
+                                        {{ form.last_name(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.personal.last_name.errors %}
+                                            {% for error in form.last_name.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.personal.last_name(class="form-control form-control-sm", value=applicant.last_name) }}
+                                        {{ form.last_name(class="form-control form-control-sm", value=applicant.last_name) }}
                                     {% endif %}
                                 </div>
 
                                 <!-- First Name -->
                                 <div class="form-group mb-2">
-                                    {% if form.personal.first_name.flags.required %}
-                                        {{ form.personal.first_name.label(class="form-control-label", text=form.personal.first_name.label.text + '*') }}
+                                    {% if form.first_name.flags.required %}
+                                        {{ form.first_name.label(class="form-control-label", text=form.first_name.label.text + '*') }}
                                     {% else %}
-                                        {{ form.personal.first_name.label(class="form-control-label") }}
+                                        {{ form.first_name.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.personal.first_name.errors %}
-                                        {{ form.personal.first_name(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.first_name.errors %}
+                                        {{ form.first_name(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.personal.first_name.errors %}
+                                            {% for error in form.first_name.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.personal.first_name(class="form-control form-control-sm", value=applicant.first_name) }}
+                                        {{ form.first_name(class="form-control form-control-sm", value=applicant.first_name) }}
                                     {% endif %}
                                 </div>
 
                                 <!-- Middle Name -->
                                 <div class="form-group mb-2">
-                                    {% if form.personal.middle_name.flags.required %}
-                                        {{ form.personal.middle_name.label(class="form-control-label", text=form.personal.middle_name.label.text + '*') }}
+                                    {% if form.middle_name.flags.required %}
+                                        {{ form.middle_name.label(class="form-control-label", text=form.middle_name.label.text + '*') }}
                                     {% else %}
-                                        {{ form.personal.middle_name.label(class="form-control-label") }}
+                                        {{ form.middle_name.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.personal.middle_name.errors %}
-                                        {{ form.personal.middle_name(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.middle_name.errors %}
+                                        {{ form.middle_name(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.personal.middle_name.errors %}
+                                            {% for error in form.middle_name.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.personal.middle_name(class="form-control form-control-sm", value=applicant.middle_name) }}
+                                        {{ form.middle_name(class="form-control form-control-sm", value=applicant.middle_name) }}
                                     {% endif %}
                                 </div>
 
                                 <!-- Birthdate -->
                                 <div class="form-group mb-2">
-                                    {% if form.personal.birthdate.flags.required %}
-                                        {{ form.personal.birthdate.label(class="form-control-label", text=form.personal.birthdate.label.text + '*') }}
+                                    {% if form.birthdate.flags.required %}
+                                        {{ form.birthdate.label(class="form-control-label", text=form.birthdate.label.text + '*') }}
                                     {% else %}
-                                        {{ form.personal.birthdate.label(class="form-control-label") }}
+                                        {{ form.birthdate.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.personal.birthdate.errors %}
-                                        {{ form.personal.birthdate(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.birthdate.errors %}
+                                        {{ form.birthdate(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.personal.birthdate.errors %}
+                                            {% for error in form.birthdate.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
 
-                                        {{ form.personal.birthdate(class="form-control form-control-sm", value=applicant.birthdate|form_date) }}
+                                        {{ form.birthdate(class="form-control form-control-sm", value=applicant.birthdate|form_date) }}
                                     {% endif %}
                                 </div>
 
                                 <!-- Email -->
                                 <div class="form-group mb-2">
-                                    {% if form.personal.email.flags.required %}
-                                        {{ form.personal.email.label(class="form-control-label", text=form.personal.email.label.text + '*') }}
+                                    {% if form.email.flags.required %}
+                                        {{ form.email.label(class="form-control-label", text=form.email.label.text + '*') }}
                                     {% else %}
-                                        {{ form.personal.email.label(class="form-control-label") }}
+                                        {{ form.email.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.personal.email.errors %}
-                                        {{ form.personal.email(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.email.errors %}
+                                        {{ form.email(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.personal.email.errors %}
+                                            {% for error in form.email.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.personal.email(class="form-control form-control-sm", value=applicant.email) }}
+                                        {{ form.email(class="form-control form-control-sm", value=applicant.email) }}
                                     {% endif %}
                                 </div>
 
                                 <!-- Mobile 1 -->
                                 <div class="form-group mb-2">
-                                    {% if form.personal.mobile1.flags.required %}
-                                        {{ form.personal.mobile1.label(class="form-control-label", text=form.personal.mobile1.label.text + '*') }}
+                                    {% if form.mobile1.flags.required %}
+                                        {{ form.mobile1.label(class="form-control-label", text=form.mobile1.label.text + '*') }}
                                     {% else %}
-                                        {{ form.personal.mobile1.label(class="form-control-label") }}
+                                        {{ form.mobile1.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.personal.mobile1.errors %}
-                                        {{ form.personal.mobile1(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.mobile1.errors %}
+                                        {{ form.mobile1(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.personal.mobile1.errors %}
+                                            {% for error in form.mobile1.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.personal.mobile1(class="form-control form-control-sm", value=applicant.mobile1) }}
+                                        {{ form.mobile1(class="form-control form-control-sm", value=applicant.mobile1) }}
                                     {% endif %}
                                 </div>
 
                                 <!-- Mobile 2 -->
                                 <div class="form-group mb-2">
-                                    {% if form.personal.mobile2.flags.required %}
-                                        {{ form.personal.mobile2.label(class="form-control-label", text=form.personal.mobile2.label.text + '*') }}
+                                    {% if form.mobile2.flags.required %}
+                                        {{ form.mobile2.label(class="form-control-label", text=form.mobile2.label.text + '*') }}
                                     {% else %}
-                                        {{ form.personal.mobile2.label(class="form-control-label") }}
+                                        {{ form.mobile2.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.personal.mobile2.errors %}
-                                        {{ form.personal.mobile2(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.mobile2.errors %}
+                                        {{ form.mobile2(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.personal.mobile2.errors %}
+                                            {% for error in form.mobile2.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.personal.mobile2(class="form-control form-control-sm", value=applicant.mobile2) }}
+                                        {{ form.mobile2(class="form-control form-control-sm", value=applicant.mobile2) }}
                                     {% endif %}
                                 </div>
 
                                 <!-- Landline -->
                                 <div class="form-group mb-2">
-                                    {% if form.personal.landline.flags.required %}
-                                        {{ form.personal.landline.label(class="form-control-label", text=form.personal.landline.label.text + '*') }}
+                                    {% if form.landline.flags.required %}
+                                        {{ form.landline.label(class="form-control-label", text=form.landline.label.text + '*') }}
                                     {% else %}
-                                        {{ form.personal.landline.label(class="form-control-label") }}
+                                        {{ form.landline.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.personal.landline.errors %}
-                                        {{ form.personal.landline(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.landline.errors %}
+                                        {{ form.landline(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.personal.landline.errors %}
+                                            {% for error in form.landline.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.personal.landline(class="form-control form-control-sm", value=applicant.landline) }}
+                                        {{ form.landline(class="form-control form-control-sm", value=applicant.landline) }}
                                     {% endif %}
                                 </div>
 
                                 <!-- Address -->
                                 <div class="form-group mb-2">
-                                    {% if form.personal.address.flags.required %}
-                                        {{ form.personal.address.label(class="form-control-label", text=form.personal.address.label.text + '*') }}
+                                    {% if form.address.flags.required %}
+                                        {{ form.address.label(class="form-control-label", text=form.address.label.text + '*') }}
                                     {% else %}
-                                        {{ form.personal.address.label(class="form-control-label") }}
+                                        {{ form.address.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.personal.address.errors %}
-                                        {{ form.personal.address(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.address.errors %}
+                                        {{ form.address(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.personal.address.errors %}
+                                            {% for error in form.address.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.personal.address(class="form-control form-control-sm") }}
+                                        {{ form.address(class="form-control form-control-sm") }}
                                     {% endif %}
                                 </div>
 
                                 <!-- Marital Status -->
                                 <div class="form-group mb-2">
-                                    {% if form.personal.marital_status.flags.required %}
-                                        {{ form.personal.marital_status.label(class="form-control-label", text=form.personal.marital_status.label.text + '*') }}
+                                    {% if form.marital_status.flags.required %}
+                                        {{ form.marital_status.label(class="form-control-label", text=form.marital_status.label.text + '*') }}
                                     {% else %}
-                                        {{ form.personal.marital_status.label(class="form-control-label") }}
+                                        {{ form.marital_status.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.personal.marital_status.errors %}
-                                        {{ form.personal.marital_status(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.marital_status.errors %}
+                                        {{ form.marital_status(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.personal.marital_status.errors %}
+                                            {% for error in form.marital_status.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.personal.marital_status(class="form-control form-control-sm", value=applicant.marital_status) }}
+                                        {{ form.marital_status(class="form-control form-control-sm", value=applicant.marital_status) }}
                                     {% endif %}
                                 </div>
                             </fieldset>
@@ -288,61 +241,61 @@
 
                                 <!-- Educational Attainment -->
                                 <div class="form-group mb-2">
-                                    {% if form.education.attainment.flags.required %}
-                                        {{ form.education.attainment.label(class="form-control-label", text=form.education.attainment.label.text + '*') }}
+                                    {% if form.educational_attainment.flags.required %}
+                                        {{ form.educational_attainment.label(class="form-control-label", text=form.educational_attainment.label.text + '*') }}
                                     {% else %}
-                                        {{ form.education.attainment.label(class="form-control-label") }}
+                                        {{ form.educational_attainment.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.education.attainment.errors %}
-                                        {{ form.education.attainment(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.educational_attainment.errors %}
+                                        {{ form.educational_attainment(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.education.attainment.errors %}
+                                            {% for error in form.educational_attainment.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.education.attainment(class="form-control form-control-sm", value=applicant.educational_attainment) }}
+                                        {{ form.educational_attainment(class="form-control form-control-sm", value=applicant.educational_attainment) }}
                                     {% endif %}
                                 </div>
 
                                 <!-- Course -->
                                 <div class="form-group mb-2">
-                                    {% if form.education.course.flags.required %}
-                                        {{ form.education.course.label(class="form-control-label", text=form.education.course.label.text + '*') }}
+                                    {% if form.course.flags.required %}
+                                        {{ form.course.label(class="form-control-label", text=form.course.label.text + '*') }}
                                     {% else %}
-                                        {{ form.education.course.label(class="form-control-label") }}
+                                        {{ form.course.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.education.course.errors %}
-                                        {{ form.education.course(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.course.errors %}
+                                        {{ form.course(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.education.course.errors %}
+                                            {% for error in form.course.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.education.course(class="form-control form-control-sm", value=applicant.course) }}
+                                        {{ form.course(class="form-control form-control-sm", value=applicant.course) }}
                                     {% endif %}
                                 </div>
 
                                 <!-- Graduation Year -->
                                 <div class="form-group mb-2">
-                                    {% if form.education.graduation_year.flags.required %}
-                                        {{ form.education.graduation_year.label(class="form-control-label", text=form.education.graduation_year.label.text + '*') }}
+                                    {% if form.graduation_year.flags.required %}
+                                        {{ form.graduation_year.label(class="form-control-label", text=form.graduation_year.label.text + '*') }}
                                     {% else %}
-                                        {{ form.education.graduation_year.label(class="form-control-label") }}
+                                        {{ form.graduation_year.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.education.graduation_year.errors %}
-                                        {{ form.education.graduation_year(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.graduation_year.errors %}
+                                        {{ form.graduation_year(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.education.graduation_year.errors %}
+                                            {% for error in form.graduation_year.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.education.graduation_year(class="form-control form-control-sm", value=applicant.graduation_year) }}
+                                        {{ form.graduation_year(class="form-control form-control-sm", value=applicant.graduation_year) }}
                                     {% endif %}
                                 </div>
                             </fieldset>
@@ -362,81 +315,81 @@
 
                                 <!-- Applied Position -->
                                 <div class="form-group mb-2">
-                                    {% if form.preference.applied_position.flags.required %}
-                                        {{ form.preference.applied_position.label(class="form-control-label", text=form.preference.applied_position.label.text + '*') }}
+                                    {% if form.applied_position.flags.required %}
+                                        {{ form.applied_position.label(class="form-control-label", text=form.applied_position.label.text + '*') }}
                                     {% else %}
-                                        {{ form.preference.applied_position.label(class="form-control-label") }}
+                                        {{ form.applied_position.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.preference.applied_position.errors %}
-                                        {{ form.preference.applied_position(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.applied_position.errors %}
+                                        {{ form.applied_position(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.preference.applied_position.errors %}
+                                            {% for error in form.applied_position.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.preference.applied_position(class="form-control form-control-sm", value=applicant.applied_position) }}
+                                        {{ form.applied_position(class="form-control form-control-sm", value=applicant.applied_position) }}
                                     {% endif %}
                                 </div>
 
                                 <!-- Expected Salary -->
                                 <div class="form-group mb-2">
-                                    {% if form.preference.expected_salary.flags.required %}
-                                        {{ form.preference.expected_salary.label(class="form-control-label", text=form.preference.expected_salary.label.text + '*') }}
+                                    {% if form.expected_salary.flags.required %}
+                                        {{ form.expected_salary.label(class="form-control-label", text=form.expected_salary.label.text + '*') }}
                                     {% else %}
-                                        {{ form.preference.expected_salary.label(class="form-control-label") }}
+                                        {{ form.expected_salary.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.preference.expected_salary.errors %}
-                                        {{ form.preference.expected_salary(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.expected_salary.errors %}
+                                        {{ form.expected_salary(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.preference.expected_salary.errors %}
+                                            {% for error in form.expected_salary.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.preference.expected_salary(class="form-control form-control-sm", value=applicant.expected_salary) }}
+                                        {{ form.expected_salary(class="form-control form-control-sm", value=applicant.expected_salary) }}
                                     {% endif %}
                                 </div>
 
                                 <!-- Shift -->
                                 <div class="form-group mb-2">
-                                    {% if form.preference.shift.flags.required %}
-                                        {{ form.preference.shift.label(class="form-control-label", text=form.preference.shift.label.text + '*') }}
+                                    {% if form.preferred_shift.flags.required %}
+                                        {{ form.preferred_shift.label(class="form-control-label", text=form.preferred_shift.label.text + '*') }}
                                     {% else %}
-                                        {{ form.preference.shift.label(class="form-control-label") }}
+                                        {{ form.preferred_shift.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.preference.shift.errors %}
-                                        {{ form.preference.shift(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.preferred_shift.errors %}
+                                        {{ form.preferred_shift(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.preference.shift.errors %}
+                                            {% for error in form.preferred_shift.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.preference.shift(class="form-control form-control-sm", value=applicant.preferred_shift) }}
+                                        {{ form.preferred_shift(class="form-control form-control-sm", value=applicant.preferred_shift) }}
                                     {% endif %}
                                 </div>
 
                                 <!-- Location -->
                                 <div class="form-group mb-2">
-                                    {% if form.preference.location.flags.required %}
-                                        {{ form.preference.location.label(class="form-control-label", text=form.preference.location.label.text + '*') }}
+                                    {% if form.preferred_location.flags.required %}
+                                        {{ form.preferred_location.label(class="form-control-label", text=form.preferred_location.label.text + '*') }}
                                     {% else %}
-                                        {{ form.preference.location.label(class="form-control-label") }}
+                                        {{ form.preferred_location.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.preference.location.errors %}
-                                        {{ form.preference.location(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.preferred_location.errors %}
+                                        {{ form.preferred_location(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.preference.location.errors %}
+                                            {% for error in form.preferred_location.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.preference.location(class="form-control form-control-sm", value=applicant.preferred_location) }}
+                                        {{ form.preferred_location(class="form-control form-control-sm", value=applicant.preferred_location) }}
                                     {% endif %}
                                 </div>
                             </fieldset>
@@ -452,62 +405,62 @@
 
                                 <!-- Disposition -->
                                 <div class="form-group mb-2">
-                                    {% if form.call.disposition.flags.required %}
-                                        {{ form.call.disposition.label(class="form-control-label", text=form.call.disposition.label.text + '*') }}
+                                    {% if form.status.flags.required %}
+                                        {{ form.status.label(class="form-control-label", text=form.status.label.text + '*') }}
                                     {% else %}
-                                        {{ form.call.disposition.label(class="form-control-label") }}
+                                        {{ form.status.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.call.disposition.errors %}
-                                        {{ form.call.disposition(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.status.errors %}
+                                        {{ form.status(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.call.disposition.errors %}
+                                            {% for error in form.status.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.call.disposition(class="form-control form-control-sm", value=applicant.status) }}
+                                        {{ form.status(class="form-control form-control-sm", value=applicant.status) }}
                                     {% endif %}
                                 </div>
 
                                 <!-- Remarks -->
                                 <div class="form-group mb-2">
-                                    {% if form.call.remarks.flags.required %}
-                                        {{ form.call.remarks.label(class="form-control-label", text=form.call.remarks.label.text + '*') }}
+                                    {% if form.remarks.flags.required %}
+                                        {{ form.remarks.label(class="form-control-label", text=form.remarks.label.text + '*') }}
                                     {% else %}
-                                        {{ form.call.remarks.label(class="form-control-label") }}
+                                        {{ form.remarks.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.call.remarks.errors %}
-                                        {{ form.call.remarks(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.remarks.errors %}
+                                        {{ form.remarks(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.call.remarks.errors %}
+                                            {% for error in form.remarks.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.call.remarks(class="form-control form-control-sm", value=applicant.remarks) }}
+                                        {{ form.remarks(class="form-control form-control-sm", value=applicant.remarks) }}
                                     {% endif %}
                                 </div>
 
                                 {% if current_user.role == 'admin' %}
                                     <!-- HR -->
                                     <div class="form-group mb-2">
-                                        {% if form.call.hr.flags.required %}
-                                            {{ form.call.hr.label(class="form-control-label", text=form.call.hr.label.text + '*') }}
+                                        {% if form.hr_id.flags.required %}
+                                            {{ form.hr_id.label(class="form-control-label", text=form.hr_id.label.text + '*') }}
                                         {% else %}
-                                            {{ form.call.hr.label(class="form-control-label") }}
+                                            {{ form.hr_id.label(class="form-control-label") }}
                                         {% endif %}
 
-                                        {% if form.call.hr.errors %}
-                                            {{ form.call.hr(class="form-control form-control-sm is-invalid")}}
+                                        {% if form.hr_id.errors %}
+                                            {{ form.hr_id(class="form-control form-control-sm is-invalid")}}
                                             <div class="invalid-feedback">
-                                                {% for error in form.call.hr.errors %}
+                                                {% for error in form.hr_id.errors %}
                                                     <span>{{ error }}</span>
                                                 {% endfor %}
                                             </div>
                                         {% else %}
-                                            {{ form.call.hr(class="form-control form-control-sm", value=applicant.hr_id|string)}}
+                                            {{ form.hr_id(class="form-control form-control-sm", value=applicant.hr_id|string)}}
                                         {% endif %}
                                     </div>
                                 {% endif %}
@@ -525,61 +478,61 @@
 
                                 <!-- Source -->
                                 <div class="form-group mb-2">
-                                    {% if form.additional.source.flags.required %}
-                                        {{ form.additional.source.label(class="form-control-label", text=form.additional.source.label.text + '*') }}
+                                    {% if form.source.flags.required %}
+                                        {{ form.source.label(class="form-control-label", text=form.source.label.text + '*') }}
                                     {% else %}
-                                        {{ form.additional.source.label(class="form-control-label") }}
+                                        {{ form.source.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.additional.source.errors %}
-                                        {{ form.additional.source(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.source.errors %}
+                                        {{ form.source(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.additional.source.errors %}
+                                            {% for error in form.source.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.additional.source(class="form-control form-control-sm", value=applicant.source) }}
+                                        {{ form.source(class="form-control form-control-sm", value=applicant.source) }}
                                     {% endif %}
                                 </div>
 
                                 <!-- Interview Date -->
                                 <div class="form-group mb-2">
-                                    {% if form.additional.interview_date.flags.required %}
-                                        {{ form.additional.interview_date.label(class="form-control-label", text=form.additional.interview_date.label.text + '*') }}
+                                    {% if form.interview_date.flags.required %}
+                                        {{ form.interview_date.label(class="form-control-label", text=form.interview_date.label.text + '*') }}
                                     {% else %}
-                                        {{ form.additional.interview_date.label(class="form-control-label") }}
+                                        {{ form.interview_date.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.additional.interview_date.errors %}
-                                        {{ form.additional.interview_date(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.interview_date.errors %}
+                                        {{ form.interview_date(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.additional.interview_date.errors %}
+                                            {% for error in form.interview_date.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.additional.interview_date(class="form-control form-control-sm", value=applicant.interview_datetime|form_date) }}
+                                        {{ form.interview_date(class="form-control form-control-sm", value=applicant.interview_datetime|form_date) }}
                                     {% endif %}
                                 </div>
 
                                 <!-- Interview Time -->
                                 <div class="form-group mb-2">
-                                    {% if form.additional.interview_time.flags.required %}
-                                        {{ form.additional.interview_time.label(class="form-control-label", text=form.additional.interview_time.label.text + '*') }}
+                                    {% if form.interview_time.flags.required %}
+                                        {{ form.interview_time.label(class="form-control-label", text=form.interview_time.label.text + '*') }}
                                     {% else %}
-                                        {{ form.additional.interview_time.label(class="form-control-label") }}
+                                        {{ form.interview_time.label(class="form-control-label") }}
                                     {% endif %}
 
-                                    {% if form.additional.interview_time.errors %}
-                                        {{ form.additional.interview_time(class="form-control form-control-sm is-invalid")}}
+                                    {% if form.interview_time.errors %}
+                                        {{ form.interview_time(class="form-control form-control-sm is-invalid")}}
                                         <div class="invalid-feedback">
-                                            {% for error in form.additional.interview_time.errors %}
+                                            {% for error in form.interview_time.errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.additional.interview_time(class="form-control form-control-sm", value=applicant.interview_datetime|form_time) }}
+                                        {{ form.interview_time(class="form-control form-control-sm", value=applicant.interview_datetime|form_time) }}
                                     {% endif %}
                                 </div>
                             </fieldset>

@@ -108,9 +108,11 @@ def edit(username):
             'success')
     else:
         flash('Account not modified', 'danger')
+
         print('==================== ERRORS: edit() ================')
         for err in form.errors:
             print(err)
+
         return render_template('pages/write_account.html', form=form, account=account, generated_password=generated_password)
 
     return redirect(url_for('it.accounts_page'))
