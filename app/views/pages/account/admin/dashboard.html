@@ -1,33 +1,5 @@
 {% extends 'layouts/dashboard.html' %}
 
-{% block title %}Dashboard{% endblock %}
-
-{% block sidebar %}
-    <!-- Nav Item - Account Records -->
-    <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('admin.records_page') }}">
-            <i class="fas fa-fw fa-table"></i>
-            <span>HR Records</span>
-        </a>
-    </li>
-
-    <!-- Nav Item - Callout Form -->
-    <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('admin.add_applicant_page') }}">
-            <i class="fas fa-fw fa-phone-alt"></i>
-            <span>Callout Form</span>
-        </a>
-    </li>
-
-    <!-- Nav Item - Candidate List -->
-    <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('admin.candidates_page') }}">
-            <i class="fas fa-fw fa-th-list"></i>
-            <span>Candidate List</span>
-        </a>
-    </li>
-{% endblock %}
-
 {% block page_content %}
 
     <!-- Page Heading -->

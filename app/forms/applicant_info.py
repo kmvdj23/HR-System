@@ -15,7 +15,7 @@ class PersonalInformation(FlaskForm):
     mobile1 = StringField('Mobile number', validators=[DataRequired(), Length(min=10, max=11), Regexp('^(\d{10,11})|(\d{3,4}-\d{3}-\d{4})$', message='Input valid mobile number format (e.g. 9123456789)')])
     mobile2 = StringField('Secondary Mobile number', validators=[Optional(), Length(min=10, max=11), Regexp('^(\d{10,11})|(\d{3,4}-\d{3}-\d{4})$', message='Input valid mobile number format (e.g. 9123456789)')])
     address = TextAreaField('Address', validators=[Optional(), Length(max=300)])
-    email = EmailField('Email', validators=[Optional(), Length(max=50), Email()])
+    email = EmailField('Email', validators=[DataRequired(), Length(max=50), Email()])
     marital_status = SelectField('Marital status', coerce=str, validators=[Optional()], choices=choices_from_dict(Applicant.MARITAL_STATUS, prepend_blank=False))
 
 

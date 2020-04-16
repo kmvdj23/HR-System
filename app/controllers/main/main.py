@@ -1,7 +1,7 @@
 from lib import password_decrypt, password_encrypt, upload_file
 from app.models import Account, Applicant
 from app.config import db
-from app.forms import AccountSettingsForm
+from app.forms import AccountForm
 from flask import redirect, request, render_template, url_for, flash, Blueprint
 from flask_login import login_user, logout_user, current_user, login_required
 
@@ -12,7 +12,7 @@ main = Blueprint('main', __name__, url_prefix='/main')
 
 @main.route('/')
 def login_page():
-	if(current_user.is_authenticated):
+	if(current_user.is_authenticated and current_user.is_active()):
 		return redirect(url_for('main.home_page'))
 	else:
 		return render_template('index.html')
@@ -21,46 +21,54 @@ def login_page():
 @main.route('/dashboard')
 @login_required
 def home_page():
-	if current_user.account_type == 0:
+	if current_user.role == 'it':
 		return redirect(url_for('it.home_page'))
-	elif current_user.account_type == 1:
+	elif current_user.role == 'admin':
 		return redirect(url_for('admin.home_page'))
-	elif current_user.account_type == 2:
+	elif current_user.role == 'hr':
 		return redirect(url_for('hr.home_page'))
 
 
 @main.route('/settings')
 @login_required
 def settings_page():
-	form = AccountSettingsForm(request.form)
+	form = AccountForm()
 	return render_template('pages/settings.html', form=form)
 
+@main.route('/error')
+def error_page():
+	return render_template('404.html')
 
 # ============================ METHODS ==============================
+
 @main.route('/login', methods=['POST'])
 def login():
-	if request.method == 'POST':
-		account = Account.find_account(request.form.get('username'))
-		if account and password_decrypt(request.form.get('password'), account.password):
-			if login_user(account) and account.account_type == 0:
+	account = Account.find_account(request.form.get('username'))
+	if account and password_decrypt(request.form.get('password'), account.password):
+		if login_user(account) and account.is_active():
+			account.update_activity_tracking(request.remote_addr)
+			if account.role == 'it':
 				return redirect(url_for('it.home_page'))
-			elif login_user(account) and account.account_type == 1:
+			elif account.role == 'admin':
 				return redirect(url_for('admin.home_page'))
-			elif login_user(account) and account.account_type == 2:
+			elif account.role == 'hr':
 				return redirect(url_for('hr.home_page'))
 		else:
-			flash('Invalid Account!')
-			return redirect(url_for('main.login_page'))
+			flash('That account is disabled', 'danger')
 	else:
-		flash('Invalid Account!')
-		return redirect(url_for('main.login_page'))
+		flash('Identity or password is incorrect', 'danger')
+
+	return redirect(url_for('main.login_page'))
 
 
-@login_required
 @main.route('/settings', methods=['POST'])
 @login_required
 def settings():
-	form = AccountSettingsForm(request.form)
+	form = AccountForm(obj=current_user)
+
+	# Set new labels
+	form.password.label.text = 'New password'
+	form.confirm_pass.label.text = 'Confirm New Password'
 
 	if form.validate_on_submit():
 		current_user.first_name = request.form.get('first_name')
@@ -68,8 +76,8 @@ def settings():
 		current_user.username = request.form.get('username')
 		current_user.mobile = request.form.get('mobile')
 
-		old_pass = request.form.get('old_pass')
-		new_pass = request.form.get('new_pass')
+		old_pass= request.form.get('old_password')
+		new_pass = request.form.get('password')
 
 		if old_pass != '' and new_pass != '' and password_decrypt(old_pass, current_user.password):
 			current_user.password = password_encrypt(new_pass)
@@ -99,8 +107,7 @@ def upload_profile_pic():
 		image = request.files.get('profile-input')
 
 		directory = upload_file(image, user=current_user)
-		print(directory)
+		current_user.profile_pic = directory
+		db.session.commit()
 
-		# current_user.profile_pic = directory
-		# db.session.commit()
 		return redirect(url_for('main.settings'))

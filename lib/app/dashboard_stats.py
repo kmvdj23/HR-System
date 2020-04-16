@@ -78,7 +78,7 @@ class Dashboard(object):
         return Applicant.query.filter(Applicant.status == 'pending').count()
 
     def hr_applicant_ratio(self):
-        return f'{Account.count()} : {Applicant.count()}'
+        return f'{Account.hr_count()} : {Applicant.count()}'
 
 
 class CandidateStatus(object):
@@ -122,10 +122,11 @@ class CandidateStatus(object):
 class HRProcess(object):
     def __init__(self):
         self.hr_process = dict()
+
         result = Account.query.add_columns(func.count(Applicant.id))\
             .join(Applicant)\
             .filter(Account.id == Applicant.hr_id)\
-            .filter(Account.account_type == 2)\
+            .filter(Account.role == 'hr')\
             .group_by(Account.id).all()
 
         for r in result:

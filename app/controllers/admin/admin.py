@@ -5,7 +5,7 @@ from flask import redirect, request, render_template, url_for, flash, Blueprint
 from flask_login import login_required, current_user
 from wtforms.validators import DataRequired
 from app.forms import CalloutForm, PersonalInformation, ScholasticInformation, JobPreference, CallInformation, AdditionalInformation
-from lib.app import Dashboard, HRStats
+from lib.app import Dashboard, HRStats, admin_user
 from lib import upload_file
 import os
 
@@ -18,21 +18,23 @@ admin = Blueprint('admin', __name__, url_prefix='/admin')
 
 @admin.route('/dashboard')
 @login_required
+@admin_user
 def home_page():
-	#Do Query Here
 	stats = Dashboard()
-	return render_template('pages/account/dashboard_admin.html', stats=stats)
+	return render_template('pages/account/admin/dashboard.html', stats=stats)
 
 
 @admin.route('/records')
 @login_required
+@admin_user
 def records_page():
-	interviewers = Account.get_callers()
+	interviewers = Account.get_all_active_hr()
 	return render_template('pages/account/admin/records.html', interviewers=interviewers)
 
 
 @admin.route('/candidates')
 @login_required
+@admin_user
 def candidates_page():
 	applicants = Applicant.query.all()
 	return render_template('pages/account/admin/candidates.html', applicants=applicants)
@@ -40,6 +42,7 @@ def candidates_page():
 
 @admin.route('/view/hr/<username>')
 @login_required
+@admin_user
 def hr_page(username):
 	hr = Account.find_account(username)
 	stats = HRStats(hr.username)
@@ -53,12 +56,13 @@ def hr_page(username):
 
 @admin.route('/add/applicant')
 @login_required
+@admin_user
 def add_applicant_page():
 	form = CalloutForm(request.form)
 	form.call.hr.validators.append(DataRequired())
 	form.call.hr.choices = list()
 
-	callers = Account.get_callers()
+	callers = Account.get_all_active_hr()
 	for caller in callers:
 		form.call.hr.choices.append((caller.id, f'{caller.first_name} {caller.last_name} ({caller.username})'))
 
@@ -67,6 +71,7 @@ def add_applicant_page():
 
 @admin.route('/<applicant_id>/modify')
 @login_required
+@admin_user
 def edit_applicant_page(applicant_id):
 	form = CalloutForm(request.form)
 	applicant = Applicant.find_applicant(applicant_id)
@@ -76,7 +81,7 @@ def edit_applicant_page(applicant_id):
 	form.call.remarks.data = applicant.remarks
 	form.call.hr.choices = list()
 
-	callers = Account.get_callers()
+	callers = Account.get_all_active_hr()
 	for caller in callers:
 		form.call.hr.choices.append((caller.id, caller.username))
 
@@ -89,6 +94,7 @@ def edit_applicant_page(applicant_id):
 
 @admin.route('/<applicant_id>/view')
 @login_required
+@admin_user
 def view_applicant_page(applicant_id):
 	applicant = Applicant.find_applicant(applicant_id)
 	if not applicant:
@@ -103,12 +109,13 @@ def view_applicant_page(applicant_id):
 
 @admin.route('/add/applicant', methods=['POST'])
 @login_required
+@admin_user
 def add_applicant():
 	form = CalloutForm(request.form)
 	form.call.hr.validators.append(DataRequired())
 	form.call.hr.choices = list()
 
-	callers = Account.get_callers()
+	callers = Account.get_all_active_hr()
 	for caller in callers:
 		form.call.hr.choices.append((caller.id, f'{caller.first_name} {caller.last_name} ({caller.username})'))
 
@@ -165,7 +172,6 @@ def add_applicant():
 		db.session.commit()
 
 		flash('Applicant {0} {1} added successfully'.format(applicant.first_name, applicant.last_name), 'success')
-		# TODO: Make candidate list page
 		return redirect(url_for('admin.candidates_page'))
 
 	else:
@@ -196,6 +202,7 @@ def add_applicant():
 
 @admin.route('/<applicant_id>/modify', methods=['POST'])
 @login_required
+@admin_user
 def edit_applicant(applicant_id):
 	form = CalloutForm(request.form)
 	applicant = Applicant.find_applicant(applicant_id)
@@ -205,7 +212,7 @@ def edit_applicant(applicant_id):
 	form.call.remarks.data = applicant.remarks
 	form.call.hr.choices = list()
 
-	callers = Account.get_callers()
+	callers = Account.get_all_active_hr()
 	for caller in callers:
 		form.call.hr.choices.append((caller.id, caller.username))
 
@@ -289,8 +296,9 @@ def edit_applicant(applicant_id):
 
 @admin.route('/import', methods=['POST'])
 @login_required
+@admin_user
 def import_from_csv():
-    callers = Account.get_callers()
+    callers = Account.get_all_active_hr()
     iterator = 0
 
     if 'csv-input' not in request.files:

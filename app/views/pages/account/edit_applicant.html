@@ -3,7 +3,7 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block sidebar %}
-    {% if current_user.account_type == 1 %}
+    {% if current_user.role == 'admin' %}
         <!-- Nav Item - Account Records -->
         <li class="nav-item">
             <a class="nav-link" href="{{ url_for('admin.records_page') }}">
@@ -27,7 +27,7 @@
                 <span>Candidate List</span>
             </a>
         </li>
-    {% elif current_user.account_type == 2 %}
+    {% elif current_user.role == 'hr' %}
         <!-- Nav Item - Call History -->
         <li class="nav-item">
             <a class="nav-link" href="{{ url_for('hr.call_history') }}">
@@ -53,9 +53,9 @@
 
     <div class="row">
         <div class="col-md-12">
-            {% if current_user.account_type == 1 %}
+            {% if current_user.role == 'admin' %}
                 {% set endpoint = 'admin.edit_applicant' %}
-            {% elif current_user.account_type == 2 %}
+            {% elif current_user.role == 'hr' %}
                 {% set endpoint = 'hr.edit_applicant' %}
             {% endif %}
             <form method="POST" action="{{ url_for(endpoint, applicant_id=applicant.id) }}">
@@ -490,7 +490,7 @@
                                     {% endif %}
                                 </div>
 
-                                {% if current_user.account_type == 1 %}
+                                {% if current_user.role == 'admin' %}
                                     <!-- HR -->
                                     <div class="form-group mb-2">
                                         {% if form.call.hr.flags.required %}

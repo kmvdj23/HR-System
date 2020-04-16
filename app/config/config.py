@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import os
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
@@ -6,29 +6,29 @@ from flask_login import LoginManager
 from sqlalchemy import desc
 
 def form_date(value):
-	default_datetime = datetime.datetime.strptime('0001-01-01 12:00 AM', '%Y-%m-%d %I:%M %p')
+	default_datetime = datetime.strptime('0001-01-01 12:00 AM', '%Y-%m-%d %I:%M %p')
 	print('====================================================')
 	print(value)
 	print(type(value))
 	if value == default_datetime:
 		return ''
 	else:
-		return datetime.datetime.strftime(value, '%Y-%m-%d')
+		return datetime.strftime(value, '%Y-%m-%d')
 
 
 def form_time(value):
-	default_datetime = datetime.datetime.strptime('0001-01-01 12:00 AM', '%Y-%m-%d %I:%M %p')
+	default_datetime = datetime.strptime('0001-01-01 12:00 AM', '%Y-%m-%d %I:%M %p')
 	if value == default_datetime:
 		return ''
 	else:
-		return datetime.datetime.strftime(value, '%I:%M %p')
+		return datetime.strftime(value, '%I:%M %p')
 
 
 def table_date(value):
-	default_datetime = datetime.datetime.strptime('0001-01-01 12:00 AM', '%Y-%m-%d %I:%M %p')
+	default_datetime = datetime.strptime('0001-01-01 12:00 AM', '%Y-%m-%d %I:%M %p')
 	if value == default_datetime:
 		return ''
-	return datetime.datetime.strftime(value, '%B %d, %Y %I:%M %p')
+	return datetime.strftime(value, '%B %d, %Y %I:%M %p')
 
 
 def full_name(value):
@@ -58,7 +58,7 @@ def no_call_info(value):
 
 
 def no_additional_info(value):
-	default_datetime = datetime.datetime.strptime('0001-01-01 12:00 AM', '%Y-%m-%d %I:%M %p')
+	default_datetime = datetime.strptime('0001-01-01 12:00 AM', '%Y-%m-%d %I:%M %p')
 	from app.models import Applicant
 	applicant = Applicant.find_applicant(value)
 	return(not applicant.source and applicant.interview_datetime == default_datetime)
@@ -111,7 +111,13 @@ login_manager = LoginManager(hr_main)
 login_manager.login_view = 'main.login_page'
 login_manager.login_message_category = 'info'
 
+
 @login_manager.user_loader
 def load_user(username):
 	from app.models import Account
 	return Account.query.get(username)
+
+
+@hr_main.context_processor
+def inject_now():
+	return { 'now': datetime.now() }

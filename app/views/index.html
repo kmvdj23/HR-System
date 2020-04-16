@@ -1,3 +1,4 @@
+{% import "macros/flash.html" as flash with context %}
 {% extends 'layouts/base.html' %}
 
 {% block title %}Login{% endblock %}
@@ -15,7 +16,7 @@
 								<legend>
 									HR Management System
 								</legend>
-
+								{{ flash.render() }}
 								<div class="form-group mb-1">
 									<label for="username" class="sr-only">
 										Username

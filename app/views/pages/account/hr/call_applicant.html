@@ -3,7 +3,7 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block sidebar %}
-    {% if current_user.account_type == 2 %}
+    {% if current_user.role == 'hr' %}
         <!-- Nav Item - Call History -->
         <li class="nav-item">
             <a class="nav-link" href="{{ url_for('hr.call_history') }}">
@@ -246,7 +246,7 @@
                                         {{ form.personal.marital_status(class="form-control form-control-sm", value=applicant.marital_status) }}
                                     {% endif %}
                                 </div>
-                            </fieldset>                            
+                            </fieldset>
                         </div>
                         <!-- End of Personal Information -->
 
