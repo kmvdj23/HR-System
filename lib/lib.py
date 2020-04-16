@@ -4,6 +4,7 @@ from werkzeug import security
 from werkzeug.utils import secure_filename
 from flask_wtf import Form
 
+
 def choices_from_dict(source, prepend_blank=True):
     choices = list()
 
@@ -58,6 +59,7 @@ def upload_file(file, **kwargs):
 
         elif filename.endswith(('.jpeg', '.jpg','.png')):
             user = kwargs.get('user')
+
             if not os.path.exists(os.path.join(os.getcwd(), 'app', 'static', 'images', user.username)):
                 os.mkdir(os.path.join(os.getcwd(), 'app', 'static', 'images', user.username))
             directory = os.path.join(os.getcwd(), 'app', 'static', 'images', user.username, filename)
@@ -71,3 +73,4 @@ class ModelForm(Form):
             self, obj=obj, prefix=prefix, **kwargs
         )
         self._obj = obj
+

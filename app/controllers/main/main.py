@@ -107,8 +107,7 @@ def upload_profile_pic():
 		image = request.files.get('profile-input')
 
 		directory = upload_file(image, user=current_user)
-		print(directory)
-
 		current_user.profile_pic = directory
 		db.session.commit()
+
 		return redirect(url_for('main.settings'))
