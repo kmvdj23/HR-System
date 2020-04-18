@@ -1,5 +1,6 @@
 from datetime import datetime
 from collections import OrderedDict
+from sqlalchemy import desc
 from app.config import db
 from flask_login import  UserMixin
 from app.models.util import ResourceMixin
@@ -159,6 +160,75 @@ class Applicant(db.Model, ResourceMixin):
     @classmethod
     def count(cls):
         return Applicant.query.count()
+
+    def get_full_name(self):
+        if self.middle_name != '':
+            return f'{ self.first_name } \
+                { self.middle_name } \
+                { self.last_name }'
+        else:
+            return f'{ self.first_name } \
+                { self.last_name }'
+
+
+    def get_birthdate(self):
+        return self.short_date(self.birthdate)
+
+    def get_interview_date(self):
+        return self.short_date(self.interview_datetime)
+
+    def get_interview_time(self):
+        return self.format_time_to_str(self.interview_datetime)
+
+    def get_interview_datetime(self):
+        return self.long_date(self.interview_datetime)
+
+    def has_no_scholastic_info(self):
+        return ( not self.educational_attainment
+                and not self.course
+                and not self.graduation_year )
+
+    def has_no_preference(self):
+        return ( not self.applied_position
+                and not self.expected_salary
+                and not self.preferred_shift
+                and not self.preferred_location )
+
+    def has_no_call_info(self):
+        return ( not self.status
+                and not self.remarks )
+
+    def has_no_additional_info(self):
+        default_datetime = datetime.strptime('01/01/0001 12:00 AM', '%d/%m/%Y %I:%M %p')
+        return ( not self.source
+                and self.interview_datetime == default_datetime )
+
+    def get_educational_attainment(self):
+        if self.educational_attainment != '':
+            return Applicant.ATTAINMENT[self.educational_attainment]
+        else:
+            return ''
+
+    def get_preferred_shift(self):
+        return Applicant.SHIFT[self.preferred_shift]
+
+    def get_marital_status(self):
+        return Applicant.MARITAL_STATUS[self.marital_status]
+
+    def get_status(self):
+        return Applicant.STATUS[self.status]
+
+    def get_last_call_date(self):
+        query = CallHistory.query.join(Applicant)\
+            .filter(CallHistory.applicant_id == Applicant.id)\
+            .order_by(desc(CallHistory.datetime))\
+            .filter(Applicant.id == self.id)\
+            .first()
+
+        if not query:
+            return ''
+        else:
+            return query.datetime
 
 
 class CallHistory(db.Model, ResourceMixin):

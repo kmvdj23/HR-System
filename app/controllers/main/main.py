@@ -220,6 +220,10 @@ def add_applicant():
 			interview_datetime = datetime.strptime(f'{ interview_date } { hour }:{ minute } { locale_time }', '%d/%m/%Y %I:%M %p')
 			applicant.interview_datetime = interview_datetime
 
+		expected_salary = request.form.get('expected_salary')
+		if expected_salary != '':
+			applicant.expected_salary = int(expected_salary)
+
 		db.session.add(applicant)
 		db.session.commit()
 

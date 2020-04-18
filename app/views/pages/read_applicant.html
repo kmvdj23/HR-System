@@ -29,13 +29,13 @@
                                 <div class="tab-pane fade show active" id="personal-pane" role="tabpanel" aria-labelledby="personal-tab">
                                     <div class="form-group">
                                         <h4>Full Name</h4>
-                                        {{ applicant.id|full_name }}
+                                        {{ applicant.get_full_name() }}
                                         <hr>
                                     </div>
-                                    {% if applicant.birthdate|form_date != '' %}
+                                    {% if applicant.get_birthdate() != '' %}
                                         <div class="form-group">
                                             <h4>Birthdate</h4>
-                                            {{ applicant.birthdate|form_date }}
+                                            {{ applicant.get_birthdate() }}
                                             <hr>
                                         </div>
                                     {% endif %}
@@ -72,12 +72,12 @@
                                     {% endif %}
                                     <div class="form-group">
                                         <h4>Marital Status</h4>
-                                        {{ applicant.marital_status|select }}
+                                        {{ applicant.get_marital_status() }}
                                         <hr>
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="education-pane" role="tabpanel" aria-labelledby="education-tab">
-                                    {% if applicant.id|no_scholastic_info %}
+                                    {% if applicant.has_no_scholastic_info() %}
                                     <div class="jumbotron d-flex align-items-center no-data">
                                         <div class="container">
                                             <h1>No Data</h1>
@@ -86,7 +86,7 @@
                                     {% else %}
                                         <div class="form-group">
                                             <h4>Educational Attainment</h4>
-                                            {{ applicant.educational_attainment|select }}
+                                            {{ applicant.get_educational_attainment() }}
                                             <hr>
                                         </div>
                                         {% if applicant.course != '' %}
@@ -106,7 +106,7 @@
                                     {% endif %}
                                 </div>
                                 <div class="tab-pane fade" id="preference-pane" role="tabpanel" aria-labelledby="preference-tab">
-                                    {% if applicant.id|no_preference %}
+                                    {% if applicant.has_no_preference() %}
                                     <div class="jumbotron d-flex align-items-center no-data">
                                         <div class="container">
                                             <h1>No Data</h1>
@@ -130,7 +130,7 @@
                                         {% if applicant.preferred_shift != '' %}
                                             <div class="form-group">
                                                 <h4>Preferred Shift</h4>
-                                                {{ applicant.preferred_shift|select }}
+                                                {{ applicant.get_preferred_shift() }}
                                                 <hr>
                                             </div>
                                         {% endif %}
@@ -144,7 +144,7 @@
                                     {% endif %}
                                 </div>
                                 <div class="tab-pane fade" id="call-pane" role="tabpanel" aria-labelledby="call-tab">
-                                    {% if applicant.id|no_call_info %}
+                                    {% if applicant.has_no_call_info() %}
                                     <div class="jumbotron d-flex align-items-center no-data">
                                         <div class="container">
                                             <h1>No Data</h1>
@@ -165,7 +165,7 @@
                                         {% endif %}
                                         <div class="form-group">
                                             <h4>Applicant Status</h4>
-                                            {{ applicant.status|select }}
+                                            {{ applicant.get_status() }}
                                             <hr>
                                         </div>
                                         {% if applicant.remarks != '' %}
@@ -178,24 +178,24 @@
                                     {% endif %}
                                 </div>
                                 <div class="tab-pane fade" id="additional-pane" role="tabpanel" aria-labelledby="additional-tab">
-                                    {% if applicant.id|no_additional_info %}
+                                    {% if applicant.has_no_additional_info() %}
                                     <div class="jumbotron d-flex align-items-center no-data">
                                         <div class="container">
                                             <h1>No Data</h1>
                                         </div>
                                     </div>
                                     {% else %}
-                                        {% if applicant.interview_datetime|form_date != '' %}
+                                        {% if applicant.get_interview_date() != '' %}
                                             <div class="form-group">
                                                 <h4>Interview Date</h4>
-                                                {{ applicant.interview_datetime|form_date }}
+                                                {{ applicant.get_interview_date() }}
                                                 <hr>
                                             </div>
                                         {% endif %}
-                                        {% if applicant.interview_datetime|form_time != '' %}
+                                        {% if applicant.get_interview_time() != '' %}
                                             <div class="form-group">
                                                 <h4>Interview Time</h4>
-                                                {{ applicant.interview_datetime|form_time }}
+                                                {{ applicant.get_interview_time() }}
                                                 <hr>
                                             </div>
                                         {% endif %}

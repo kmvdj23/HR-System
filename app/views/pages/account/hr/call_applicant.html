@@ -100,7 +100,7 @@
                                         </div>
                                     {% else %}
 
-                                        {{ form.birthdate(class="form-control form-control-sm", value=applicant.birthdate|form_date) }}
+                                        {{ form.birthdate(class="form-control form-control-sm", value=applicant.short_date(birthdate)) }}
                                     {% endif %}
                                 </div>
 
@@ -484,7 +484,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.interview_date(class="form-control form-control-sm", value=applicant.interview_datetime|form_date) }}
+                                        {{ form.interview_date(class="form-control form-control-sm", value=applicant.short_date(applicant.interview_datetime)) }}
                                     {% endif %}
                                 </div>
 
@@ -504,7 +504,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{ form.interview_time(class="form-control form-control-sm", value=applicant.interview_datetime|form_time) }}
+                                        {{ form.interview_time(class="form-control form-control-sm", value=applicant.get_interview_time() ) }}
                                     {% endif %}
                                 </div>
                             </fieldset>

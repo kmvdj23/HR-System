@@ -20,7 +20,7 @@
     {% set last_name = applicant.last_name %}
     {% set first_name = applicant.first_name %}
     {% set middle_name = applicant.middle_name %}
-    {% set birthdate = applicant.birthdate|form_date %}
+    {% set birthdate = applicant.get_birthdate() %}
     {% set email = applicant.email %}
     {% set mobile1 = applicant.mobile1 %}
     {% set mobile2 = applicant.mobile2 %}
@@ -30,13 +30,14 @@
     {% set course = applicant.course %}
     {% set graduation_year = applicant.graduation_year %}
     {% set applied_position = applicant.applied_position %}
+    {% set expected_salary = applicant.expected_salary|string %}
     {% set preferred_location = applicant.preferred_location %}
     {% set status = applicant.status %}
     {% set remarks = applicant.remarks %}
     {% set hr_id = applicant.hr_id|string %}
     {% set source = applicant.source %}
-    {% set interview_date = applicant.interview_datetime|form_date %}
-    {% set interview_time = applicant.interview_datetime|form_time %}
+    {% set interview_date = applicant.get_interview_date() %}
+    {% set interview_time = applicant.get_interview_time() %}
 
 {% endif %}
 

@@ -51,7 +51,7 @@
                         <td>{{ applicant.applied_position }}</td>
                         <td>{{ applicant.preferred_location }}</td>
                         <td>{{ applicant.source }}</td>
-                        <td>{{ applicant.status|select }}</td>
+                        <td>{{ applicant.get_status() }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

@@ -90,18 +90,18 @@
                         <td>{{ applicant.preferred_location }}</td>
                         <td>{{ applicant.source }}</td>
                         <td>{{ applicant.hr.first_name }} {{ applicant.hr.last_name }}</td>
-                        <td>{{ applicant.status|select }}</td>
+                        <td>{{ applicant.get_status() }}</td>
                         {% if applicant.id|last_call_date != '' %}
                             <td>
-                                <time class="from-now" data-datetime="{{ applicant.id|last_call_date }}">
-                                    {{ applicant.id|last_call_date }}
+                                <time class="from-now" data-datetime="{{ applicant.get_last_call_date() }}">
+                                    {{ applicant.get_last_call_date() }}
                                 </time>
                             </td>
                         {% else %}
                             <td></td>
                         {% endif %}
                         <td>
-                            {{ applicant.interview_datetime|table_date }}
+                            {{ applicant.get_interview_datetime() }}
                         </td>
                     </tr>
                 {% endfor %}
