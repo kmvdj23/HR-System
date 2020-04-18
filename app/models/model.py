@@ -44,6 +44,10 @@ class Account(db.Model, ResourceMixin, UserMixin):
         return Account.query.all()
 
     @classmethod
+    def get_all_active_accounts(cls):
+        return Account.query.filter(cls.active == True).all()
+
+    @classmethod
     def get_all_active_hr(cls):
         return Account.query.filter(cls.role == 'hr' \
             and cls.active == True).all()
@@ -51,6 +55,10 @@ class Account(db.Model, ResourceMixin, UserMixin):
     @classmethod
     def count(cls):
         return Account.query.count()
+
+    @classmethod
+    def get_role_count(cls, role):
+        return Account.query.filter(cls.role == role).count()
 
     @classmethod
     def hr_count(cls):

@@ -67,6 +67,7 @@ class Dashboard(object):
         self.candidate_status = CandidateStatus()
         self.hr_process = HRProcess()
         self.monthly_applicants = MonthlyApplicants()
+        self.user_types = UserTypes()
 
     def total_applicants(self):
         return Applicant.count()
@@ -158,3 +159,26 @@ class MonthlyApplicants(object):
         for month in range(1, 12 + 1):
             ls.append(MonthlyApplicants.get_applicant_count(month))
         return ls
+
+
+class UserTypes(object):
+    def __init__(self):
+        pass
+
+    @classmethod
+    def get_it_percentage(cls):
+        count = Account.get_role_count('it')
+        total = Account.count()
+        return f'{ round(count / total * 100) }%'
+
+    @classmethod
+    def get_admin_percentage(cls):
+        count = Account.get_role_count('admin')
+        total = Account.count()
+        return f'{ round(count / total * 100) }%'
+
+    @classmethod
+    def get_hr_percentage(cls):
+        count = Account.get_role_count('hr')
+        total = Account.count()
+        return f'{ round(count / total * 100) }%'

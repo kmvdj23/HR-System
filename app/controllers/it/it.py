@@ -1,6 +1,7 @@
 from flask import redirect, request, render_template, url_for, flash, Blueprint
 from flask_login import login_required, current_user
 from lib import generate_random_password, password_encrypt, password_decrypt
+from lib.app import Dashboard
 from app.models import Account
 from app.config import db
 from app.forms import AccountForm
@@ -15,7 +16,8 @@ it = Blueprint('it', __name__, url_prefix='/it')
 @login_required
 def home_page():
     accounts = Account.get_all_accounts()
-    return render_template('pages/account/it/dashboard.html', accounts=accounts)
+    stats = Dashboard()
+    return render_template('pages/account/it/dashboard.html', accounts=accounts, stats=stats)
 
 
 @login_required
