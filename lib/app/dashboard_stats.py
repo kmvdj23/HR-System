@@ -169,16 +169,16 @@ class UserTypes(object):
     def get_it_percentage(cls):
         count = Account.get_role_count('it')
         total = Account.count()
-        return f'{ round(count / total * 100) }%'
+        return f'{ round(count / total * 100) }'
 
     @classmethod
     def get_admin_percentage(cls):
         count = Account.get_role_count('admin')
         total = Account.count()
-        return f'{ round(count / total * 100) }%'
+        return f'{ round(count / total * 100) }'
 
     @classmethod
     def get_hr_percentage(cls):
         count = Account.get_role_count('hr')
         total = Account.count()
-        return f'{ round(count / total * 100) }%'
+        return f'{ round(count / total * 100) }'

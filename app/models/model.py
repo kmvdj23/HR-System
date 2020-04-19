@@ -76,6 +76,9 @@ class Account(db.Model, ResourceMixin, UserMixin):
         self.current_sign_in_ip = ip_address
         self.save()
 
+    def get_role(self):
+        return Account.ROLE[self.role]
+
 
 class Applicant(db.Model, ResourceMixin):
     __tablename__ = 'applicant'

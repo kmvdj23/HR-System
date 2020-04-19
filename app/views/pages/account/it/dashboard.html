@@ -46,17 +46,17 @@
                     <h6 class="m-0 font-weight-bold text-primary">Types of Users</h6>
                 </div>
                 <div class="card-body">
-                    <h4 class="small font-weight-bold">IT <span class="float-right">{{ stats.user_types.get_it_percentage() }}</span></h4>
+                    <h4 class="small font-weight-bold">IT <span class="float-right">{{ stats.user_types.get_it_percentage() + '%' }}</span></h4>
                     <div class="progress mb-4">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ stats.user_types.get_it_percentage() }}" aria-valuenow="" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ stats.user_types.get_it_percentage()  + '%' }}" aria-valuenow="{{ stats.user_types.get_it_percentage() }}" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    <h4 class="small font-weight-bold">HR Admin <span class="float-right">{{ stats.user_types.get_admin_percentage() }}</span></h4>
+                    <h4 class="small font-weight-bold">HR Admin <span class="float-right">{{ stats.user_types.get_admin_percentage() + '%' }}</span></h4>
                     <div class="progress mb-4">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: {{ stats.user_types.get_it_percentage() }}" aria-valuenow="" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar bg-info" role="progressbar" style="width: {{ stats.user_types.get_admin_percentage() + '%' }}" aria-valuenow="{{ stats.user_types.get_admin_percentage() }}" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    <h4 class="small font-weight-bold">HR <span class="float-right">{{ stats.user_types.get_hr_percentage() }}</span></h4>
+                    <h4 class="small font-weight-bold">HR <span class="float-right">{{ stats.user_types.get_hr_percentage() + '%' }}</span></h4>
                     <div class="progress mb-4">
-                        <div class="progress-bar" role="progressbar" style="width: {{ stats.user_types.get_it_percentage() }}" aria-valuenow="" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar" role="progressbar" style="width: {{ stats.user_types.get_hr_percentage() + '%'}}" aria-valuenow="{{ stats.user_types.get_hr_percentage() }}" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
             </div>

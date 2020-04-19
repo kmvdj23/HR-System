@@ -40,14 +40,9 @@
                     <tr>
                         <td>{{ account.first_name }} {{ account.last_name }}</td>
 
-                        <!-- TODO: ELIMINATE IF ELSE -->
-                        {% if account.role == 'it' %}
-                            <td>IT</td>
-                        {% elif account.role == 'admin' %}
-                            <td>HR Admin</td>
-                        {% elif account.role == 'hr' %}
-                            <td>HR</td>
-                        {% endif %}
+                        <td>
+                            {{ account.get_role() }}
+                        </td>
 
                         {% if account.active %}
                             <td>Active</td>
@@ -57,11 +52,13 @@
 
                         <td>
                             <form method="POST" action="{{ url_for('it.toggle_status', username=account.username) }}">
+
                                 <div class="btn-group btn-group-sm" role="group">
                                     <a href="{{ url_for('it.edit_page', username=account.username) }}" data-placement="top" data-toggle="tooltip" title="Edit"
                                     class="btn btn-primary tooltips">
                                         <i class="fas fa-fw fa-edit"></i>
                                     </a>
+
                                     {% if account.active %}
                                         <button type="submit" data-placement="top" data-toggle="tooltip" title="Toggle Inactive" class="btn btn-danger tooltips">
                                             <i class="fas fa-unlock"></i>
@@ -72,6 +69,7 @@
                                         </button>
                                     {% endif %}
                                 </div>
+
                             </form>
                         </td>
 

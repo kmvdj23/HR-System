@@ -127,6 +127,6 @@ def call_applicant(applicant_id):
 		for err in form.errors:
 			print(err)
 
-		return render_template('pages/account/hr/call_applicant.html', form=form, applicant=applicant)
+		return render_template('pages/write_applicant.html', form=form, applicant=applicant)
 
 	return redirect(url_for('hr.call_applicant_page', applicant_id=applicant_id))

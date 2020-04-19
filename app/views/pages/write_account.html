@@ -1,4 +1,5 @@
 {% extends 'layouts/dashboard.html' %}
+{% import 'macros/form.html' as f with context %}
 
 {% block title %}Register{% endblock %}
 
@@ -8,14 +9,13 @@
         {% set page_heading = 'Register User' %}
         {% set endpoint = 'it.register' %}
         {% set kwargs = {} %}
-        {% set username = '' %}
         {% set button = 'Submit' %}
     {% elif 'edit' in request.endpoint %}
         {% set page_heading = 'Edit User' %}
         {% set endpoint = 'it.edit' %}
         {% set kwargs = { 'username': account.username } %}
-        {% set username = account.username %}
         {% set button = 'Update' %}
+        {% set username = account.username %}
         {% set first_name = account.first_name %}
         {% set last_name = account.last_name %}
         {% set username = account.username %}
@@ -29,148 +29,49 @@
     <div class="row">
         <div class="col-md-6 center">
             <div class="card card-body">
-                <form method="POST" action="{{ url_for(endpoint, **kwargs) }}">
-                    {{ form.hidden_tag() }}
+
+                {% call f.form_tag(endpoint, **kwargs) %}
                     <fieldset class="form-group">
 
                         <!-- First Name -->
-                        <div class="form-group mb-2">
-                            {{ form.first_name.label(class="form-control-label") }}
-
-                            {% if form.first_name.errors %}
-                                {{ form.first_name(class="form-control form-control-sm is-invalid")}}
-                                <div class="invalid-feedback">
-                                    {% for error in form.first_name.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-                                {{ form.first_name(class="form-control form-control-sm", value=first_name)}}
-                            {% endif %}
-                        </div>
+                        {{ f.form_group(form.first_name, class_="mb-2", value=first_name) }}
 
                         <!-- Last Name -->
-                        <div class="form-group mb-2">
-                            {{ form.last_name.label(class="form-control-label") }}
-
-                            {% if form.last_name.errors %}
-                                {{ form.last_name(class="form-control form-control-sm is-invalid")}}
-                                <div class="invalid-feedback">
-                                    {% for error in form.last_name.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-                                {{ form.last_name(class="form-control form-control-sm", value=last_name)}}
-                            {% endif %}
-                        </div>
+                        {{ f.form_group(form.last_name, class_="mb-2", value=last_name) }}
 
                         <!-- Username -->
-                        <div class="form-group mb-2">
-                            {{ form.username.label(class="form-control-label") }}
-
-                            {% if form.username.errors %}
-                                {{ form.username(class="form-control form-control-sm is-invalid")}}
-                                <div class="invalid-feedback">
-                                    {% for error in form.username.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-                                {{ form.username(class="form-control form-control-sm", value=username)}}
-                            {% endif %}
-                        </div>
+                        {{ f.form_group(form.username, class_="mb-2", value=username) }}
 
                         <!-- Email -->
-                        <div class="form-group mb-2">
-                            {{ form.email.label(class="form-control-label") }}
-
-                            {% if form.email.errors %}
-                                {{ form.email(class="form-control form-control-sm is-invalid")}}
-                                <div class="invalid-feedback">
-                                    {% for error in form.email.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-                                {{ form.email(class="form-control form-control-sm", value=email)}}
-                            {% endif %}
-                        </div>
+                        {{ f.form_group(form.email, class_="mb-2", value=email) }}
 
                         <!-- Mobile Number -->
-                        <div class="form-group mb-2">
-                            {{ form.mobile.label(class="form-control-label") }}
-
-                            {% if form.mobile.errors %}
-                                {{ form.mobile(class="form-control form-control-sm is-invalid")}}
-                                <div class="invalid-feedback">
-                                    {% for error in form.mobile.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-                                {{ form.mobile(class="form-control form-control-sm", value=mobile)}}
-                            {% endif %}
-                        </div>
+                        {{ f.form_group(form.mobile, class_="mb-2", value=mobile) }}
 
                         {% if endpoint == 'it.register' %}
-                            <!-- Password -->
-                            <div class="form-group mb-2">
-                                {{ form.password.label(class="form-control-label") }}
-
-                                {% if form.password.errors %}
-                                    {{ form.password(class="form-control form-control-sm is-invalid")}}
-                                    <div class="invalid-feedback">
-                                        {% for error in form.password.errors %}
-                                            <span>{{ error }}</span>
-                                        {% endfor %}
-                                    </div>
-                                {% else %}
-                                    {{ form.password(class="form-control form-control-sm")}}
-                                {% endif %}
-                            </div>
 
                             <!-- Password -->
-                            <div class="form-group mb-2">
-                                {{ form.confirm_pass.label(class="form-control-label") }}
+                            {{ f.form_group(form.password, class_="mb-2") }}
 
-                                {% if form.confirm_pass.errors %}
-                                    {{ form.confirm_pass(class="form-control form-control-sm is-invalid")}}
-                                    <div class="invalid-feedback">
-                                        {% for error in form.confirm_pass.errors %}
-                                            <span>{{ error }}</span>
-                                        {% endfor %}
-                                    </div>
-                                {% else %}
-                                    {{ form.confirm_pass(class="form-control form-control-sm")}}
-                                {% endif %}
-                            </div>
+                            <!-- Confirm Password -->
+                            {{ f.form_group(form.confirm_pass, class_="mb-2") }}
+
                         {% endif %}
 
                         <!-- Account Type -->
-                        <div class="form-group mb-2">
-                            {{ form.role.label(class="form-control-label") }}
-
-                            {% if form.role.errors %}
-                                {{ form.role(class="form-control form-control-sm is-invalid")}}
-                                <div class="invalid-feedback">
-                                    {% for error in form.role.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-                                {{ form.role(class="form-control form-control-sm")}}
-                            {% endif %}
-                        </div>
+                        {{ f.form_group(form.role, class_="mb-2") }}
 
                         <hr>
 
                         <!-- Actions -->
                         <div class="form-group mb-2">
-                            <button type="submit" class="btn btn-sm btn-primary">
+                            <button type="submit"
+                            class="btn btn-sm btn-primary">
                                 {{ button }}
                             </button>
-                            <a href="{{ url_for('it.accounts_page') }}" class="btn btn-sm btn-secondary">
+
+                            <a href="{{ url_for('it.accounts_page') }}"
+                            class="btn btn-sm btn-secondary">
                                 Cancel
                             </a>
                         </div>
@@ -178,15 +79,18 @@
                         {% if endpoint == 'it.edit' %}
                             <!-- Reset Password -->
                             <div class="form-group mb-2">
-                                <button id="reset-pass-btn" type="button" class="btn btn-sm btn-danger"
-                                    data-toggle="modal" data-target="#resetPassModal">
+                                <button type="button"
+                                id="reset-pass-btn"
+                                class="btn btn-sm btn-danger"
+                                data-toggle="modal"
+                                data-target="#resetPassModal">
                                     Reset Password
                                 </button>
                             </div>
                         {% endif %}
 
                     </fieldset>
-                </form>
+                {% endcall %}
             </div>
         </div>
     </div>

@@ -1,0 +1,53 @@
+{# Render a form with CSRF token #}
+{%- macro form_tag(endpoint, id='', class_='', method='POST') -%}
+    <form action="{{ url_for(endpoint, **kwargs) }}"
+    method="{{ method }}"
+    id="{{ id }}"
+    class="{{ class_ }}">
+        {{ form.hidden_tag() }}
+        {{ caller() }}
+    </form>
+{%- endmacro -%}
+
+
+{# Render a form group #}
+{%- macro form_group(f, class_='', value='') -%}
+    <div class="form-group {{ class_ }}">
+        {{ field_label(f) }}
+        {{ field(f, class_=class_, value=value, **kwargs) }}
+    </div>
+{%- endmacro -%}
+
+
+{# Render a form field label with visual aid to see if required #}
+{%- macro field_label(f) -%}
+
+    {% if f.flags.required %}
+        {{ f.label(class="form-control-label",
+            text=f.label.text + " *") }}
+    {% else %}
+        {{ f.label(class="form-control-label") }}
+    {% endif %}
+
+{%- endmacro -%}
+
+{# Render a form field #}
+{%- macro field(f, class_='', value='') -%}
+
+    {% if f.errors %}
+
+        {{ f(class="form-control form-control-sm is-invalid class_") }}
+
+        <div class="invalid-feedback">
+            {% for error in f.errors %}
+                <span>{{ error }}</span>
+            {% endfor %}
+        </div>
+
+    {% else %}
+
+        {{ f(class="form-control form-control-sm class_", value=value) }}
+
+    {% endif %}
+
+{%- endmacro -%}
