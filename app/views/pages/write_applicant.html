@@ -1,0 +1,210 @@
+{% extends 'layouts/dashboard.html' %}
+{% import 'macros/form.html' as f with context %}
+
+{% if 'add' in request.endpoint %}
+    {% set title = 'Add Applicant' %}
+    {% set endpoint = 'main.add_applicant' %}
+    {% set kwargs = {} %}
+    {% set heading = 'Callout Form' %}
+{% else %}
+
+    {% if 'edit' in request.endpoint %}
+        {% set title = 'Edit Applicant' %}
+        {% set endpoint = 'main.edit_applicant' %}
+    {% elif 'call' in request.endpoint %}
+        {% set title = 'Call Applicant' %}
+        {% set endpoint = 'hr.call_applicant' %}
+    {% endif %}
+
+    {% set kwargs = { 'applicant_id': applicant.id } %}
+    {% set heading = 'Candidate Contact Information' %}
+    {% set last_name = applicant.last_name %}
+    {% set first_name = applicant.first_name %}
+    {% set middle_name = applicant.middle_name %}
+    {% set birthdate = applicant.get_birthdate() %}
+    {% set email = applicant.email %}
+    {% set mobile1 = applicant.mobile1 %}
+    {% set mobile2 = applicant.mobile2 %}
+    {% set landline = applicant.landline %}
+    {% set marital_status = applicant.marital_status %}
+    {% set educational_attainment = applicant.educational_attainment %}
+    {% set course = applicant.course %}
+    {% set graduation_year = applicant.graduation_year %}
+    {% set applied_position = applicant.applied_position %}
+    {% set expected_salary = applicant.expected_salary|string %}
+    {% set preferred_location = applicant.preferred_location %}
+    {% set status = applicant.status %}
+    {% set remarks = applicant.remarks %}
+    {% set hr_id = applicant.hr_id|string %}
+    {% set source = applicant.source %}
+    {% set interview_date = applicant.get_interview_date() %}
+    {% set interview_time = applicant.get_interview_time() %}
+
+{% endif %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block page_content %}
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">{{ heading }}</h1>
+
+    <div class="row">
+        <div class="col-md-12">
+            {% call f.form_tag(endpoint, **kwargs) %}
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <!-- Personal Information -->
+                        <div class="card card-body mb-2">
+                            <fieldset class="form-group">
+                                <legend>
+                                    Personal Information
+                                </legend>
+
+                                <!-- Last Name -->
+                                {{ f.form_group(form.last_name, class_="mb-2", value=last_name) }}
+
+                                <!-- First Name -->
+                                {{ f.form_group(form.first_name, class_="mb-2", value=first_name) }}
+
+                                <!-- Middle Name -->
+                                {{ f.form_group(form.middle_name, class_="mb-2", value=middle_name) }}
+
+                                <!-- Birthdate -->
+                                {{ f.form_group(form.birthdate, class_="mb-2", value=birthdate) }}
+
+                                <!-- Email -->
+                                {{ f.form_group(form.email, class_="mb-2", value=email) }}
+
+                                <!-- Mobile 1 -->
+                                {{ f.form_group(form.mobile1, class_="mb-2", value=mobile1) }}
+
+                                <!-- Mobile 2 -->
+                                {{ f.form_group(form.mobile2, class_="mb-2", value=mobile2) }}
+
+                                <!-- Landline -->
+                                {{ f.form_group(form.landline, class_="mb-2", value=landline) }}
+
+                                <!-- Address -->
+                                {{ f.form_group(form.address, class_="mb-2") }}
+
+                                <!-- Marital Status -->
+                                {{ f.form_group(form.marital_status, class_="mb-2", value=marital_status) }}
+                            </fieldset>
+                        </div>
+                        <!-- End of Personal Information -->
+
+                        <!-- Scholastic Information -->
+                        <div class="card card-body mb-2">
+                            <fieldset class="form-group">
+                                <legend>
+                                    Scholastic Information
+                                </legend>
+
+                                <!-- Educational Attainment -->
+                                {{ f.form_group(form.educational_attainment, class_="mb-2", value=educational_attainment) }}
+
+                                <!-- Course -->
+                                {{ f.form_group(form.course, class_="mb-2", value=course) }}
+
+                                <!-- Graduation Year -->
+                                {{ f.form_group(form.graduation_year, class_="mb-2", value=graduation_year) }}
+                            </fieldset>
+                        </div>
+                        <!-- End of Scholastic Information -->
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <!-- Job Preference -->
+                        <div class="card card-body mb-2">
+                            <fieldset class="form-group">
+                                <legend>
+                                    Job Preference
+                                </legend>
+
+                                <!-- Applied Position -->
+                                {{ f.form_group(form.applied_position, class_="mb-2", value=applied_position) }}
+
+                                <!-- Expected Salary -->
+                                {{ f.form_group(form.expected_salary, class_="mb-2", value=expected_salary) }}
+
+                                <!-- Shift -->
+                                {{ f.form_group(form.preferred_shift, class_="mb-2", value=preferred_shift) }}
+
+                                <!-- Location -->
+                                {{ f.form_group(form.preferred_location, class_="mb-2", value=preferred_location) }}
+                            </fieldset>
+                        </div>
+                        <!-- End of Job Preference -->
+
+                        <!-- Call Information -->
+                        <div class="card card-body mb-2">
+                            <fieldset class="form-group">
+                                <legend>
+                                    Call Information
+                                </legend>
+
+                                <!-- Disposition -->
+                                {{ f.form_group(form.status, class_="mb-2", value=status) }}
+
+                                <!-- Remarks -->
+                                {{ f.form_group(form.remarks, class_="mb-2", value=remarks) }}
+
+                                {% if current_user.role == 'admin' %}
+                                    <!-- HR -->
+                                    {{ f.form_group(form.hr_id, class_="mb-2", value=hr_id) }}
+
+                                {% endif %}
+                            </fieldset>
+                        </div>
+                        <!-- End of Call Information -->
+
+                        <!-- Additional Information -->
+                        <div class="card card-body mb-2">
+                            <fieldset class="form-group">
+                                <legend>
+                                    Additional Information
+                                </legend>
+
+                                <!-- Source -->
+                                {{ f.form_group(form.source, class_="mb-2", value=source) }}
+
+                                <!-- Interview Data -->
+                                {{ f.form_group(form.interview_date, class_="mb-2", value=interview_date) }}
+
+                                <!-- Interview Time -->
+                                {{ f.form_group(form.interview_time, class_="mb-2", value=interview_time) }}
+
+                            </fieldset>
+                        </div>
+                        <!-- End of Additinal Information -->
+
+                    </div>
+
+                </div>
+
+                <div class="btn-group btn-group-lg" role="group"
+                style="position: fixed; bottom: .5in; right: .5in;">
+                    <button data-placement="top" data-toggle="tooltip"
+                    title="Submit" type="Submit"
+                    class="btn btn-primary tooltips">
+                        <i class="fas fa-fw fa-edit"></i>
+                    </button>
+                    <a href="{{ url_for('main.home_page') }}"
+                    data-placement="top" data-toggle="tooltip"
+                    title="Cancel"
+                    class="btn btn-danger tooltips">
+                        <i class="fas fa-times-circle"></i>
+                    </a>
+                </div>
+            {% endcall %}
+        </div>
+    </div>
+
+{% endblock %}

@@ -46,7 +46,7 @@
                         <td>{{ call.applicant.first_name }} {{ call.applicant.last_name }}</td>
                         <td>{{ call.applicant.mobile1 }}</td>
                         <td>{{ call.applicant.email }}</td>
-                        <td>{{ call.applicant.status|select }}</td>
+                        <td>{{ call.applicant.get_status() }}</td>
                         <td>{{ call.applicant.remarks }}</td>
                         <td>
                             <time class="from-now" data-datetime="{{ call.datetime }}">
@@ -54,7 +54,7 @@
                             </time>
                         </td>
                         <td>
-                            {{ call.applicant.interview_datetime|table_date }}
+                            {{ call.applicant.get_interview_datetime() }}
                         </td>
                     </tr>
                 {% endfor %}
