@@ -5,7 +5,7 @@ from flask import redirect, request, render_template, url_for, flash, Blueprint
 from flask_login import login_required, current_user
 from wtforms.validators import DataRequired
 from app.forms import ApplicantForm
-from lib.app import Dashboard, HRStats
+from lib.app import Dashboard, HRStats, admin_user
 from lib import upload_file
 import os
 

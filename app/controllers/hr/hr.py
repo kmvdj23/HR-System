@@ -5,6 +5,7 @@ from app.config import db
 from flask import redirect, request, render_template, url_for, flash, Blueprint
 from flask_login import login_required, current_user
 from app.forms import ApplicantForm
+from lib.app import hr_user
 
 hr = Blueprint('hr', __name__, url_prefix='/hr')
 
