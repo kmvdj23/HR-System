@@ -27,3 +27,11 @@ def hr_user(func):
             return
         return redirect(url_for('main.error_page'))
     return is_user
+
+def human_resource(func):
+    @wraps(func)
+    def hr():
+        if current_user.role in ['hr', 'admin']:
+            return
+        return redirect(url_for('main.error_page'))
+    return hr
