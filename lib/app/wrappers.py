@@ -6,32 +6,32 @@ from app.controllers import main
 
 def it_user(func):
     @wraps(func)
-    def is_user():
+    def is_user(*args, **kwargs):
         if current_user.role == 'it':
-            return
+            return func(*args, **kwargs)
         return redirect(url_for('main.error_page'))
     return is_user
 
 def admin_user(func):
     @wraps(func)
-    def is_user():
+    def is_user(*args, **kwargs):
         if current_user.role == 'admin':
-            return
+            return func(*args, **kwargs)
         return redirect(url_for('main.error_page'))
     return is_user
 
 def hr_user(func):
     @wraps(func)
-    def is_user():
+    def is_user(*args, **kwargs):
         if current_user.role == 'hr':
-            return
+            return func(*args, **kwargs)
         return redirect(url_for('main.error_page'))
     return is_user
 
 def human_resource(func):
     @wraps(func)
-    def hr():
+    def hr(*args, **kwargs):
         if current_user.role in ['hr', 'admin']:
-            return
+            return func(*args, **kwargs)
         return redirect(url_for('main.error_page'))
     return hr
