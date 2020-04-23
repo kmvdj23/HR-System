@@ -27,9 +27,6 @@
                 </a>
             </li>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
             {% block sidebar %}{% endblock %}
 
             <!-- Divider -->
@@ -59,135 +56,104 @@
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
+                        {% if not current_user.is_authenticated %}
+                            <div class="topbar-divider d-none d-sm-block"></div>
 
-                        <!-- Nav Item - Alerts -->
-                        <li class="nav-item dropdown no-arrow mx-1">
+                            <!-- Login -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('main.login_page') }}">
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600"><b>Login</b></span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <!-- Nav Item - Alerts -->
+                            <li class="nav-item dropdown no-arrow mx-1">
 
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
+                                <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-bell fa-fw"></i>
 
-                                {% if current_user.get_notification_count() > 0 %}
-                                    <!-- Counter - Alerts -->
-                                    <span class="badge badge-danger badge-counter">{{ current_user.get_notification_count() }}</span>
-                                {% endif %}
-                            </a>
+                                    {% if current_user.get_notification_count() > 0 %}
+                                        <!-- Counter - Alerts -->
+                                        <span class="badge badge-danger badge-counter">{{ current_user.get_notification_count() }}</span>
+                                    {% endif %}
+                                </a>
 
-                            <!-- Dropdown - Alerts -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+                                <!-- Dropdown - Alerts -->
+                                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
 
-                                <h6 class="dropdown-header">
-                                    Alerts Center
-                                </h6>
+                                    <h6 class="dropdown-header">
+                                        Alerts Center
+                                    </h6>
 
-                                {% for notif in current_user.get_latest_notifications() %}
+                                    {% for notif in current_user.get_latest_notifications() %}
 
-                                    <a href="{{ url_for('main.read_notification', id=notif.id) }}"
-                                    class="dropdown-item">
-                                        <div class="row d-flex align-items-center">
-                                            <div class="col-md-2">
-                                                <div class="icon-circle bg-{{ notif.category }}">
-                                                    <i class="{{ notif.icon }} text-white"></i>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <div>
-                                                    <div class="small text-gray-400">
-                                                        <time class="from-now"
-                                                        data-datetime="{{ notif.datetime }}">
-                                                            {{ notif.datetime }}
-                                                        </time>
+                                        <a href="{{ url_for('main.read_notification', id=notif.id) }}"
+                                        class="dropdown-item">
+                                            <div class="row d-flex align-items-center">
+                                                <div class="col-md-2">
+                                                    <div class="icon-circle bg-{{ notif.category }}">
+                                                        <i class="{{ notif.icon }} text-white"></i>
                                                     </div>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <div>
+                                                        <div class="small text-gray-400">
+                                                            <time class="from-now"
+                                                            data-datetime="{{ notif.datetime }}">
+                                                                {{ notif.datetime }}
+                                                            </time>
+                                                        </div>
 
-                                                    {% if not notif.read %}
-                                                        <span class="font-weight-bold">
+                                                        {% if not notif.read %}
+                                                            <span class="font-weight-bold">
+                                                                {{ notif.title }}
+                                                            </span>
+                                                        {% else %}
                                                             {{ notif.title }}
-                                                        </span>
-                                                    {% else %}
-                                                        {{ notif.title }}
-                                                    {% endif %}
+                                                        {% endif %}
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </a>
+
+                                    {% endfor %}
+
+                                    <a class="dropdown-item text-center small text-gray-500" href="{{ url_for('main.notification_page') }}">Show All Alerts</a>
+                                </div>
+                            </li>
+
+                            <div class="topbar-divider d-none d-sm-block"></div>
+
+                            <!-- Nav Item - User Information -->
+                            <li class="nav-item dropdown no-arrow">
+
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ current_user.first_name }} {{ current_user.last_name }}</span>
+                                    <img class="img-profile rounded-circle" src="/{{ current_user.profile_pic }}">
+                                </a>
+
+                                <!-- Dropdown - User Information -->
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+
+                                    <a class="dropdown-item" href="{{ url_for('main.settings_page') }}">
+                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Account Settings
                                     </a>
 
-                                {% endfor %}
+                                    <div class="dropdown-divider"></div>
 
-                                <!-- <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-primary">
-                                            <i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
+                                    <form action='/main/logout' method="POST">
+                                        <button class='dropdown-item' type="submit">
+                                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                            Logout
+                                        </button>
+                                        <!-- SUBJECT TO CHANGE TO ADD MODAL -->
+                                    </form>
 
-                                    <div>
-                                        <div class="small text-gray-500">December 12, 2019</div>
+                                </div>
 
-                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                                    </div>
-                                </a>
-
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <div class="small text-gray-500">December 7, 2019</div>
-
-                                        $290.29 has been deposited into your account!
-                                    </div>
-                                </a>
-
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-warning">
-                                            <i class="fas fa-exclamation-triangle text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 2, 2019</div>
-                                        Spending Alert: We've noticed unusually high spending for your account.
-                                    </div>
-                                </a> -->
-
-                                <a class="dropdown-item text-center small text-gray-500" href="{{ url_for('main.notification_page') }}">Show All Alerts</a>
-                            </div>
-                        </li>
-
-                        <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ current_user.first_name }} {{ current_user.last_name }}</span>
-                                <img class="img-profile rounded-circle" src="/{{ current_user.profile_pic }}">
-                            </a>
-
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-
-                                <a class="dropdown-item" href="{{ url_for('main.settings_page') }}">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Account Settings
-                                </a>
-
-                                <div class="dropdown-divider"></div>
-
-                                <form action='/main/logout' method="POST">
-                                    <button class='dropdown-item' type="submit">
-                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Logout
-                                    </button>
-                                    <!-- SUBJECT TO CHANGE TO ADD MODAL -->
-                                </form>
-
-                            </div>
-
-                        </li>
-
+                            </li>
+                        {% endif %}
                     </ul>
                     <!-- End of Topbar Navbar -->
 

@@ -4,7 +4,7 @@ from app.controllers.hr import hr
 from app.controllers.it import it
 from app.controllers.admin import admin
 from app.controllers.api import api_v1
-from flask import redirect, url_for
+from flask import redirect, url_for, render_template
 
 # =========== BLUEPRINTS ======================
 hr_main.register_blueprint(main)
@@ -18,3 +18,7 @@ hr_main.register_blueprint(api_v1)
 @hr_main.route('/')
 def start():
 	return redirect(url_for('main.login_page'))
+
+@hr_main.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html')
