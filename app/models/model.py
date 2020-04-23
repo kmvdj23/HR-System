@@ -79,6 +79,28 @@ class Account(db.Model, ResourceMixin, UserMixin):
     def get_role(self):
         return Account.ROLE[self.role]
 
+    def get_latest_notifications(self):
+        return Notification.query.join(Account)\
+            .filter(Notification.account_id == Account.id)\
+            .filter(Account.id == self.id)\
+            .order_by(desc(Notification.datetime))\
+            .limit(3).all()
+
+    def get_all_notifications(self):
+        return Notification.query.join(Account)\
+            .filter(Notification.account_id == Account.id)\
+            .filter(Account.id == self.id)\
+            .order_by(desc(Notification.datetime))\
+            .all()
+
+    def get_notification_count(self):
+        return Notification.query.join(Account)\
+            .filter(Notification.account_id == Account.id)\
+            .filter(Account.id == self.id)\
+            .filter(Notification.read == False)\
+            .order_by(desc(Notification.datetime))\
+            .count()
+
 
 class Applicant(db.Model, ResourceMixin):
     __tablename__ = 'applicant'
@@ -258,9 +280,43 @@ class CallHistory(db.Model, ResourceMixin):
 
     @classmethod
     def find_call(cls, id):
-        return CallHistory.query.filter(cls.id == id)
+        return CallHistory.query.filter(cls.id == id).first()
 
     def save(self):
         self.datetime = datetime.now()
         db.session.add(self)
         db.session.commit()
+
+
+class Notification(db.Model, ResourceMixin):
+
+    __tablename__ = 'notification'
+
+    CATEGORY = OrderedDict([
+        ('primary', 'Primary'),
+        ('secondary', 'Secondary'),
+        ('success', 'Success'),
+        ('danger', 'Danger'),
+        ('warning', 'Warning'),
+        ('info', 'Info'),
+        ('light', 'Light'),
+        ('dark', 'Dark')
+    ])
+
+    id = db.Column(db.Integer, primary_key=True)
+    datetime = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    category = db.Column(db.Enum(*CATEGORY, name='category', native_enum=False),
+                        index=True, nullable=False, server_default='it')
+    icon = db.Column(db.String(100), nullable=True)
+    title = db.Column(db.String(300), nullable=True)
+    summary = db.Column(db.String(500), nullable=True)
+    redirect = db.Column(db.String(300), nullable=True)
+    read = db.Column('is_read', db.Boolean(), nullable=False, server_default='0')
+    last_read_date = db.Column(db.DateTime, nullable=True)
+
+    account_id = db.Column(db.Integer, db.ForeignKey('account.id'))
+    account = db.relationship('Account', backref=db.backref('notifications', lazy=True))
+
+    @classmethod
+    def find_notif(cls, id):
+        return Notification.query.filter(cls.id == id).first()

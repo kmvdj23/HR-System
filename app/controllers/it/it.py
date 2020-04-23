@@ -2,7 +2,7 @@ from flask import redirect, request, render_template, url_for, flash, Blueprint
 from flask_login import login_required, current_user
 from lib import generate_random_password, password_encrypt, password_decrypt
 from lib.app import Dashboard
-from app.models import Account
+from app.models import Account, Notification
 from app.config import db
 from app.forms import AccountForm
 from wtforms.validators import DataRequired
@@ -86,7 +86,20 @@ def register():
         account = Account()
         form.populate_obj(account)
 
+        account.password = password_encrypt(account.password)
+
         db.session.add(account)
+        db.session.commit()
+
+        notif = Notification(
+            category='success',
+            icon='fas fa-star',
+            title='Welcome to HRSystem',
+            redirect=url_for('main.home_page'),
+            account_id=account.id
+        )
+
+        db.session.add(notif)
         db.session.commit()
 
         flash(f'Account for { account.username } created successfully',

@@ -1,0 +1,102 @@
+{% extends 'layouts/dashboard.html' %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block page_content %}
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">Notifications</h1>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <tbody>
+
+                {% for notif in notifications %}
+                    <tr>
+                        <td>
+                            <a href="{{ url_for('main.read_notification', id=notif.id) }}"
+                            class="d-flex align-items-center">
+                                <div class="mr-3">
+                                    <div class="icon-circle bg-{{ notif.category }}">
+                                        <i class="{{ notif.icon }} text-white"></i>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="small text-gray-500">
+                                        <time class="from-now"
+                                        data-datetime="{{ notif.datetime }}">
+                                            {{ notif.datetime }}
+                                        </time>
+                                    </div>
+
+
+                                    {% if not notif.read %}
+                                        <span class="font-weight-bold">
+                                            {{ notif.title }}
+                                        </span>
+                                    {% else %}
+                                        {{ notif.title }}
+                                    {% endif %}
+                                </div>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+<!--                 <tr>
+                    <td>
+                        <a class="d-flex align-items-center" href="#">
+                            <div class="mr-3">
+                                <div class="icon-circle bg-primary">
+                                    <i class="fas fa-file-alt text-white"></i>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="small text-gray-500">December 12, 2019</div>
+
+                                <span class="font-weight-bold">A new monthly report is ready to download!</span>
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <a class="d-flex align-items-center" href="#">
+                            <div class="mr-3">
+                                <div class="icon-circle bg-success">
+                                    <i class="fas fa-donate text-white"></i>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="small text-gray-500">December 7, 2019</div>
+
+                                $290.29 has been deposited into your account!
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <a class="d-flex align-items-center" href="#">
+                            <div class="mr-3">
+                                <div class="icon-circle bg-warning">
+                                    <i class="fas fa-exclamation-triangle text-white"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="small text-gray-500">December 2, 2019</div>
+                                Spending Alert: We've noticed unusually high spending for your account.
+                            </div>
+                        </a>
+                    </td>
+                </tr> -->
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

@@ -1,7 +1,7 @@
 from datetime import datetime
 from wtforms.validators import DataRequired
 from lib import password_decrypt, password_encrypt, upload_file
-from app.models import Account, Applicant
+from app.models import Account, Applicant, Notification
 from app.config import db
 from app.forms import AccountForm, ApplicantForm
 from flask import redirect, request, render_template, url_for, flash, Blueprint
@@ -92,6 +92,30 @@ def view_applicant_page(applicant_id):
 		return redirect(url_for('hr.home_page'))
 
 	return render_template('pages/read_applicant.html', applicant=applicant)
+
+
+@main.route('/notifications')
+@login_required
+def notification_page():
+	notifications = current_user.get_all_notifications()
+	return render_template('pages/notifications.html', notifications=notifications)
+
+
+@main.route('/notification/<id>/read')
+@login_required
+def read_notification(id):
+	notif = Notification.find_notif(id)
+
+	if not notif:
+		flash('Page does not exist', 'danger')
+		return redirect(url_for('main.notification_page'))
+
+	notif.read = True
+	notif.last_read_date = datetime.now()
+
+	db.session.commit()
+
+	return redirect(notif.redirect)
 
 
 # ============================ METHODS ==============================
@@ -225,8 +249,22 @@ def add_applicant():
 		if expected_salary != '':
 			applicant.expected_salary = int(expected_salary)
 
+
 		db.session.add(applicant)
 		db.session.commit()
+
+		if current_user.role == 'admin':
+			notif = Notification(
+				category='info',
+				icon='fas fa-user-plus',
+				title=f'{ current_user.first_name } { current_user.last_name } assigned \
+					a new applicant to you: { applicant.first_name } { applicant.last_name }',
+				redirect=url_for('main.view_applicant_page', applicant_id=applicant.id),
+				account_id=applicant.hr_id
+			)
+
+			db.session.add(notif)
+			db.session.commit()
 
 		flash(f'Applicant {applicant.first_name} {applicant.last_name} \
 			added successfully', 'success')
