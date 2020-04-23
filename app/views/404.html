@@ -1,4 +1,29 @@
-<!DOCTYPE html>
+{% extends 'layouts/dashboard.html' %}
+
+{% block title %} 404 {% endblock %}
+
+{% block page_content %}
+
+    <div class="page-404">
+        <p class="text-404">404</p>
+        <h2>Page not found</h2>
+        <a href="javascript:history.go(-1)">
+            Go Back
+        </a>
+    </div>
+
+
+    <!-- <div class="d-flex flex-column align-items-center justify-content-center">
+        <h1>404</h1>
+        <p>Page not found!</p>
+        <a href="javascript:history.go(-1)">
+            Go Back
+        </a>
+    </div>
+ -->
+{% endblock %}
+
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>404</title>
@@ -9,3 +34,4 @@
     <p>Page not found</p>
 </body>
 </html>
+ -->
