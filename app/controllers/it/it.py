@@ -1,12 +1,12 @@
 from flask import redirect, request, render_template, url_for, flash, Blueprint
 from flask_login import login_required, current_user
 from lib import generate_random_password, password_encrypt, password_decrypt
-from lib.app import Dashboard
+from app.lib import Dashboard, it_user
 from app.models import Account, Notification
 from app.config import db
 from app.forms import AccountForm
 from wtforms.validators import DataRequired
-from lib.app import it_user
+
 
 it = Blueprint('it', __name__, url_prefix='/it')
 
